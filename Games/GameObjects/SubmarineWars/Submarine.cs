@@ -7,7 +7,7 @@ namespace AxeGameCollection.GameObjects.SubmarineWars
     {
         private bool diving;
 
-        public override Rectangle BoundingBox => new((int)(position.X - Width / 2f), (int)(position.Y - Height / 2f), (int)Width, (int)Height);
+        public override Rectangle BoundingBox => new((int)(position.X - Width / 2f), (int)position.Y, (int)Width, (int)(Height/2f));
 
         public Submarine(Vector2 position, float rotation, float scale) : base("graphic/submarineWars/submarine", position, rotation, scale, (int)Layer.Submarine, CollisionType.BoundingBoxRotated)
         {

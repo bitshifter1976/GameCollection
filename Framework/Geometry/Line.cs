@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Runtime.CompilerServices;
-using System.Threading;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
@@ -8,14 +6,8 @@ namespace Framework
 {
     public class Line
     {
-        #region members
-
         private Texture2D sprite;
         public Color Color;
-
-        #endregion
-
-        #region properties
 
         public Vector2 Normal
         {
@@ -27,7 +19,6 @@ namespace Framework
                 return new Vector2(dy, -dx);
             }
         }
-
         public Vector2 Center
         {
             get
@@ -38,14 +29,8 @@ namespace Framework
                 return v;
             }
         }
-
         public Vector2 Start { get; set; }
-
         public Vector2 End { get; set; }
-
-        #endregion
-
-        #region methods
 
         public Line(float x1, float y1, float x2, float y2) : this(x1, y1, x2, y2, Color.Black, false)
         {
@@ -64,7 +49,7 @@ namespace Framework
             Color = color;
             Start = p1;
             End = p2;
-            sprite = Manager.Content.Load<Texture2D>(thick ? "graphic/dotBig" : "graphic/dot");
+            sprite = Manager.Content.Load<Texture2D>(thick ? "graphic/common/dotBig" : "graphic/common/dot");
         }
 
         public static Line[] GetFromRectangle(Rectangle rect, Color color)
@@ -203,7 +188,5 @@ namespace Framework
         {
             return Start + " - " + End;
         }
-
-        #endregion
     }
 }

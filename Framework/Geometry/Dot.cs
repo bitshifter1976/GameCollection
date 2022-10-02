@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using Microsoft.Xna.Framework.Graphics;
+﻿using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework;
 
 namespace Framework
@@ -19,7 +15,7 @@ namespace Framework
             position.Y = pos.Y - 2.5f;
             if (!isInitialized)
             {
-                sprite = Manager.Content.Load<Texture2D>("graphic/dotBig");
+                sprite = Manager.Content.Load<Texture2D>("graphic/common/dotBig");
                 isInitialized = true;
             }
         }
