@@ -1,0 +1,273 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net6.0</TargetFramework>
+    <RollForward>Major</RollForward>
+    <PublishReadyToRun>false</PublishReadyToRun>
+    <TieredCompilation>false</TieredCompilation>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationManifest>app.manifest</ApplicationManifest>
+    <ApplicationIcon>Icon.ico</ApplicationIcon>
+    <RootNamespace>AxeGameCollection</RootNamespace>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Remove="Content\bin\**" />
+    <Compile Remove="Content\obj\**" />
+    <EmbeddedResource Remove="Content\bin\**" />
+    <EmbeddedResource Remove="Content\obj\**" />
+    <None Remove="Content\bin\**" />
+    <None Remove="Content\obj\**" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Remove="Content\font\Segoe UI.ttf" />
+    <None Remove="Content\font\Snap ITC.ttf" />
+    <None Remove="Content\graphic\bird.png" />
+    <None Remove="Content\graphic\blank_black.png" />
+    <None Remove="Content\graphic\blank_blue.png" />
+    <None Remove="Content\graphic\blank_red.png" />
+    <None Remove="Content\graphic\blank_white.png" />
+    <None Remove="Content\graphic\cloud1.png" />
+    <None Remove="Content\graphic\cloud2.png" />
+    <None Remove="Content\graphic\cloud3.png" />
+    <None Remove="Content\graphic\cloud4.png" />
+    <None Remove="Content\graphic\cloud5.png" />
+    <None Remove="Content\graphic\cloud6.png" />
+    <None Remove="Content\graphic\cloud7.png" />
+    <None Remove="Content\graphic\compass.jpg" />
+    <None Remove="Content\graphic\compass.pdn" />
+    <None Remove="Content\graphic\controls.pdn" />
+    <None Remove="Content\graphic\dot.png" />
+    <None Remove="Content\graphic\dotBig.png" />
+    <None Remove="Content\graphic\explosion.png" />
+    <None Remove="Content\graphic\health_bar.png" />
+    <None Remove="Content\graphic\intro.psd" />
+    <None Remove="Content\graphic\logo.png" />
+    <None Remove="Content\graphic\mine.jpg" />
+    <None Remove="Content\graphic\mine.pdn" />
+    <None Remove="Content\graphic\moon.png" />
+    <None Remove="Content\graphic\progressBar.png" />
+    <None Remove="Content\graphic\rectangle.png" />
+    <None Remove="Content\graphic\shot.pdn" />
+    <None Remove="Content\graphic\shot.png" />
+    <None Remove="Content\graphic\stone.pdn" />
+    <None Remove="Content\graphic\stone.psd" />
+    <None Remove="Content\graphic\sun.png" />
+    <None Remove="Content\graphic\tank design.jpg" />
+    <None Remove="Content\graphic\tank design.pdn" />
+    <None Remove="Content\graphic\tank.pdn" />
+    <None Remove="Content\graphic\tank.png" />
+    <None Remove="Content\graphic\tank.psd" />
+    <None Remove="Content\graphic\tank2.pdn" />
+    <None Remove="Content\graphic\tank3.pdn" />
+    <None Remove="Content\graphic\tanks from top.png" />
+    <None Remove="Content\graphic\tanksFromTop.png" />
+    <None Remove="Content\graphic\track.psd" />
+    <None Remove="Content\graphic\tree.jpg" />
+    <None Remove="Content\graphic\tree.pdn" />
+    <None Remove="Content\graphic\tree.png" />
+    <None Remove="Content\graphic\treeFromTop.jpg" />
+    <None Remove="Content\graphic\trees from top.jpg" />
+    <None Remove="Content\graphic\water.png" />
+    <None Remove="Content\graphic\weapon.pdn" />
+    <None Remove="Content\graphic\weapon.png" />
+    <None Remove="Content\graphic\wind.pdn" />
+    <None Remove="Content\graphic\wind.png" />
+    <None Remove="Content\sound\fx\applause.wav" />
+    <None Remove="Content\sound\fx\autsch.WAV" />
+    <None Remove="Content\sound\fx\collect.WAV" />
+    <None Remove="Content\sound\fx\dead.wav" />
+    <None Remove="Content\sound\fx\escape.WAV" />
+    <None Remove="Content\sound\fx\explosion.WAV" />
+    <None Remove="Content\sound\fx\fireBurn.WAV" />
+    <None Remove="Content\sound\fx\fireDelete.WAV" />
+    <None Remove="Content\sound\fx\helicopter.wav" />
+    <None Remove="Content\sound\fx\jump.WAV" />
+    <None Remove="Content\sound\fx\menu_next.WAV" />
+    <None Remove="Content\sound\fx\menu_open.WAV" />
+    <None Remove="Content\sound\fx\menu_start.wav" />
+    <None Remove="Content\sound\fx\option_open.WAV" />
+    <None Remove="Content\sound\fx\shot.WAV" />
+    <None Remove="Content\sound\song\game.ogg" />
+    <None Remove="Content\sound\song\intro.ogg" />
+    <None Remove="Content\sound\song\On the Short spree.ogg" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Content\graphic\bird.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\graphic\blank_black.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\graphic\blank_blue.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\graphic\blank_red.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\graphic\blank_white.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\graphic\cloud1.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\graphic\cloud2.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\graphic\cloud3.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\graphic\cloud4.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\graphic\cloud5.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\graphic\cloud6.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\graphic\cloud7.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\graphic\dot.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\graphic\dotBig.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\graphic\explosion.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\graphic\health_bar.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\graphic\logo.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\graphic\moon.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\graphic\progressBar.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\graphic\rectangle.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\graphic\shot.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\graphic\sun.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\graphic\tank.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\graphic\tree.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\graphic\water.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\graphic\weapon.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\graphic\wind.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\sound\fx\applause.wav">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\sound\fx\autsch.WAV">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\sound\fx\collect.WAV">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\sound\fx\dead.wav">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\sound\fx\escape.WAV">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\sound\fx\explosion.WAV">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\sound\fx\fireBurn.WAV">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\sound\fx\fireDelete.WAV">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\sound\fx\helicopter.wav">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\sound\fx\jump.WAV">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\sound\fx\menu_next.WAV">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\sound\fx\menu_open.WAV">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\sound\fx\menu_start.wav">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\sound\fx\option_open.WAV">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\sound\fx\shot.WAV">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\sound\song\game.ogg">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\sound\song\intro.ogg">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\sound\song\On the Short spree.ogg">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Icon.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="MonoGame.Framework.DesktopGL" Version="3.8.1.303" />
+    <PackageReference Include="MonoGame.Content.Builder.Task" Version="3.8.1.303" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Framework\Framework.csproj" />
+  </ItemGroup>
+  <Target Name="RestoreDotnetTools" BeforeTargets="Restore">
+    <Message Text="Restoring dotnet tools" Importance="High" />
+    <Exec Command="dotnet tool restore" />
+  </Target>
+  <ItemGroup>
+    <_DeploymentManifestIconFile Remove="Icon.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Update="Content\graphic\controls.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Update="Content\graphic\mine.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Update="Content\graphic\stone.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Update="Content\graphic\tank2.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Update="Content\graphic\tank3.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Update="Content\graphic\track.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Update="Content\graphic\treeFromTop.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Update="Content\ui\style.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+</Project>
