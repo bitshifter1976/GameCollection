@@ -27,6 +27,13 @@
 /processorParam:TextureFormat=Compressed
 /build:font/Debug.spritefont
 
+#begin font/Standard.spritefont
+/importer:FontDescriptionImporter
+/processor:FontDescriptionProcessor
+/processorParam:PremultiplyAlpha=True
+/processorParam:TextureFormat=Compressed
+/build:font/Standard.spritefont
+
 #begin font/SubmarineWars.spritefont
 /importer:FontDescriptionImporter
 /processor:FontDescriptionProcessor
@@ -232,6 +239,18 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:graphic/common/shot.png
+
+#begin graphic/submarineWars/submarine.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:graphic/submarineWars/submarine.png
 
 #begin graphic/tankBattle/bird.png
 /importer:TextureImporter

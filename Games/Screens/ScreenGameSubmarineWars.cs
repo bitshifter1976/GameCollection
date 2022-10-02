@@ -1,7 +1,8 @@
-﻿using AxeGameCollection.GameObjects.ArenaChase;
+﻿using AxeGameCollection.GameObjects.SubmarineWars;
 using Framework;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
+using System.Security.Policy;
 
 namespace AxeGameCollection.Screens;
 
@@ -10,7 +11,6 @@ public class ScreenGameSubmarineWars : GameScreen
     public enum GameState
     {
         Load,
-        Start,
         Play,
         End
     }
@@ -18,14 +18,15 @@ public class ScreenGameSubmarineWars : GameScreen
     private Color backColor;
     private GameState state;
     private int level;
+    private Submarine submarine;
 
     public ScreenGameSubmarineWars(Game game, int level) : base(game)
     {
         state = GameState.Load;
         this.level = level;
 
-        Manager.Input.CreateHoldingKeys(0.10f, Keys.Up, Keys.Down, Keys.Left, Keys.Right);
-        Manager.Input.CreateHoldingButtons(0.10f, Buttons.DPadUp, Buttons.DPadDown, Buttons.DPadLeft, Buttons.DPadRight, Buttons.LeftThumbstickRight, Buttons.LeftThumbstickLeft, Buttons.LeftThumbstickUp, Buttons.LeftThumbstickDown);
+        Manager.Input.CreateHoldingKeys(0.10f, Keys.Up, Keys.Down, Keys.W, Keys.S);
+        Manager.Input.CreateHoldingButtons(0.10f, Buttons.DPadUp, Buttons.DPadDown, Buttons.LeftThumbstickUp, Buttons.LeftThumbstickDown);
     }
 
     public override void LoadContent()
@@ -40,6 +41,10 @@ public class ScreenGameSubmarineWars : GameScreen
 
     private void CreateScene()
     {
+        backColor = Color.CornflowerBlue;
+        Water.Load();
+        submarine = new Submarine(new Vector2(Manager.DesignWidth / 2f, Manager.DesignHeight / 2f), 0, 1);
+        SpriteManager.AddImmediate(submarine);
     }
 
     public override void Update(GameTime gameTime, bool otherScreenHasFocus, bool coveredByOtherScreen)
@@ -47,46 +52,48 @@ public class ScreenGameSubmarineWars : GameScreen
         switch (state)
         {
             case GameState.Load:
-                {
-                    break;
-                }
-            case GameState.Start:
-                {
-                    break;
-                }
+            {
+                SpriteManager.Update(gameTime);
+                Water.Update(gameTime);
+                break;
+            }
             case GameState.Play:
-                {
-                    break;
-                }
+            {
+                SpriteManager.Update(gameTime);
+                Water.Update(gameTime);
+                break;
+            }
             case GameState.End:
-                {
-                    break;
-                }
+            {
+                break;
+            }
         }
         base.Update(gameTime, otherScreenHasFocus, coveredByOtherScreen);
     }
 
     public override void Draw(GameTime gameTime)
     {
-        InitDraw(Color.Black);
+        InitDraw(backColor);
         switch (state)
         {
             case GameState.Load:
-                {
-                    break;
-                }
-            case GameState.Start:
-                {
-                    break;
-                }
+            {
+                SpriteManager.Draw();
+                Water.Draw(gameTime);
+                var str = $"Get ready!\nLevel {level}";
+                ShowCenterText(str, AxeGameCollection.Games.ArenaChase.ToString(), Color.Gold, 1);
+                break;
+            }
             case GameState.Play:
-                {
-                    break;
-                }
+            {
+                SpriteManager.Draw();
+                Water.Draw(gameTime);
+                break;
+            }
             case GameState.End:
-                {
-                    break;
-                }
+            {
+                break;
+            }
         }
         EndDraw(Color.Black);
     }
@@ -102,7 +109,7 @@ public class ScreenGameSubmarineWars : GameScreen
         {
             SpriteManager.Clear();
             ScreenManager.RemoveScreen(this);
-            ScreenManager.AddScreen(new ScreenGameTankBattle(game, true, level + 1));
+            ScreenManager.AddScreen(new ScreenGameSubmarineWars(game, level + 1));
         }
         if (Manager.Input.KeyPressed(Keys.F2))
         {
@@ -113,15 +120,35 @@ public class ScreenGameSubmarineWars : GameScreen
             Manager.Graphics.IsFullScreen = !Manager.Graphics.IsFullScreen;
             Manager.Graphics.ApplyChanges();
         }
+        // up
+        if (Manager.Input.HoldingKey(Keys.Up, Keys.W) || Manager.Input.GamePadHoldingKey(PlayerIndex.One, Buttons.DPadUp, Buttons.LeftThumbstickUp))
+        {
+            submarine.Dive(true);
+        }
+        // down
+        if (Manager.Input.HoldingKey(Keys.Down, Keys.S) || Manager.Input.GamePadHoldingKey(PlayerIndex.One, Buttons.DPadDown, Buttons.LeftThumbstickDown))
+        {
+            submarine.Dive(false);
+        }
         // accept messages
         if (Manager.Input.KeyPressed(Keys.Enter) || Manager.Input.GamePadKeyPressed(PlayerIndex.One, Buttons.A) || Manager.Input.GamePadKeyPressed(PlayerIndex.Two, Buttons.A))
         {
             switch (state)
             {
                 case GameState.Load:
+                {
+                    state = GameState.Play;
                     break;
+                }
+                case GameState.Play:
+                {
+                    state = GameState.Play;
+                    break;
+                }
                 case GameState.End:
+                {
                     break;
+                }
             }
         }
 

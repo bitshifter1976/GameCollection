@@ -4,6 +4,7 @@ public enum Layer
 {
     Mountain = 1,
     Cannon = 10,
+    Submarine = 11,
     Trees = 20,
     Water = 30,
     Stars = 40,

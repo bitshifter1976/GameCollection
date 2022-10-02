@@ -260,6 +260,5 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Content\graphic\submarineWars\" />
-    <Folder Include="GameObjects\SubmarineWars\" />
   </ItemGroup>
 </Project>
