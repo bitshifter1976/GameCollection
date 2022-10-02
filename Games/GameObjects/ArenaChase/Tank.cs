@@ -14,7 +14,7 @@ public sealed class Tank : Sprite
 
     public override Rectangle BoundingBox => new((int)(position.X - Width / 2f), (int)(position.Y - Height / 2f), (int)Width, (int)Height);
 
-    public Tank(Vector2 position, float scale, float rotation, bool ai, Tank tankToChase = null) : base("graphic/tank" + (ai ? "3" : "2"), position, rotation, scale, (int)Layer.Cannon, CollisionType.BoundingBoxRotated)
+    public Tank(Vector2 position, float scale, float rotation, bool ai, Tank tankToChase = null) : base("graphic/arenaChase/tank" + (ai ? "2" : "1"), position, rotation, scale, (int)Layer.Cannon, CollisionType.BoundingBoxRotated)
     {
         isAi = ai;
         this.tankToChase = tankToChase;

@@ -22,7 +22,7 @@ public sealed class Wind : Sprite
         get => position;
         set { position = value; SetDirection(angle); }
     }
-    public Wind(Vector2 position, float angle, float scale) : base("graphic/wind", position, 0f, scale, Color.Black, (int)Layer.Hud, CollisionType.None)
+    public Wind(Vector2 position, float angle, float scale) : base("graphic/tankBattle/wind", position, 0f, scale, Color.Black, (int)Layer.Hud, CollisionType.None)
     {
         SetDirection(angle); 
     }

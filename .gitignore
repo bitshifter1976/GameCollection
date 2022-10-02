@@ -6,3 +6,5 @@ obj
 bin
 .vs
 .config
+/log
+/Games/Content/graphic/design

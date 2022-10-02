@@ -6,7 +6,7 @@ namespace AxeGameCollection.GameObjects.TankBattle;
 public sealed class Cloud : Sprite
 {
     public Cloud(int index, float speed, Vector2 position, float rotation, float scale)	: 
-		base("graphic/cloud" + index, position, rotation, scale, (int)Layer.Cloud, CollisionType.None)
+		base("graphic/tankBattle/cloud" + index, position, rotation, scale, (int)Layer.Cloud, CollisionType.None)
 	{
 		this.speed = speed;
 	}

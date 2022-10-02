@@ -10,7 +10,7 @@ public sealed class Water : SpriteAnimatedMultiLine
 
     public static int Top = Manager.DesignHeight - 200;
 
-	public Water() : base("graphic/water", new Vector2(0,0), 20, 4, 10, 0f, 1f, (int)Layer.Water)
+	public Water() : base("graphic/tankBattle/water", new Vector2(0,0), 20, 4, 10, 0f, 1f, (int)Layer.Water)
     {
         Position = new Vector2(0, Manager.DesignHeight - Height / RowCount);
         scrolling = false;

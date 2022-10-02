@@ -16,7 +16,7 @@ public class Shot : Sprite
 
     public Circle DamageCircle { get => damageCircle; }
 
-    public Shot(Tank tank, Vector2 position, Vector2 velocity) : base("graphic/shot", position, 0, 1f, 1, CollisionType.BoundingBox)
+    public Shot(Tank tank, Vector2 position, Vector2 velocity) : base("graphic/common/shot", position, 0, 1f, 1, CollisionType.BoundingBox)
     {
         this.tank = tank;
         gravity = new Gravity(GravityType.UpDown, velocity, 0.1f);

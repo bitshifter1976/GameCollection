@@ -13,10 +13,13 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Remove="Content\bin\**" />
+    <Compile Remove="Content\graphic\design\**" />
     <Compile Remove="Content\obj\**" />
     <EmbeddedResource Remove="Content\bin\**" />
+    <EmbeddedResource Remove="Content\graphic\design\**" />
     <EmbeddedResource Remove="Content\obj\**" />
     <None Remove="Content\bin\**" />
+    <None Remove="Content\graphic\design\**" />
     <None Remove="Content\obj\**" />
   </ItemGroup>
   <ItemGroup>
@@ -40,14 +43,11 @@
     <None Remove="Content\graphic\dot.png" />
     <None Remove="Content\graphic\dotBig.png" />
     <None Remove="Content\graphic\explosion.png" />
-    <None Remove="Content\graphic\health_bar.png" />
     <None Remove="Content\graphic\intro.psd" />
-    <None Remove="Content\graphic\logo.png" />
     <None Remove="Content\graphic\mine.jpg" />
     <None Remove="Content\graphic\mine.pdn" />
     <None Remove="Content\graphic\moon.png" />
     <None Remove="Content\graphic\progressBar.png" />
-    <None Remove="Content\graphic\rectangle.png" />
     <None Remove="Content\graphic\shot.pdn" />
     <None Remove="Content\graphic\shot.png" />
     <None Remove="Content\graphic\stone.pdn" />
@@ -93,85 +93,76 @@
     <None Remove="Content\sound\song\On the Short spree.ogg" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Content\graphic\bird.png">
+    <Content Include="Content\graphic\tankBattle\bird.png">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\graphic\blank_black.png">
+    <Content Include="Content\graphic\common\blank_black.png">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\graphic\blank_blue.png">
+    <Content Include="Content\graphic\common\blank_blue.png">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\graphic\blank_red.png">
+    <Content Include="Content\graphic\common\blank_red.png">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\graphic\blank_white.png">
+    <Content Include="Content\graphic\common\blank_white.png">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\graphic\cloud1.png">
+    <Content Include="Content\graphic\tankBattle\cloud1.png">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\graphic\cloud2.png">
+    <Content Include="Content\graphic\tankBattle\cloud2.png">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\graphic\cloud3.png">
+    <Content Include="Content\graphic\tankBattle\cloud3.png">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\graphic\cloud4.png">
+    <Content Include="Content\graphic\tankBattle\cloud4.png">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\graphic\cloud5.png">
+    <Content Include="Content\graphic\tankBattle\cloud5.png">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\graphic\cloud6.png">
+    <Content Include="Content\graphic\tankBattle\cloud6.png">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\graphic\cloud7.png">
+    <Content Include="Content\graphic\tankBattle\cloud7.png">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\graphic\dot.png">
+    <Content Include="Content\graphic\common\dot.png">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\graphic\dotBig.png">
+    <Content Include="Content\graphic\common\dotBig.png">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\graphic\explosion.png">
+    <Content Include="Content\graphic\common\explosion.png">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\graphic\health_bar.png">
+    <Content Include="Content\graphic\tankBattle\moon.png">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\graphic\logo.png">
+    <Content Include="Content\graphic\common\progressBar.png">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\graphic\moon.png">
+    <Content Include="Content\graphic\common\shot.png">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\graphic\progressBar.png">
+    <Content Include="Content\graphic\tankBattle\sun.png">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\graphic\rectangle.png">
+    <Content Include="Content\graphic\tankBattle\tank.png">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\graphic\shot.png">
+    <Content Include="Content\graphic\tankBattle\tree.png">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\graphic\sun.png">
+    <Content Include="Content\graphic\tankBattle\water.png">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\graphic\tank.png">
+    <Content Include="Content\graphic\tankBattle\weapon.png">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\graphic\tree.png">
-      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Content\graphic\water.png">
-      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Content\graphic\weapon.png">
-      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Content\graphic\wind.png">
+    <Content Include="Content\graphic\tankBattle\wind.png">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </Content>
     <Content Include="Content\sound\fx\applause.wav">
@@ -245,29 +236,30 @@
     <_DeploymentManifestIconFile Remove="Icon.ico" />
   </ItemGroup>
   <ItemGroup>
-    <None Update="Content\graphic\controls.png">
+    <None Update="Content\graphic\arenaChase\mine.png">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </None>
-    <None Update="Content\graphic\mine.png">
+    <None Update="Content\graphic\arenaChase\stone.png">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </None>
-    <None Update="Content\graphic\stone.png">
+    <None Update="Content\graphic\arenaChase\tank1.png">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </None>
-    <None Update="Content\graphic\tank2.png">
+    <None Update="Content\graphic\arenaChase\tank2.png">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </None>
-    <None Update="Content\graphic\tank3.png">
+    <None Update="Content\graphic\arenaChase\track.png">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </None>
-    <None Update="Content\graphic\track.png">
-      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
-    </None>
-    <None Update="Content\graphic\treeFromTop.png">
+    <None Update="Content\graphic\arenaChase\tree.png">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </None>
     <None Update="Content\ui\style.xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Content\graphic\submarineWars\" />
+    <Folder Include="GameObjects\SubmarineWars\" />
   </ItemGroup>
 </Project>

@@ -10,7 +10,7 @@ public class Track : Particle
 
     static Track()
     {
-        textureStatic = Manager.Content.Load<Texture2D>("graphic/track");
+        textureStatic = Manager.Content.Load<Texture2D>("graphic/arenaChase/track");
     }
 
     public Track(Vector2 position, float rotation, float scale) : base(textureStatic, position, Vector2.Zero, rotation, 0, Color.White, (int)Layer.Cannon-1, scale, 10, 0, 0, false)

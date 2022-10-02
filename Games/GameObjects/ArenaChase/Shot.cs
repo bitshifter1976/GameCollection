@@ -9,7 +9,7 @@ public sealed class Shot : Sprite
     public Circle Circle { get; }
     public Circle DamageCircle { get; }
 
-    public Shot(Tank tank, Vector2 position, Vector2 velocity, float scale) : base("graphic/shot", position, 0, scale, 1, CollisionType.BoundingBox)
+    public Shot(Tank tank, Vector2 position, Vector2 velocity, float scale) : base("graphic/common/shot", position, 0, scale, 1, CollisionType.BoundingBox)
     {
         Tank = tank;
         this.velocity = velocity;

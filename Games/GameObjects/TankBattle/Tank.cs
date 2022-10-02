@@ -50,7 +50,7 @@ public class Tank : Sprite
     }
 
 
-    public Tank(bool ai, bool flip, float scale, bool isActive, int level) : base("graphic/tank", Vector2.Zero, 0, scale, (int)Layer.Cannon, CollisionType.BoundingBoxRotated)
+    public Tank(bool ai, bool flip, float scale, bool isActive, int level) : base("graphic/tankBattle/tank", Vector2.Zero, 0, scale, (int)Layer.Cannon, CollisionType.BoundingBoxRotated)
     {
         this.IsAi = ai;
         this.flip = flip;

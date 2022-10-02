@@ -11,7 +11,7 @@ public class ExplosionParticles
 
     static ExplosionParticles()
     {
-        texture = Manager.Content.Load<Texture2D>("graphic/dotBig");
+        texture = Manager.Content.Load<Texture2D>("graphic/common/dotBig");
     }
 
     public static List<Sprite> Create(int count, Color color, Vector2 position)

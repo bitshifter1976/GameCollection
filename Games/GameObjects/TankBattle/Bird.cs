@@ -10,7 +10,7 @@ public sealed class Bird : SpriteAnimated
     private readonly float deltaX;
     private readonly int sign;
 
-    public Bird() : base("graphic/bird", Vector2.Zero, 8, 12, 0f, 1f, (int)Layer.Bird)
+    public Bird() : base("graphic/tankBattle/bird", Vector2.Zero, 8, 12, 0f, 1f, (int)Layer.Bird)
     {
     	scrolling = true;
         var direction = Rand.Int(0, 1);

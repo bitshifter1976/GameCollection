@@ -9,7 +9,7 @@ public class Star : Sprite
     private const int minAlpha = 100;
     private const int deltaAlpha = 2;
 
-	public Star(Vector2 position) : base("graphic/dotBig", position, 0f, 0.25f, (int)Layer.Stars, CollisionType.None)
+	public Star(Vector2 position) : base("graphic/common/dotBig", position, 0f, 0.25f, (int)Layer.Stars, CollisionType.None)
 	{
 		color = Color.Gold;
 		color.B = (byte)Rand.Int(minAlpha, byte.MaxValue);
