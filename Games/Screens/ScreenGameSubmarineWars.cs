@@ -120,18 +120,17 @@ public class ScreenGameSubmarineWars : GameScreen
             Manager.Graphics.IsFullScreen = !Manager.Graphics.IsFullScreen;
             Manager.Graphics.ApplyChanges();
         }
-        // up
+        // dive
         if (Manager.Input.HoldingKey(Keys.Up, Keys.W) || Manager.Input.GamePadHoldingKey(PlayerIndex.One, Buttons.DPadUp, Buttons.LeftThumbstickUp))
         {
             submarine.Dive(true);
         }
-        // down
         if (Manager.Input.HoldingKey(Keys.Down, Keys.S) || Manager.Input.GamePadHoldingKey(PlayerIndex.One, Buttons.DPadDown, Buttons.LeftThumbstickDown))
         {
             submarine.Dive(false);
         }
         // accept messages
-        if (Manager.Input.KeyPressed(Keys.Enter) || Manager.Input.GamePadKeyPressed(PlayerIndex.One, Buttons.A) || Manager.Input.GamePadKeyPressed(PlayerIndex.Two, Buttons.A))
+        if (Manager.Input.KeyPressed(Keys.Enter) || Manager.Input.GamePadKeyPressed(PlayerIndex.One, Buttons.A))
         {
             switch (state)
             {

@@ -148,7 +148,10 @@ public static class SpriteManager
     {
         sprites.ForEach(s => s.Draw());
         if (Manager.Debug)
+        {
             Debug.Draw();
+            Debug.Clear();
+        }
     }
 
     public static void Clear()
