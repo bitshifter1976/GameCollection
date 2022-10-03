@@ -10,8 +10,6 @@ namespace Framework
     [Serializable]
     public class SpriteAnimatedMultiLine : Sprite
     {
-        #region members
-
         protected float TimeElapsed;
         protected int FrameIndex;
         protected int RowIndex;
@@ -22,10 +20,6 @@ namespace Framework
         protected int FramesPerRow;
         private bool loop;
 
-        #endregion
-
-        #region properties
-
         public override float Width
         {
             get { return SpriteWidth * scale; }
@@ -35,10 +29,6 @@ namespace Framework
         {
             get { return SpriteHeight * scale; }
         }
-
-        #endregion
-
-        #region methods
 
         public SpriteAnimatedMultiLine(string texture, Vector2 position, int frameCount, int rowCount, float framesPerSecond, float rotation, float scale, int layer, bool loop = true, CollisionType collType = CollisionType.None) : 
             base(texture, position, rotation, scale, layer, collType)
@@ -82,9 +72,7 @@ namespace Framework
         public override void Draw()
         {
             var src = new Rectangle(SpriteWidth * FrameIndex, SpriteHeight * RowIndex, SpriteWidth, SpriteHeight);
-            Manager.SpriteBatch.Draw(texture, Position, src, Color.White, rotation, origin, scale, SpriteEffects.None, 0);
+            Manager.SpriteBatch.Draw(texture, Position, src, Color.White, rotation, origin, scale, flip ? SpriteEffects.FlipHorizontally : SpriteEffects.None, 0);
         }
-
-        #endregion
     }
 }

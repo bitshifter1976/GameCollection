@@ -7,8 +7,6 @@ namespace Framework
     [Serializable]
     public class SpriteAnimated : Sprite
     {
-        #region members
-
         private float timeElapsed;
         protected int FrameIndex;
         protected int FrameCount;
@@ -16,18 +14,10 @@ namespace Framework
         private readonly float timeToUpdate = 0.05f;
         protected int SpriteWidth;
 
-        #endregion
-
-        #region properies
-
         public override float Width
         {
             get { return SpriteWidth*scale; }
         }
-
-        #endregion
-
-        #region methods
 
         public SpriteAnimated(string texture, Vector2 position, int frameCount, float framesPerSecond, float rotation, float scale, int layer, CollisionType collType = CollisionType.None) : base(texture, position, rotation, scale, layer, collType)
         {
@@ -55,7 +45,5 @@ namespace Framework
             var src = new Rectangle(texture.Width / FrameCount * FrameIndex, 0, texture.Width / FrameCount, texture.Height);
 			Manager.SpriteBatch.Draw(texture, Position, src, color, rotation, origin, scale, flip ? SpriteEffects.FlipHorizontally : SpriteEffects.None, 0);
         }
-
-        #endregion
     }
 }

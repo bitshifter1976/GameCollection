@@ -68,6 +68,7 @@ public class ScreenGameSubmarineWars : GameScreen
                 break;
             }
         }
+        Fishes.Create(100);
         base.Update(gameTime, otherScreenHasFocus, coveredByOtherScreen);
     }
 

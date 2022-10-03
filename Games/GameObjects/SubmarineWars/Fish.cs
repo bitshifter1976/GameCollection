@@ -1,16 +1,17 @@
 ﻿using System;
+using System.Linq;
 using Framework;
 using Microsoft.Xna.Framework;
 
-namespace AxeGameCollection.GameObjects.TankBattle;
+namespace AxeGameCollection.GameObjects.SubmarineWars;
 
 [Serializable]
-public sealed class Bird : SpriteAnimated
+public sealed class Fish : SpriteAnimatedMultiLine
 {
     private readonly float deltaX;
     private readonly int sign;
 
-    public Bird() : base("graphic/tankBattle/bird", Vector2.Zero, 8, 12, 0f, 1f, (int)Layer.Bird)
+    public Fish() : base("graphic/submarineWars/fish", Vector2.Zero, 12, 3, 6, 0f, 0.5f, (int)Layer.Fish)
     {
     	scrolling = true;
         var direction = Rand.Int(0, 1);
@@ -26,12 +27,12 @@ public sealed class Bird : SpriteAnimated
             position.X = -Width;
             flip = true;
         }
-        var factor = Rand.Int(100, 200);
+        var factor = Rand.Int(1, 200);
 		deltaX = factor / 5f + 0.3f;
-        position.Y = factor;
+        position.Y = Rand.Float(Water.TopPixel.Max(p => p.Value) + Height*2, Manager.DesignHeight-Height*2);
         scale = factor/800f;
         origin = new Vector2(texture.Width / (float)FrameCount / 2, (float)texture.Height/2);
-        color = Color.Black;
+        color = Color.White;
     }
 
     public override Sprite Update(GameTime gameTime)

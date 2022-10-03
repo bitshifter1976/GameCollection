@@ -11,6 +11,7 @@ public enum Layer
     Planet = 50,
     Cloud = 60,
     Bird = 70,
+    Fish = 71,
     Shot = 80,
     Explosion = 90,
     Hud = 100,
