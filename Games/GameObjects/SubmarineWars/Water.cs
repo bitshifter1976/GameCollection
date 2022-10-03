@@ -16,7 +16,7 @@ public static class Water
     private static float waveHeight;
     private static float xOffset;
     private static float yOffset;
-
+    private static float xDelta;
     public static Dictionary<int, int> TopPixel { get; private set; }
 
 
@@ -30,24 +30,29 @@ public static class Water
         waveHeight = Rand.Float(2f, 20f);
         yOffset = Manager.DesignHeight / 6f;
         TopPixel = new Dictionary<int, int>();
-        CreateTopPixel();
+        for (var x = 0; x <= Manager.DesignWidth; x++)
+        {
+            var y = (int)Math.Round(yOffset + Math.Sin((xOffset + x) / waveWidth) * waveHeight, 0);
+            TopPixel.Add(x, y);
+        }
     }
 
     public static void Update(GameTime gameTime)
     {
-        xOffset += speed * (float)gameTime.ElapsedGameTime.TotalSeconds;
+        var delta = speed * (float)gameTime.ElapsedGameTime.TotalSeconds;
+        xDelta += delta;
+        xOffset += delta;
         if (xOffset > Manager.DesignWidth)
             xOffset -= Manager.DesignWidth;
-        CreateTopPixel();
-    }
-
-    private static void CreateTopPixel()
-    {
-        TopPixel.Clear();
-        for (var x = 1; x <= Manager.DesignWidth; x++)
+        if (xDelta > 1)
         {
-            var y = (int)Math.Round(yOffset + Math.Sin((xOffset + x) / waveWidth) * waveHeight, 0);
-            TopPixel.Add(x, y);
+            // shift pixel to the left (x to x-1)
+            for (var i=1; i < TopPixel.Count; i++)
+                TopPixel[i-1] = TopPixel[i];
+            // now calculate waves y at end of list
+            var y = (int)Math.Round(yOffset + Math.Sin((xOffset + Manager.DesignWidth) / waveWidth) * waveHeight, 0);
+            TopPixel[TopPixel.Count - 1] = y;
+            xDelta %= 1;
         }
     }
 

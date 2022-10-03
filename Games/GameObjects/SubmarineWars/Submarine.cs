@@ -6,6 +6,7 @@ namespace AxeGameCollection.GameObjects.SubmarineWars
     public class Submarine : Sprite
     {
         private bool diving;
+        private bool waterlineReached;
 
         public override Rectangle BoundingBox => new((int)(position.X - Width / 2f), (int)position.Y, (int)Width, (int)(Height/2f));
 
@@ -16,13 +17,23 @@ namespace AxeGameCollection.GameObjects.SubmarineWars
         public void Dive(bool up)
         {
             diving = true;
-            position = new Vector2(position.X, up ? position.Y-1 : position.Y+1);
+            var minY = Water.TopPixel[(int)position.X];
+            var maxY = Manager.DesignHeight - Height/2f;
+            var y = MathHelper.Clamp(up ? position.Y - 1 : position.Y + 1, minY, maxY);
+            waterlineReached = (y == minY);
+            position.Y = MathHelper.Clamp(y, minY, maxY);
             rotation += up ? -0.005f : 0.005f;
             rotation = MathHelper.Clamp(rotation, -0.2f, 0.2f);
         }
 
         public override Sprite Update(GameTime gameTime)
         {
+            // if water line reached, stay on top
+            if (waterlineReached)
+            {
+                position.Y = Water.TopPixel[(int)position.X];
+            }
+            // rotate back if not diving
             if (!diving)
             {
                 if (rotation < 0)
