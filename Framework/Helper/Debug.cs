@@ -8,16 +8,13 @@ public class LineDebug
 {
     public Line Line { get; set; }
     public string Name { get; set; }
-    public LineDebug(Line line, string name)
-    {
-        Line = line;
-        Name = name;
-    }
+    public Color Color { get; set; }
+
     public LineDebug(Line line, string name, Color color)
     {
         Line = line;
         Name = name;
-        Line.Color = color;
+        Color = color;
     }
 }
 
@@ -132,14 +129,14 @@ public static class Debug
 			TextOut("------LINES------", Color.White);
         foreach (LineDebug l in Lines)
         {
-            l.Line.Draw();
-            TextOut(l.Name + "   " + l.Line, l.Line.Color);
+            l.Line.Draw(l.Color, 1);
+            TextOut(l.Name + "   " + l.Line, l.Color);
         }
 			TextOut("------RECTS------", Color.White);
         foreach (RectDebug r in Rects)
         {
             foreach (Line l in r.Lines)
-                l.Draw();
+                l.Draw(r.Color, 1);
             TextOut(r.Name, r.Color);
         }
 			TextOut("------ELLIPSES------", Color.White);

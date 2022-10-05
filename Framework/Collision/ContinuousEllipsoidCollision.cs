@@ -211,7 +211,7 @@ public static class ContinuousEllipsoidCollision
                 Debug.Log("    Collider:  {0}", colliderSprite.GetType().Name);
                 Debug.Log("    Bounds:    {0}", colliderSprite.BoundingBox);
 #endif
-                collLines = Line.GetFromRectangle(colliderSprite.BoundingBox, Color.Black);
+                collLines = Line.GetFromRectangle(colliderSprite.BoundingBox);
                 foreach (var t in collLines)
                 {
                     t.Start *= worldScale;

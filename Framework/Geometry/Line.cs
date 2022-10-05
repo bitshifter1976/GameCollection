@@ -6,8 +6,7 @@ namespace Framework
 {
     public class Line
     {
-        private Texture2D sprite;
-        public Color Color;
+        private readonly Texture2D sprite;
 
         public Vector2 Normal
         {
@@ -32,53 +31,44 @@ namespace Framework
         public Vector2 Start { get; set; }
         public Vector2 End { get; set; }
 
-        public Line(float x1, float y1, float x2, float y2) : this(x1, y1, x2, y2, Color.Black, false)
+        public Line(float x1, float y1, float x2, float y2) : this(new Vector2(x1, y1), new Vector2(x2, y2))
         {
         }
 
-        public Line(float x1, float y1, float x2, float y2, Color color, bool thick) : this(new Vector2(x1, y1), new Vector2(x2, y2), color, thick)
+        public Line(Vector2 p1, Vector2 p2)
         {
-        }
-
-        public Line(Vector2 p1, Vector2 p2) : this(p1, p2, Color.Black, false)
-        {
-        }
-
-        public Line(Vector2 p1, Vector2 p2, Color color, bool thick)
-        {
-            Color = color;
             Start = p1;
             End = p2;
-            sprite = Manager.Content.Load<Texture2D>(thick ? "graphic/common/dotBig" : "graphic/common/dot");
+            sprite = Manager.Content.Load<Texture2D>("graphic/common/dot");
         }
 
-        public static Line[] GetFromRectangle(Rectangle rect, Color color)
+        public static Line[] GetFromRectangle(Rectangle rect)
         {
             Line[] lines = new Line[4];
-            lines[0] = new Line(rect.Left, rect.Top, rect.Right, rect.Top, color, false);
-            lines[1] = new Line(rect.Right, rect.Bottom, rect.Left, rect.Bottom, color, false);
-            lines[2] = new Line(rect.Left, rect.Bottom, rect.Left, rect.Top, color, false);
-            lines[3] = new Line(rect.Right, rect.Top, rect.Right, rect.Bottom, color, false);
+            lines[0] = new Line(rect.Left, rect.Top, rect.Right, rect.Top);
+            lines[1] = new Line(rect.Right, rect.Bottom, rect.Left, rect.Bottom);
+            lines[2] = new Line(rect.Left, rect.Bottom, rect.Left, rect.Top);
+            lines[3] = new Line(rect.Right, rect.Top, rect.Right, rect.Bottom);
             return lines;
         }
 
-        public static Line[] GetFromRectangle(RectangleF rect, Color color)
+        public static Line[] GetFromRectangle(RectangleF rect)
         {
             Line[] lines = new Line[4];
-            lines[0] = new Line(rect.Left, rect.Top, rect.Right, rect.Top, color, false);
-            lines[1] = new Line(rect.Right, rect.Bottom, rect.Left, rect.Bottom, color, false);
-            lines[2] = new Line(rect.Left, rect.Bottom, rect.Left, rect.Top, color, false);
-            lines[3] = new Line(rect.Right, rect.Top, rect.Right, rect.Bottom, color, false);
+            lines[0] = new Line(rect.Left, rect.Top, rect.Right, rect.Top);
+            lines[1] = new Line(rect.Right, rect.Bottom, rect.Left, rect.Bottom);
+            lines[2] = new Line(rect.Left, rect.Bottom, rect.Left, rect.Top);
+            lines[3] = new Line(rect.Right, rect.Top, rect.Right, rect.Bottom);
             return lines;
         }
 
-        public static Line[] GetFromRectangle(RotatedRectangle rect, Color color)
+        public static Line[] GetFromRectangle(RotatedRectangle rect)
         {
             Line[] lines = new Line[4];
-            lines[0] = new Line(rect.UpperLeftCorner.X, rect.UpperLeftCorner.Y, rect.UpperRightCorner.X, rect.UpperRightCorner.Y, color, false);
-            lines[1] = new Line(rect.LowerRightCorner.X, rect.LowerRightCorner.Y, rect.LowerLeftCorner.X, rect.LowerLeftCorner.Y, color, false);
-            lines[2] = new Line(rect.LowerLeftCorner.X, rect.LowerLeftCorner.Y, rect.UpperLeftCorner.X, rect.UpperLeftCorner.Y, color, false);
-            lines[3] = new Line(rect.UpperRightCorner.X, rect.UpperRightCorner.Y, rect.LowerRightCorner.X, rect.LowerRightCorner.Y, color, false);
+            lines[0] = new Line(rect.UpperLeftCorner.X, rect.UpperLeftCorner.Y, rect.UpperRightCorner.X, rect.UpperRightCorner.Y);
+            lines[1] = new Line(rect.LowerRightCorner.X, rect.LowerRightCorner.Y, rect.LowerLeftCorner.X, rect.LowerLeftCorner.Y);
+            lines[2] = new Line(rect.LowerLeftCorner.X, rect.LowerLeftCorner.Y, rect.UpperLeftCorner.X, rect.UpperLeftCorner.Y);
+            lines[3] = new Line(rect.UpperRightCorner.X, rect.UpperRightCorner.Y, rect.LowerRightCorner.X, rect.LowerRightCorner.Y);
             return lines;
         }
 
@@ -89,7 +79,7 @@ namespace Framework
             Vector2 oldEnd = End;
             Vector2 newEnd = Start + direction;
             Vector2 newStart = oldEnd - direction;
-            return new Line(newStart.X, newStart.Y, newEnd.X, newEnd.Y, Color, false);
+            return new Line(newStart.X, newStart.Y, newEnd.X, newEnd.Y);
         }
 
         public bool ContainsPoint(Vector2 point)
@@ -175,13 +165,13 @@ namespace Framework
             return false;
         }
 
-        public void Draw()
+        public void Draw(Color color, float thickness)
         {
             Vector2 origin = new Vector2(0.5f, 0.0f);
             Vector2 diff = End - Start;
-            Vector2 scale = new Vector2(1.0f, diff.Length() / sprite.Height);
+            Vector2 scale = new Vector2(thickness, diff.Length() / sprite.Height);
             float angle = (float)(Math.Atan2(diff.Y, diff.X)) - MathHelper.PiOver2;
-            Manager.SpriteBatch.Draw(sprite, Start, null, Color, angle, origin, scale, SpriteEffects.None, 1.0f);
+            Manager.SpriteBatch.Draw(sprite, Start, null, color, angle, origin, scale, SpriteEffects.None, 1.0f);
         }
 
         public override string ToString()

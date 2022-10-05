@@ -102,7 +102,7 @@ public static class Mountain
                 0);
 
         foreach (var l in explosionLines)
-            l.Value.Draw();
+            l.Value.Draw(color, 1);
     }
 
     public static bool Collide(Rectangle rect, out Vector2 collisionPoint)
@@ -159,7 +159,7 @@ public static class Mountain
                 {
                     var posX = (int)(Math.Round(intersection1.X, 0));
                     if (intersection1 != Vector2.Zero && TopPixel.ContainsKey(posX) && !explosionLines.ContainsKey(posX))
-                        explosionLines.Add(posX, new Line(posX, TopPixel[posX].Y, posX, intersection1.Y, color, false));
+                        explosionLines.Add(posX, new Line(posX, TopPixel[posX].Y, posX, intersection1.Y));
 
                     posX = (int)(Math.Round(intersection2.X, 0));
                     if (intersection2 != Vector2.Zero && TopPixel.ContainsKey(posX))

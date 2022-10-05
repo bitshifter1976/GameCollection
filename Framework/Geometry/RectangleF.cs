@@ -85,7 +85,7 @@ namespace Framework
 
         public Vector2 Center
         {
-            get { return new Line(x, y, x2, y2, Color.White, false).Center; }
+            get { return new Line(x, y, x2, y2).Center; }
         }
 
         public RectangleF()

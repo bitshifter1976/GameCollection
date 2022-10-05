@@ -35,9 +35,9 @@ public sealed class Wind : Sprite
         var end = Center + velocity;
         var velocity2 = Vector2.Transform(up, Matrix.CreateRotationZ(MathHelper.ToRadians(angle + 150))) * topRadius; 
         var velocity3 = Vector2.Transform(up, Matrix.CreateRotationZ(MathHelper.ToRadians(angle - 150))) * topRadius;
-        windDirectionLine = new Line(Center, Center+velocity, Color.Red, false);
-        windTop1Line = new Line(end, end+velocity2, Color.Red, false);
-        windTop2Line = new Line(end, end+velocity3, Color.Red, false);
+        windDirectionLine = new Line(Center, Center+velocity);
+        windTop1Line = new Line(end, end+velocity2);
+        windTop2Line = new Line(end, end+velocity3);
     }
 
     public override Sprite Update(GameTime gameTime)
@@ -48,8 +48,8 @@ public sealed class Wind : Sprite
     public override void Draw()
     {
         base.Draw();
-        windDirectionLine.Draw();
-        windTop1Line.Draw();
-        windTop2Line.Draw();
+        windDirectionLine.Draw(Color.Red, 1);
+        windTop1Line.Draw(Color.Red, 1);
+        windTop2Line.Draw(Color.Red, 1);
     }
 }

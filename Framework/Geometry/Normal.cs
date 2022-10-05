@@ -18,10 +18,10 @@ namespace Framework
         public static Vector2[] GetFromRectangle(Rectangle rect)
         {
             Vector2[] normals = new Vector2[4];
-            normals[0] = GetFromLine(new Line(rect.Left, rect.Top, rect.Right, rect.Top, Color.White, false));
-            normals[1] = GetFromLine(new Line(rect.Right, rect.Bottom, rect.Left, rect.Bottom, Color.White, false));
-            normals[2] = GetFromLine(new Line(rect.Left, rect.Bottom, rect.Right, rect.Top, Color.White, false));
-            normals[3] = GetFromLine(new Line(rect.Right, rect.Top, rect.Right, rect.Bottom, Color.White, false));
+            normals[0] = GetFromLine(new Line(rect.Left, rect.Top, rect.Right, rect.Top));
+            normals[1] = GetFromLine(new Line(rect.Right, rect.Bottom, rect.Left, rect.Bottom));
+            normals[2] = GetFromLine(new Line(rect.Left, rect.Bottom, rect.Right, rect.Top));
+            normals[3] = GetFromLine(new Line(rect.Right, rect.Top, rect.Right, rect.Bottom));
             return normals;
         }
     }

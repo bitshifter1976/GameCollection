@@ -149,7 +149,7 @@ namespace Framework
 
             if (Manager.Debug)
             {
-                Debug.Rects.Add(new RectDebug(BoundingBoxRotated.ToLines(Color.Red), "BoundingBox", Color.Red));
+                Debug.Rects.Add(new RectDebug(BoundingBoxRotated.ToLines(), "BoundingBox", Color.Red));
                 Debug.Points.Add(new PointDebug(new Dot(Center), "Center", Color.Gold));
                 Debug.Points.Add(new PointDebug(new Dot(position), "Position", Color.Green));
                 Manager.SpriteBatch.DrawString(Manager.Fonts.Get("Debug"),$"{position}({this.GetType().Name})", new Vector2(position.X, position.Y + Height + 2), Color.Black);

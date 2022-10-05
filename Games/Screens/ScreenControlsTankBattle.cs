@@ -52,7 +52,7 @@ public class ScreenControlsTankBattle : GameScreen
         var rowHeight = (float)Manager.DesignHeight / rowCount;
         for (var rowIndex = 0; rowIndex < rowCount; rowIndex++)
         {
-            new Line(1, 1 + rowIndex * rowHeight, Manager.DesignWidth - 1, 1 + rowIndex * rowHeight, Color.Black, false).Draw();
+            new Line(1, 1 + rowIndex * rowHeight, Manager.DesignWidth - 1, 1 + rowIndex * rowHeight).Draw(Color.Black, 1);
             for (var colIndex = 0; colIndex < colCount; colIndex++)
             {
                 var text = rows[rowIndex][colIndex];
@@ -63,7 +63,7 @@ public class ScreenControlsTankBattle : GameScreen
                 var textSize = font.MeasureString(text) * scale;
                 var x = colIndex * colWidth + colWidth / 2f - textSize.X / 2f;
                 var y = rowIndex * rowHeight;
-                new Line(1 + colIndex * colWidth, y, 1 + colIndex * colWidth, y + rowHeight, Color.Black, false).Draw();
+                new Line(1 + colIndex * colWidth, y, 1 + colIndex * colWidth, y + rowHeight).Draw(Color.Black, 1);
                 Manager.SpriteBatch.DrawString(font, text, new Vector2(x, y+textYOffset), Color.Black, 0, Vector2.Zero, scale, SpriteEffects.None, 0);
             }
         }

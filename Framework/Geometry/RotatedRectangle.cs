@@ -75,8 +75,8 @@ namespace Framework
         {
             get
             {
-                var l1 = new Line(UpperLeftCorner.X,UpperLeftCorner.Y,LowerRightCorner.X,LowerRightCorner.Y, Color.White, false);
-                var l2 = new Line(LowerLeftCorner.X, LowerLeftCorner.Y, UpperRightCorner.X, UpperRightCorner.Y, Color.White, false);
+                var l1 = new Line(UpperLeftCorner.X,UpperLeftCorner.Y,LowerRightCorner.X,LowerRightCorner.Y);
+                var l2 = new Line(LowerLeftCorner.X, LowerLeftCorner.Y, UpperRightCorner.X, UpperRightCorner.Y);
                 l1.IntersectLine(l2, out var intersectionPoint);
                 return intersectionPoint;
             }
@@ -223,9 +223,9 @@ namespace Framework
             return $"[{UpperLeftCorner.X}/{UpperLeftCorner.Y}/{Width}/{Height}/{Rotation}]";
         }
 
-        public List<Line> ToLines(Color color)
+        public List<Line> ToLines()
         {
-            return Line.GetFromRectangle(this, color).ToList();
+            return Line.GetFromRectangle(this).ToList();
         }
     }
 }

@@ -132,12 +132,12 @@ namespace Framework
                 Vector2 v = (Vector2)vectors[i];
                 Vector2 pos = Position + v;
                 if (i > 0)
-                    new Line(oldPos.X, oldPos.Y, pos.X, pos.Y, color, false).Draw();
+                    new Line(oldPos.X, oldPos.Y, pos.X, pos.Y).Draw(color, 1);
                 else
                     firstPos = pos;
                 oldPos = pos;
             }
-            new Line(firstPos.X, firstPos.Y, oldPos.X, oldPos.Y, color, false).Draw();
+            new Line(firstPos.X, firstPos.Y, oldPos.X, oldPos.Y).Draw(color, 1);
         }
 
         /// <summary>

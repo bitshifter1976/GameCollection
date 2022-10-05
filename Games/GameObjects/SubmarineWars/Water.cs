@@ -19,6 +19,7 @@ public static class Water
     private static float yOffset;
     private static float xDelta;
     private static int GroundYOffset = 200;
+    private static int GroundYMaxOffset = 100;
     private static float xDeltaGround;
 
     public static Dictionary<int, int> TopPixel { get; private set; }
@@ -42,11 +43,11 @@ public static class Water
             TopPixel.Add(x, y);
         }
         GroundPixel = new Dictionary<int, int>();
-        var oldY = Manager.DesignHeight - GroundYOffset / 2;
+        var oldY = Manager.DesignHeight - GroundYOffset;
         for (var x = 0; x <= Manager.DesignWidth; x++)
         {
             var y = oldY + Rand.Int(-5,5);
-            y = MathHelper.Clamp(y, Manager.DesignHeight - GroundYOffset, Manager.DesignHeight);
+            y = MathHelper.Clamp(y, Manager.DesignHeight - GroundYOffset, Manager.DesignHeight - GroundYMaxOffset);
             GroundPixel.Add(x, y);
             oldY = y;
         }

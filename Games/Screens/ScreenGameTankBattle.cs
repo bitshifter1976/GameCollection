@@ -175,8 +175,8 @@ public class ScreenGameTankBattle : GameScreen
                 }
             case GameState.Start:
                 {
-                    new Line(tank1.Center.X, 0, tank1.Center.X, tank1.Center.Y, Color.Black, false).Draw();
-                    new Line(tank2.Center.X, 0, tank2.Center.X, tank2.Center.Y, Color.Black, false).Draw();
+                    new Line(tank1.Center.X, 0, tank1.Center.X, tank1.Center.Y).Draw(Color.Black, 1);
+                    new Line(tank2.Center.X, 0, tank2.Center.X, tank2.Center.Y).Draw(Color.Black, 1);
                     Mountain.Draw(gameTime, Manager.DesignWidth);
                     SpriteManager.Draw();
                     break;
