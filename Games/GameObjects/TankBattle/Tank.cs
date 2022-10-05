@@ -62,7 +62,7 @@ public class Tank : Sprite
 
     private void Load()
     {
-        textureWeapon = Manager.Content.Load<Texture2D>("graphic/weapon");
+        textureWeapon = Manager.Content.Load<Texture2D>("graphic/tankBattle/weapon");
         tankExplosion = false;
 
         rotationWeapon = 0;

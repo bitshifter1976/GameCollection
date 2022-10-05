@@ -25,8 +25,8 @@ public class ScreenGameSubmarineWars : GameScreen
         state = GameState.Load;
         this.level = level;
 
-        Manager.Input.CreateHoldingKeys(0.10f, Keys.Up, Keys.Down, Keys.W, Keys.S);
-        Manager.Input.CreateHoldingButtons(0.10f, Buttons.DPadUp, Buttons.DPadDown, Buttons.LeftThumbstickUp, Buttons.LeftThumbstickDown);
+        Manager.Input.CreateHoldingKeys(0.10f, Keys.Up, Keys.Down, Keys.Left, Keys.Right, Keys.W, Keys.S, Keys.A, Keys.D);
+        Manager.Input.CreateHoldingButtons(0.10f, Buttons.DPadUp, Buttons.DPadDown, Buttons.DPadLeft, Buttons.DPadRight, Buttons.LeftThumbstickUp, Buttons.LeftThumbstickDown, Buttons.LeftThumbstickLeft, Buttons.LeftThumbstickRight);
     }
 
     public override void LoadContent()
@@ -42,7 +42,8 @@ public class ScreenGameSubmarineWars : GameScreen
     private void CreateScene()
     {
         backColor = Color.CornflowerBlue;
-        Water.Load();
+        SpriteManager.AddImmediate(new Water());
+        SpriteManager.AddImmediate(new Hud());
         submarine = new Submarine(new Vector2(Manager.DesignWidth / 2f, Manager.DesignHeight / 2f), 0, 1);
         SpriteManager.AddImmediate(submarine);
     }
@@ -54,13 +55,11 @@ public class ScreenGameSubmarineWars : GameScreen
             case GameState.Load:
             {
                 SpriteManager.Update(gameTime);
-                Water.Update(gameTime);
                 break;
             }
             case GameState.Play:
             {
                 SpriteManager.Update(gameTime);
-                Water.Update(gameTime);
                 break;
             }
             case GameState.End:
@@ -80,7 +79,6 @@ public class ScreenGameSubmarineWars : GameScreen
             case GameState.Load:
             {
                 SpriteManager.Draw();
-                Water.Draw(gameTime);
                 var str = $"Get ready!\nLevel {level}";
                 ShowCenterText(str, AxeGameCollection.Games.ArenaChase.ToString(), Color.Gold, 1);
                 break;
@@ -88,7 +86,6 @@ public class ScreenGameSubmarineWars : GameScreen
             case GameState.Play:
             {
                 SpriteManager.Draw();
-                Water.Draw(gameTime);
                 break;
             }
             case GameState.End:
@@ -129,6 +126,28 @@ public class ScreenGameSubmarineWars : GameScreen
         if (Manager.Input.HoldingKey(Keys.Down, Keys.S) || Manager.Input.GamePadHoldingKey(PlayerIndex.One, Buttons.DPadDown, Buttons.LeftThumbstickDown))
         {
             submarine.Dive(false);
+        }
+        var automaticSpeedDown = true;
+        if (Manager.Input.HoldingKey(Keys.Left, Keys.A) || Manager.Input.GamePadHoldingKey(PlayerIndex.One, Buttons.DPadLeft, Buttons.LeftThumbstickLeft))
+        {
+            automaticSpeedDown = false;
+            submarine.Speed += 0.01f;
+            SpriteManager.ScrollX(submarine.Speed);
+        }
+        if (Manager.Input.HoldingKey(Keys.Right, Keys.D) || Manager.Input.GamePadHoldingKey(PlayerIndex.One, Buttons.DPadRight, Buttons.LeftThumbstickRight))
+        {
+            automaticSpeedDown = false;
+            submarine.Speed -= 0.01f;
+            SpriteManager.ScrollX(submarine.Speed);
+        }
+        if (automaticSpeedDown)
+        {
+            if (submarine.Speed > 0)
+                submarine.Speed -= 0.01f;
+            if (submarine.Speed < 0)
+                submarine.Speed += 0.01f;
+            if (submarine.Speed != 0)
+                SpriteManager.ScrollX(submarine.Speed);
         }
         // accept messages
         if (Manager.Input.KeyPressed(Keys.Enter) || Manager.Input.GamePadKeyPressed(PlayerIndex.One, Buttons.A))

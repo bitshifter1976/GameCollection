@@ -31,6 +31,11 @@ public static class SpriteManager
         toAdd.AddRange(list);
     }
 
+    public static void ScrollX(float speed)
+    {
+        sprites.ForEach(s => s.ScrollX(speed));
+    }
+
     public static void Update(GameTime time)
     {
         // add new sprites

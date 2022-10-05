@@ -22,10 +22,10 @@ namespace Framework
 			set => percentage = MathHelper.Clamp(value, 0, MaxValue);
 		}
 
-		public ProgressBar(Vector2 position, float scale, Color color, int layer, string text = "") : base("graphic/progressBar", position, 0, scale, color, layer, CollisionType.None)
+		public ProgressBar(Vector2 position, float scale, Color color, int layer, string text = "") : base("graphic/common/progressBar", position, 0, scale, color, layer, CollisionType.None)
 		{
 			this.text = text;
-            textureWhite = Manager.Content.Load<Texture2D>("graphic/blank_white");
+            textureWhite = Manager.Content.Load<Texture2D>("graphic/common/blank_white");
             xOffset *= scale;
             yOffset *= scale;
 			SetActive(true);

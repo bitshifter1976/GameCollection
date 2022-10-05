@@ -7,7 +7,25 @@ namespace AxeGameCollection.Screens;
 
 public class ScreenControlsArenaChase : GameScreen
 {
-    private Texture2D texture;
+    private SpriteFont font;
+    private readonly string[][] rows = new[]
+    {
+        new []{ "Player", "Action",      "Keyboard",   "Gamepad" },
+        new []{ "",       "",            "",           "" },
+        new []{ "1",      "Steer left",  "A",          "      DPadLeft\nLeftThumbstickLeft" },
+        new []{ "",       "Steer right", "D",          "      DPadRight\nLeftThumbstickRight" },
+        new []{ "",       "Accelerate",  "W",          "RightTrigger" },
+        new []{ "",       "Shoot",       "Space",      "A" },
+        new []{ "",       "Place Mine",  "M",          "B" },
+        new []{ "",       "", "", "" },
+        new []{ "2",      "Steer left",  "Left",       "     DPadLeft\nLeftThumbstickLeft" },
+        new []{ "",       "Steer right", "Right",      "     DPadRight\nLeftThumbstickRight" },
+        new []{ "",       "Accelerate",  "Up",         "RightTrigger" },
+        new []{ "",       "Shoot",       "Enter",      "A" },
+        new []{ "",       "Place Mine",  "RightShift", "B" },
+        new []{ "",       "",            "",           "" },
+
+    };
 
     public ScreenControlsArenaChase(Game game) : base(game)
     {
@@ -16,36 +34,15 @@ public class ScreenControlsArenaChase : GameScreen
 
     public override void LoadContent()
     {
-        texture = Manager.Content.Load<Texture2D>("graphic/background_menu");
+        font = Manager.Fonts.Get(AxeGameCollection.Games.ArenaChase.ToString());
         base.LoadContent();
     }
 
     public override void Draw(GameTime gameTime)
     {
-        InitDraw(Color.Black);
+        InitDraw(Color.WhiteSmoke);
 
-        // background
-        Manager.SpriteBatch.Draw(texture, new Rectangle((int)(Manager.DesignWidth/2f - texture.Width/2f), (int)(Manager.DesignHeight/2f - texture.Height/2f), texture.Width, texture.Height), Color.White);
         // draw table
-        var font = Manager.Fonts.Get(AxeGameCollection.Games.ArenaChase.ToString());
-        var rows = new[]
-        {
-            new []{ "Player", "Action",      "Keyboard",   "Gamepad" },
-            new []{ "",       "",            "",           "" },
-            new []{ "1",      "Steer left",  "A",          "      DPadLeft\nLeftThumbstickLeft" },
-            new []{ "",       "Steer right", "D",          "      DPadRight\nLeftThumbstickRight" },
-            new []{ "",       "Accelerate",  "W",          "RightTrigger" },
-            new []{ "",       "Shoot",       "Space",      "A" },
-            new []{ "",       "Place Mine",  "M",          "B" },
-            new []{ "",       "", "", "" },
-            new []{ "2",      "Steer left",  "Left",       "     DPadLeft\nLeftThumbstickLeft" },
-            new []{ "",       "Steer right", "Right",      "     DPadRight\nLeftThumbstickRight" },
-            new []{ "",       "Accelerate",  "Up",         "RightTrigger" },
-            new []{ "",       "Shoot",       "Enter",      "A" },
-            new []{ "",       "Place Mine",  "RightShift", "B" },
-            new []{ "",       "",            "",           "" },
-
-        };
         var rowCount = rows.Length;
         var colCount = rows[0].Length;
         var colWidth = (float)Manager.DesignWidth / colCount;
@@ -56,7 +53,7 @@ public class ScreenControlsArenaChase : GameScreen
             for (var colIndex = 0; colIndex < colCount; colIndex++)
             {
                 var text = rows[rowIndex][colIndex];
-                var textYOffset = text.Contains("\n") || rowIndex == 0 ? 0 : 20;
+                var textYOffset = text.Contains('\n') || rowIndex == 0 ? 0 : 20;
                 var scale = 0.35f;
                 if (rowIndex == 0)
                     scale = 0.7f;

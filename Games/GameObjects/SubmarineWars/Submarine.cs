@@ -8,8 +8,16 @@ namespace AxeGameCollection.GameObjects.SubmarineWars
         private bool diving;
         private bool waterlineReached;
         private bool groundReached;
+        private readonly float MinSpeed = -2.5f;
+        private readonly float MaxSpeed = 5f;
 
         public override Rectangle BoundingBox => new((int)(position.X - Width / 2f), (int)position.Y, (int)Width, (int)(Height/2f));
+
+        public float Speed
+        {
+            get => speed;
+            set => speed = MathHelper.Clamp(value, MinSpeed, MaxSpeed);
+        }
 
         public Submarine(Vector2 position, float rotation, float scale) : base("graphic/submarineWars/submarine", position, rotation, scale, (int)Layer.Submarine, CollisionType.BoundingBoxRotated)
         {

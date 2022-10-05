@@ -35,7 +35,7 @@ public class ScreenMessage : GameScreen
 
     public override void LoadContent()
     {
-        texture = Manager.Content.Load<Texture2D>("graphic/blank_white");
+        texture = Manager.Content.Load<Texture2D>("graphic/common/blank_white");
         base.LoadContent();
     }
 

@@ -29,7 +29,7 @@ public sealed class Fish : SpriteAnimatedMultiLine
         }
         var factor = Rand.Int(1, 200);
 		deltaX = factor / 5f + 0.3f;
-        position.Y = Rand.Float(Water.TopPixel.Max(p => p.Value) + Height*2, Manager.DesignHeight-Height*2);
+        position.Y = Rand.Float(Water.TopPixel.Max(p => p.Value) + Height*2, Manager.DesignHeight - Water.GroundYOffset - Height*2);
         scale = factor/800f;
         origin = new Vector2(texture.Width / (float)FrameCount / 2, (float)texture.Height/2);
         color = Color.White;

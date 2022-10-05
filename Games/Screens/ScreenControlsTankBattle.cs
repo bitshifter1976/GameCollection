@@ -8,7 +8,24 @@ namespace AxeGameCollection.Screens;
 
 public class ScreenControlsTankBattle : GameScreen
 {
-    private Texture2D texture;
+    private SpriteFont font;
+    private readonly string[][] rows = new[]
+    {
+        new []{ "Player", "Action",     "Keyboard", "Gamepad" },
+        new []{ "",       "",           "",         "" },
+        new []{ "1",      "Canon up",   "Up",       "      DPadUp\nLeftThumbstickUp" },
+        new []{ "",       "Canon down", "Down",     "      DPadDown\nLeftThumbstickDown" },
+        new []{ "",       "Power up",   "Right",    "      DPadRight\nLeftThumbstickRight" },
+        new []{ "",       "Power down", "Left",     "      DPadLeft\nLeftThumbstickLeft" },
+        new []{ "",       "Shoot",      "Space",    "A" },
+        new []{ "",       "", "", "" },
+        new []{ "2",      "Canon up",   "Up",       "      DPadUp\nLeftThumbstickUp" },
+        new []{ "",       "Canon down", "Down",     "      DPadDown\nLeftThumbstickDown" },
+        new []{ "",       "Power up",   "Right",    "      DPadRight\nLeftThumbstickRight" },
+        new []{ "",       "Power down", "Left",     "      DPadLeft\nLeftThumbstickLeft" },
+        new []{ "",       "Shoot",      "Space",    "A" },
+        new []{ "",       "", "", "" },
+    };
 
     public ScreenControlsTankBattle(Game game) : base(game)
     {
@@ -17,35 +34,14 @@ public class ScreenControlsTankBattle : GameScreen
 
     public override void LoadContent()
     {
-        texture = Manager.Content.Load<Texture2D>("graphic/background_menu");
+        font = Manager.Fonts.Get(AxeGameCollection.Games.TankBattle.ToString());
         base.LoadContent();
     }
 
     public override void Draw(GameTime gameTime)
     {
-        InitDraw(Color.Black);
-
-        // background
-        Manager.SpriteBatch.Draw(texture, new Rectangle((int)(Manager.DesignWidth/2f - texture.Width/2f), (int)(Manager.DesignHeight/2f - texture.Height/2f), texture.Width, texture.Height), Color.White);
-        // draw table
-        var font = Manager.Fonts.Get(AxeGameCollection.Games.TankBattle.ToString());
-        var rows = new[]
-        {
-            new []{ "Player", "Action",     "Keyboard", "Gamepad" },
-            new []{ "",       "",           "",         "" },
-            new []{ "1",      "Canon up",   "Up",       "      DPadUp\nLeftThumbstickUp" },
-            new []{ "",       "Canon down", "Down",     "      DPadDown\nLeftThumbstickDown" },
-            new []{ "",       "Power up",   "Right",    "      DPadRight\nLeftThumbstickRight" },
-            new []{ "",       "Power down", "Left",     "      DPadLeft\nLeftThumbstickLeft" },
-            new []{ "",       "Shoot",      "Space",    "A" },
-            new []{ "",       "", "", "" },
-            new []{ "2",      "Canon up",   "Up",       "      DPadUp\nLeftThumbstickUp" },
-            new []{ "",       "Canon down", "Down",     "      DPadDown\nLeftThumbstickDown" },
-            new []{ "",       "Power up",   "Right",    "      DPadRight\nLeftThumbstickRight" },
-            new []{ "",       "Power down", "Left",     "      DPadLeft\nLeftThumbstickLeft" },
-            new []{ "",       "Shoot",      "Space",    "A" },
-            new []{ "",       "", "", "" },
-        };
+        InitDraw(Color.WhiteSmoke);
+        
         var rowCount = rows.Length;
         var colCount = rows[0].Length;
         var colWidth = (float)Manager.DesignWidth / colCount;
