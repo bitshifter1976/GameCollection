@@ -2,7 +2,6 @@
 using Framework;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
-using System.Security.Policy;
 
 namespace AxeGameCollection.Screens;
 
@@ -19,6 +18,7 @@ public class ScreenGameSubmarineWars : GameScreen
     private GameState state;
     private int level;
     private Submarine submarine;
+    private Hud hud;
 
     public ScreenGameSubmarineWars(Game game, int level) : base(game)
     {
@@ -33,6 +33,7 @@ public class ScreenGameSubmarineWars : GameScreen
     {
         Manager.Sound.LoadSong("game");
         Manager.Sound.PlaySong("game");
+        Manager.Sound.LoadEffect("fireBurn");
 
         CreateScene();
 
@@ -43,8 +44,8 @@ public class ScreenGameSubmarineWars : GameScreen
     {
         backColor = Color.CornflowerBlue;
         SpriteManager.AddImmediate(new Water());
-        SpriteManager.AddImmediate(new Hud());
-        SpriteManager.AddImmediate(submarine = new Submarine(new Vector2(Manager.DesignWidth / 2f, Manager.DesignHeight / 2f), 0, 1));
+        SpriteManager.AddImmediate(hud = new Hud());
+        SpriteManager.AddImmediate(submarine = new Submarine(new Vector2(Manager.DesignWidth / 2f, Manager.DesignHeight / 2f), 0, 1, false));
     }
 
     public override void Update(GameTime gameTime, bool otherScreenHasFocus, bool coveredByOtherScreen)
@@ -58,6 +59,7 @@ public class ScreenGameSubmarineWars : GameScreen
             }
             case GameState.Play:
             {
+                hud.Energy = submarine.Energy;
                 SpriteManager.Update(gameTime);
                 break;
             }

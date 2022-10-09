@@ -5,6 +5,7 @@ namespace AxeGameCollection.GameObjects.SubmarineWars
 {
     public class Submarine : Sprite
     {
+        private bool isAi;
         private bool diving;
         private bool waterlineReached;
         private bool groundReached;
@@ -19,8 +20,10 @@ namespace AxeGameCollection.GameObjects.SubmarineWars
             set => speed = MathHelper.Clamp(value, MinSpeed, MaxSpeed);
         }
 
-        public Submarine(Vector2 position, float rotation, float scale) : base("graphic/submarineWars/submarine", position, rotation, scale, (int)Layer.Submarine, CollisionType.BoundingBoxRotated)
+        public Submarine(Vector2 position, float rotation, float scale, bool isAi) : base("graphic/submarineWars/submarine", position, rotation, scale, (int)Layer.Submarine, CollisionType.BoundingBoxRotated)
         {
+            flip = this.isAi = isAi;
+            Energy = 100;
         }
 
         public void Dive(bool up)
@@ -39,11 +42,16 @@ namespace AxeGameCollection.GameObjects.SubmarineWars
         public override Sprite Update(GameTime gameTime)
         {
             // if water line reached, stay on top
-            if (waterlineReached)
+            if (waterlineReached && speed != 0)
                 position.Y = Water.TopPixel[(int)position.X];
             // if ground reached, stay on top
-            if (groundReached)
-                position.Y = Water.GroundPixel[(int)position.X] - Height/2f;
+            if (groundReached && speed != 0)
+            {
+                position.Y = Water.GroundPixel[(int)position.X] - Height / 2f;
+                if (!Manager.Sound.IsEffectPlaying("fireBurn"))
+                    Manager.Sound.PlayEffect("fireBurn");
+                Energy -= 0.05f;
+            }
             // rotate back if not diving
             if (!diving)
             {
