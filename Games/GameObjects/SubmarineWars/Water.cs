@@ -11,15 +11,16 @@ public class Water : Sprite
     private Color groundColor;
     private float waveWidth;
     private float waveHeight;
-    private float yOffset;
-    private static float xOffset;
-    private float xDelta;
-    private float xDeltaGround;
+    private float waveSpeed;
+    private float yWaveOffset;
+    private static double xWaveOffset;
+    private float xWaveDelta;
+    private float xGroundDelta;
     private readonly int GroundYMaxOffset = 300;
-    public static readonly int GroundYOffset = 100;
+    public static readonly int GroundYOffset = 150;
 
-    public static Dictionary<int, int> TopPixel;
-    public static Dictionary<int, int> GroundPixel;
+    public static Dictionary<int, int> TopPixel { get; private set; }
+    public static Dictionary<int, int> GroundPixel { get; private set; }
 
     public Water() : base((int)Layer.Water)
     {
@@ -28,11 +29,13 @@ public class Water : Sprite
         groundColor = Color.SaddleBrown;
         waveWidth = Rand.Float(20f, 50f);
         waveHeight = Rand.Float(2f, 20f);
-        yOffset = Manager.DesignHeight / 6f;
+        waveSpeed = Rand.Float(-20f, -30f);
+        xWaveOffset = 0;
+        yWaveOffset = Manager.DesignHeight / 6f;
         TopPixel = new Dictionary<int, int>();
         for (var x = 0; x <= Manager.DesignWidth; x++)
         {
-            var y = (int)Math.Round(yOffset + Math.Sin((xOffset + x) / waveWidth) * waveHeight, 0);
+            var y = (int)Math.Round(yWaveOffset + Math.Sin(x / waveWidth) * waveHeight, 0);
             TopPixel.Add(x, y);
         }
         GroundPixel = new Dictionary<int, int>();
@@ -46,59 +49,68 @@ public class Water : Sprite
         }
     }
 
-    public override void ScrollX(float speed)
+    public override void ScrollX(float deltaX)
     {
-        // top pixel calculation
-        xDelta += speed;
-        xOffset += speed;
-        if (xOffset > Manager.DesignWidth)
-            xOffset -= Manager.DesignWidth;
-        while (xDelta > 1 || xDelta < -1)
+        if (deltaX != 0)
         {
-            int y = 0;
-            if (speed > 0)
-                y = (int)Math.Round(yOffset + Math.Sin((xOffset + Manager.DesignWidth) / waveWidth) * waveHeight, 0);
-            if (speed < 0)
-                y = (int)Math.Round(yOffset + Math.Sin((xOffset) / waveWidth) * waveHeight, 0);
-            CalculatePixel(speed, y, ref TopPixel, ref xDelta);
-        }
-        // ground pixel calculation
-        xDeltaGround += speed;
-        while (xDeltaGround > 1 || xDeltaGround < -1)
-        {
-            int y = 0;
-            if (speed > 0)
-                y = GroundPixel[Manager.DesignWidth] + Rand.Int(-5, 5);
-            if (speed < 0)
-                y = GroundPixel[0] + Rand.Int(-5, 5);
-            CalculatePixel(speed, y, ref GroundPixel, ref xDeltaGround);
+            ScrollXWave(deltaX);
+            ScrollXGround(deltaX);
         }
     }
 
-    private static void CalculatePixel(float speed, int y, ref Dictionary<int,int> pixel, ref float xDelta)
+    private void ScrollXWave(float deltaX)
     {
-        if (speed < 0)
+        // top pixel calculation
+        xWaveDelta += deltaX;
+        xWaveOffset -= deltaX;
+        while (xWaveDelta > 1 || xWaveDelta < -1)
         {
-            for (var i = 1; i < pixel.Count; i++)
-                pixel[i - 1] = pixel[i];
-            pixel[pixel.Count - 1] = y;
-
-            if (xDelta > -2)
-                xDelta %= -1;
-            else
-                xDelta++;
+            int y = 0;
+            if (deltaX > 0)
+                y = (int)Math.Round(yWaveOffset + Math.Sin(xWaveOffset / waveWidth) * waveHeight, 0);
+            if (deltaX < 0)
+                y = (int)Math.Round(yWaveOffset + Math.Sin((Manager.DesignWidth + xWaveOffset) / waveWidth) * waveHeight, 0);
+            ScrollPixel(deltaX, y, TopPixel, ref xWaveDelta);
         }
-        if (speed > 0)
+    }
+
+    private void ScrollXGround(float deltaX)
+    {
+        // ground pixel calculation
+        xGroundDelta += deltaX;
+        while (xGroundDelta > 1 || xGroundDelta < -1)
+        {
+            int y = 0;
+            if (deltaX > 0)
+                y = GroundPixel[0] + Rand.Int(-5, 5);
+            if (deltaX < 0)
+                y = GroundPixel[Manager.DesignWidth] + Rand.Int(-5, 5);
+            ScrollPixel(deltaX, y, GroundPixel, ref xGroundDelta);
+        }
+    }
+
+    private static void ScrollPixel(float deltaX, int y, Dictionary<int,int> pixel, ref float xDelta)
+    {
+        if (deltaX < 0)
+        {
+            for (var x = 1; x < pixel.Count; x++)
+                pixel[x - 1] = pixel[x];
+            pixel[pixel.Count - 1] = y;
+            xDelta++;
+        }
+        if (deltaX > 0)
         {
             for (var i = pixel.Count - 1; i > 0; i--)
                 pixel[i] = pixel[i-1];
             pixel[0] = y;
-
-            if (xDelta < 2)
-                xDelta %= 1;
-            else
-                xDelta--;
+            xDelta--;
         }
+    }
+
+    public override Sprite Update(GameTime gameTime)
+    {
+        ScrollXWave(waveSpeed * (float)gameTime.ElapsedGameTime.TotalSeconds);
+        return null;
     }
 
     public override void Draw()

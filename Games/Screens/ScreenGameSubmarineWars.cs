@@ -44,8 +44,7 @@ public class ScreenGameSubmarineWars : GameScreen
         backColor = Color.CornflowerBlue;
         SpriteManager.AddImmediate(new Water());
         SpriteManager.AddImmediate(new Hud());
-        submarine = new Submarine(new Vector2(Manager.DesignWidth / 2f, Manager.DesignHeight / 2f), 0, 1);
-        SpriteManager.AddImmediate(submarine);
+        SpriteManager.AddImmediate(submarine = new Submarine(new Vector2(Manager.DesignWidth / 2f, Manager.DesignHeight / 2f), 0, 1));
     }
 
     public override void Update(GameTime gameTime, bool otherScreenHasFocus, bool coveredByOtherScreen)
@@ -79,7 +78,7 @@ public class ScreenGameSubmarineWars : GameScreen
             case GameState.Load:
             {
                 SpriteManager.Draw();
-                var str = $"Get ready!\nLevel {level}";
+                var str = $"Get ready!\n    Level {level}";
                 ShowCenterText(str, AxeGameCollection.Games.ArenaChase.ToString(), Color.Gold, 1);
                 break;
             }
@@ -146,8 +145,7 @@ public class ScreenGameSubmarineWars : GameScreen
                 submarine.Speed -= 0.01f;
             if (submarine.Speed < 0)
                 submarine.Speed += 0.01f;
-            if (submarine.Speed != 0)
-                SpriteManager.ScrollX(submarine.Speed);
+            SpriteManager.ScrollX(submarine.Speed);
         }
         // accept messages
         if (Manager.Input.KeyPressed(Keys.Enter) || Manager.Input.GamePadKeyPressed(PlayerIndex.One, Buttons.A))
