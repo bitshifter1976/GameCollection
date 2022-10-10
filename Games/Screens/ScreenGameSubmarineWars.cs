@@ -149,7 +149,7 @@ public class ScreenGameSubmarineWars : GameScreen
                 submarine.Speed += 0.01f;
             SpriteManager.ScrollX(submarine.Speed);
         }
-        // accept messages
+        // accept message or shoot
         if (Manager.Input.KeyPressed(Keys.Enter) || Manager.Input.GamePadKeyPressed(PlayerIndex.One, Buttons.A))
         {
             switch (state)
@@ -161,7 +161,7 @@ public class ScreenGameSubmarineWars : GameScreen
                 }
                 case GameState.Play:
                 {
-                    state = GameState.Play;
+                    submarine.Shoot();
                     break;
                 }
                 case GameState.End:

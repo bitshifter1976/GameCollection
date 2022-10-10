@@ -63,5 +63,16 @@ namespace AxeGameCollection.GameObjects.SubmarineWars
             diving = false;
             return base.Update(gameTime);
         }
+
+        public void Shoot()
+        {
+            var right = new Vector2(1, 0);
+            var rotMatrix = Matrix.CreateRotationZ(rotation);
+            var shotVelocity = Vector2.Transform(right, rotMatrix);
+            var torpedo = new Torpedo(this, Vector2.Zero, shotVelocity, 0.5f, rotation, 500);
+            shotVelocity.Normalize();
+            torpedo.Position = new Vector2(position.X, position.Y + 10) + shotVelocity * Width / 2f;
+            SpriteManager.Add(torpedo);
+        }
     }
 }

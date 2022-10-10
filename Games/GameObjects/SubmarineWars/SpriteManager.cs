@@ -59,6 +59,8 @@ public static class SpriteManager
         {
             for (var j = i + 1; j < list.Count; j++)
             {
+                if ((list[i] is Submarine s && list[j] is Torpedo t && t.Submarine == s) || (list[j] is Submarine s2 && list[i] is Torpedo t2 && t2.Submarine == s2))
+                    continue;
                 if (list[i].Collide(list[j]))
                     removeSprites.AddRange(DoCollisionReaction(list[i], list[j]));
             }
