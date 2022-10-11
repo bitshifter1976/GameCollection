@@ -1,5 +1,6 @@
 ﻿using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework;
+using System.Security.Policy;
 
 namespace Framework
 {
@@ -12,7 +13,7 @@ namespace Framework
         public Rectangle SourceRect { get; set; }
         public Vector2 Origin { get; set; }
 
-        public Particle(Texture2D texture, Vector2 position, Vector2 velocity, float rotation, float angularVelocity, Color color, int layer, float scale, float timeToLiveSec, float gravity, float shrinkFactor, bool useGravity = true)
+        public Particle(Texture2D texture, Vector2 position, Vector2 velocity, float rotation, float angularVelocity, Color color, int layer, float scale, float timeToLiveSec, float gravity, float shrinkFactor, bool useGravity = true, bool scrolling = false)
             : base(texture, position, rotation, scale, color, layer, CollisionType.None)
         {
             Velocity = velocity;
@@ -22,6 +23,7 @@ namespace Framework
                 Gravity = gravity;
             ShrinkFactor = shrinkFactor;
             SourceRect = new Rectangle(0, 0, Texture.Width, Texture.Height);
+            this.scrolling = scrolling;
         }
 
         public override Sprite Update(GameTime time)

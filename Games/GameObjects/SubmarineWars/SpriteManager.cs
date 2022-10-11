@@ -65,6 +65,16 @@ public static class SpriteManager
                     removeSprites.AddRange(DoCollisionReaction(list[i], list[j]));
             }
         }
+        var torpedos = sprites.OfType<Torpedo>().ToList();
+        foreach (Torpedo torpedo in torpedos)
+        {
+            var rect = torpedo.BoundingBoxRotated.CollisionRectangle;
+            for (var x = (int)rect.Left; x <= (int)rect.Right && x <= Manager.DesignWidth; x++)
+            {
+                if (rect.Contains(new Vector2(x, Water.GroundPixel[x])))
+                    removeSprites.AddRange(DoGroundCollisionReaction(torpedo, new Vector2(x, Water.GroundPixel[x])));
+            }
+        }
 
         return removeSprites;
     }
@@ -72,6 +82,25 @@ public static class SpriteManager
     private static List<Sprite> DoCollisionReaction(Sprite s1, Sprite s2)
     {
         var toRemove = new List<Sprite>();
+
+        if (s1 is Torpedo && s2 is Submarine)
+        {
+            CreateExplosion(s1.Center, 0.3f);
+            toRemove.Add(s1);
+        }
+
+        return toRemove;
+    }
+
+    private static List<Sprite> DoGroundCollisionReaction(Sprite s, Vector2 collisionPoint)
+    {
+        var toRemove = new List<Sprite>();
+
+        if (s is Torpedo)
+        {
+            CreateExplosion(collisionPoint, 0.3f);
+            toRemove.Add(s);
+        }
 
         return toRemove;
     }
@@ -84,6 +113,12 @@ public static class SpriteManager
             Debug.Draw();
             Debug.Clear();
         }
+    }
+
+    public static void CreateExplosion(Vector2 pos, float scale)
+    {
+        Add(new Explosion(pos, scale));
+        Add(ExplosionParticles.Create(Rand.Int(20, 50), new Color(Color.White.R, Color.White.G, Color.White.B, (byte)50), pos));
     }
 
     public static void Clear()

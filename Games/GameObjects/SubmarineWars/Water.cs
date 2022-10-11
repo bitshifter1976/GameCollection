@@ -115,7 +115,7 @@ public class Water : Sprite
 
     public override void Draw()
     {
-        for (var x = 0; x < TopPixel.Count; x++)
+        for (var x = 0; x <= Manager.DesignWidth; x++)
         {
             Manager.SpriteBatch.Draw(
                 texture,
