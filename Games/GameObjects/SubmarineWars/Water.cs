@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Framework;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -21,6 +22,8 @@ public class Water : Sprite
 
     public static Dictionary<int, int> TopPixel { get; private set; }
     public static Dictionary<int, int> GroundPixel { get; private set; }
+    public static float MaxYTopPixel => TopPixel.Max(p => p.Value);
+    public static float MinYGroundPixel => GroundPixel.Min(p => p.Value);
 
     public Water() : base((int)Layer.Water)
     {

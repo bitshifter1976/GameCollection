@@ -46,6 +46,12 @@ public class ScreenGameSubmarineWars : GameScreen
         SpriteManager.AddImmediate(new Water());
         SpriteManager.AddImmediate(hud = new Hud());
         SpriteManager.AddImmediate(submarine = new Submarine(new Vector2(Manager.DesignWidth / 2f, Manager.DesignHeight / 2f), 0, 1, false));
+        CreateEnemy();
+    }
+
+    private void CreateEnemy()
+    {
+        SpriteManager.AddImmediate(new Submarine(new Vector2(Manager.DesignWidth + 1, Rand.Float(Water.MaxYTopPixel + submarine.Height, Water.MinYGroundPixel - submarine.Height)), 0, 1, true));
     }
 
     public override void Update(GameTime gameTime, bool otherScreenHasFocus, bool coveredByOtherScreen)
@@ -53,20 +59,25 @@ public class ScreenGameSubmarineWars : GameScreen
         switch (state)
         {
             case GameState.Load:
-            {
-                SpriteManager.Update(gameTime);
-                break;
-            }
+                {
+                    SpriteManager.Update(gameTime);
+                    break;
+                }
             case GameState.Play:
-            {
-                hud.Energy = submarine.Energy;
-                SpriteManager.Update(gameTime);
-                break;
-            }
+                {
+                    if (!SpriteManager.HasEnemy)
+                    {
+                        if (Rand.Bool(1, 500))
+                            CreateEnemy();
+                    }
+                    hud.Energy = submarine.Energy;
+                    SpriteManager.Update(gameTime);
+                    break;
+                }
             case GameState.End:
-            {
-                break;
-            }
+                {
+                    break;
+                }
         }
         Fishes.Create(100);
         base.Update(gameTime, otherScreenHasFocus, coveredByOtherScreen);
@@ -78,21 +89,21 @@ public class ScreenGameSubmarineWars : GameScreen
         switch (state)
         {
             case GameState.Load:
-            {
-                SpriteManager.Draw();
-                var str = $"Get ready!\n    Level {level}";
-                ShowCenterText(str, AxeGameCollection.Games.ArenaChase.ToString(), Color.Gold, 1);
-                break;
-            }
+                {
+                    SpriteManager.Draw();
+                    var str = $"Get ready!\n    Level {level}";
+                    ShowCenterText(str, AxeGameCollection.Games.ArenaChase.ToString(), Color.Gold, 1);
+                    break;
+                }
             case GameState.Play:
-            {
-                SpriteManager.Draw();
-                break;
-            }
+                {
+                    SpriteManager.Draw();
+                    break;
+                }
             case GameState.End:
-            {
-                break;
-            }
+                {
+                    break;
+                }
         }
         EndDraw(Color.Black);
     }
@@ -155,19 +166,19 @@ public class ScreenGameSubmarineWars : GameScreen
             switch (state)
             {
                 case GameState.Load:
-                {
-                    state = GameState.Play;
-                    break;
-                }
+                    {
+                        state = GameState.Play;
+                        break;
+                    }
                 case GameState.Play:
-                {
-                    submarine.Shoot();
-                    break;
-                }
+                    {
+                        submarine.Shoot();
+                        break;
+                    }
                 case GameState.End:
-                {
-                    break;
-                }
+                    {
+                        break;
+                    }
             }
         }
 

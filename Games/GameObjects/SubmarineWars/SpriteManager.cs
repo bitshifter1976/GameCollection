@@ -11,6 +11,8 @@ public static class SpriteManager
     private static readonly List<Sprite> sprites = new();
     private static readonly List<Sprite> toAdd = new();
 
+    public static bool HasEnemy => sprites.OfType<Submarine>().ToList().Count > 1;
+
     public static void AddImmediate(Sprite s)
     {
         sprites.Add(s);
@@ -69,7 +71,7 @@ public static class SpriteManager
         foreach (Torpedo torpedo in torpedos)
         {
             var rect = torpedo.BoundingBoxRotated.CollisionRectangle;
-            for (var x = (int)rect.Left; x <= (int)rect.Right && x <= Manager.DesignWidth; x++)
+            for (var x = rect.Left < 0 ? 0 : (int)rect.Left; x <= (int)rect.Right && x <= Manager.DesignWidth; x++)
             {
                 if (rect.Contains(new Vector2(x, Water.GroundPixel[x])))
                     removeSprites.AddRange(DoGroundCollisionReaction(torpedo, new Vector2(x, Water.GroundPixel[x])));
@@ -85,8 +87,15 @@ public static class SpriteManager
 
         if (s1 is Torpedo && s2 is Submarine)
         {
-            CreateExplosion(s1.Center, 0.3f);
+            s2.Energy -= s1.Damage;
+            CreateExplosion(s1.Center, 0.5f);
             toRemove.Add(s1);
+        }
+        if (s2 is Torpedo && s1 is Submarine)
+        {
+            s1.Energy -= s2.Damage;
+            CreateExplosion(s2.Center, 0.5f);
+            toRemove.Add(s2);
         }
 
         return toRemove;
@@ -98,7 +107,7 @@ public static class SpriteManager
 
         if (s is Torpedo)
         {
-            CreateExplosion(collisionPoint, 0.3f);
+            CreateExplosion(collisionPoint, 0.5f);
             toRemove.Add(s);
         }
 

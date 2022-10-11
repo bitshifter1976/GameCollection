@@ -9,7 +9,7 @@ namespace AxeGameCollection.GameObjects.SubmarineWars
         private bool diving;
         private bool waterlineReached;
         private bool groundReached;
-        private readonly float MinSpeed = -2.5f;
+        private readonly float MinSpeed = -1.5f;
         private readonly float MaxSpeed = 5f;
 
         public override Rectangle BoundingBox => new((int)(position.X - Width / 2f), (int)position.Y, (int)Width, (int)(Height/2f));
@@ -24,6 +24,8 @@ namespace AxeGameCollection.GameObjects.SubmarineWars
         {
             flip = this.isAi = isAi;
             Energy = 100;
+            if (isAi)
+                velocity = new Vector2(MinSpeed, 0);
         }
 
         public void Dive(bool up)
@@ -41,17 +43,34 @@ namespace AxeGameCollection.GameObjects.SubmarineWars
 
         public override Sprite Update(GameTime gameTime)
         {
+            if (Energy <= 0)
+            {
+                SpriteManager.CreateExplosion(position, 1);
+                return this;
+            }
+            // if computer enemy
+            if (isAi)
+            {
+                if (Rand.Bool(1, 20))
+                    Shoot();
+                if (Rand.Bool(1, 10))
+                {
+                    rotation += Rand.Float(-0.01f, 0.01f);
+                    rotation = MathHelper.Clamp(rotation, -0.2f, 0.2f);
+                }
+                position += velocity;
+            }
             // if water line reached, stay on top
             if (waterlineReached && speed != 0)
                 position.Y = Water.TopPixel[(int)position.X];
             // if ground reached, stay on top
-            if (groundReached && speed != 0)
+            else if (groundReached && speed != 0)
             {
                 position.Y = Water.GroundPixel[(int)position.X] - Height / 2f;
                 if (!Manager.Sound.IsEffectPlaying("fireBurn"))
                     Manager.Sound.PlayEffect("fireBurn");
                 Energy -= 0.05f;
-            }
+            }            
             // rotate back if not diving
             if (!diving)
             {
@@ -67,7 +86,11 @@ namespace AxeGameCollection.GameObjects.SubmarineWars
         public void Shoot()
         {
             var right = new Vector2(1, 0);
-            var rotMatrix = Matrix.CreateRotationZ(rotation);
+            Matrix rotMatrix;
+            if (flip)
+                rotMatrix = Matrix.CreateRotationZ(rotation+MathHelper.ToRadians(180));
+            else
+                rotMatrix = Matrix.CreateRotationZ(rotation);
             var shotVelocity = Vector2.Transform(right, rotMatrix);
             var torpedo = new Torpedo(this, Vector2.Zero, shotVelocity, 0.5f, rotation, 500);
             shotVelocity.Normalize();
