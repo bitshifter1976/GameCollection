@@ -15,7 +15,6 @@ public class ScreenGameSubmarineWars : GameScreen
     }
     public enum Layer
     {
-        Mountain = 1,
         Submarine = 10,
         Trees = 20,
         Stars = 40,
@@ -31,12 +30,12 @@ public class ScreenGameSubmarineWars : GameScreen
 
     private Color backColor;
     private GameState state;
-    private int level;
+    private readonly int level;
     private Submarine submarine;
     private Hud hud;
     private float gameEndTime = 0;
-    private bool acceptEndInput;
     private const float GameEndTimeout = 2;
+    private bool acceptEndInput;
 
     public ScreenGameSubmarineWars(Game game, int level) : base(game)
     {
@@ -67,7 +66,7 @@ public class ScreenGameSubmarineWars : GameScreen
 
     private void CreateEnemy()
     {
-        SpriteManager.AddImmediate(new Submarine(new Vector2(Manager.DesignWidth + 1, Rand.Float(Water.MaxYTopPixel + submarine.Height, Water.MinYGroundPixel - submarine.Height)), 0, 1, true));
+        SpriteManager.AddImmediate(new Submarine(new Vector2(Manager.DesignWidth + submarine.Width/2f - 1, Rand.Float(Water.MaxYTopPixel + submarine.Height, Water.MinYGroundPixel - submarine.Height)), 0, 1, true));
     }
 
     public override void Update(GameTime gameTime, bool otherScreenHasFocus, bool coveredByOtherScreen)
@@ -80,7 +79,7 @@ public class ScreenGameSubmarineWars : GameScreen
                 }
             case GameState.Play:
                 {
-                    if (!SpriteManager.HasEnemy && Rand.Bool(1, 500))
+                    if (!SpriteManager.HasEnemy && Rand.Bool(1, 1000/level))
                         CreateEnemy();
                     hud.Energy = submarine.Energy;
                     SpriteManager.Update(gameTime);

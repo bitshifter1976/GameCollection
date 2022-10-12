@@ -86,7 +86,7 @@ namespace Framework
             get => scale;
             set => scale = value;
         }
-        public virtual bool OnScreen => !(position.X + texture.Width * scale < 0) && !(position.X > Manager.DesignWidth) && !(position.Y + texture.Height * scale < 0) && !(position.Y > Manager.DesignHeight);
+        public virtual bool OnScreen => (position.X + Width >= 0) && (position.X <= Manager.DesignWidth) && (position.Y + Height >= 0) && (position.Y <= Manager.DesignHeight);
         public float Rotation
         {
             get => rotation;

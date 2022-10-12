@@ -14,6 +14,7 @@ namespace AxeGameCollection.GameObjects.SubmarineWars
         private readonly float MaxSpeed = 5f;
 
         public override Rectangle BoundingBox => new((int)(position.X - Width / 2f), (int)position.Y, (int)Width, (int)(Height/2f));
+        public override bool OnScreen => (BoundingBox.Right >= 0) && (BoundingBox.Left <= Manager.DesignWidth) && (BoundingBox.Bottom >= 0) && (BoundingBox.Top <= Manager.DesignHeight);
 
         public float Speed
         {
@@ -41,7 +42,7 @@ namespace AxeGameCollection.GameObjects.SubmarineWars
             Energy = 100;
             if (isAi)
             {
-                Speed = MinSpeed;
+                scrolling = true;
             }
         }
 
@@ -67,11 +68,10 @@ namespace AxeGameCollection.GameObjects.SubmarineWars
             // if computer enemy
             if (isAi)
             {
-                if (Rand.Bool(1, 500))
-                    Shoot();
-                if (Rand.Bool(1, 50))
-                    Rotation += Rand.Float(-0.05f, 0.05f);
-                position += velocity;
+                if (Rand.Bool(1, 100)) Speed += Rand.Float(-0.5f, 1f);
+                if (Rand.Bool(1, 50))  Rotation += Rand.Float(-0.05f, 0.05f);
+                if (Rand.Bool(1, 300)) Shoot();
+                position -= velocity;
             }
             // if water line reached, stay on top
             if (waterlineReached && speed != 0)
@@ -93,7 +93,7 @@ namespace AxeGameCollection.GameObjects.SubmarineWars
                     Rotation -= 0.005f;
             }
             diving = false;
-            return base.Update(gameTime);
+            return OnScreen ? null : this;
         }
 
         public void Shoot()
