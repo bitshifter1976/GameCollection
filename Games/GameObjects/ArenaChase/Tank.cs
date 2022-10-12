@@ -1,6 +1,7 @@
 ﻿using System;
 using Framework;
 using Microsoft.Xna.Framework;
+using static AxeGameCollection.Screens.ScreenGameArenaChase;
 
 namespace AxeGameCollection.GameObjects.ArenaChase;
 

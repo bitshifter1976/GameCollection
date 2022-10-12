@@ -1,5 +1,6 @@
 ﻿using Framework;
 using Microsoft.Xna.Framework;
+using static AxeGameCollection.Screens.ScreenGameSubmarineWars;
 
 namespace AxeGameCollection.GameObjects.SubmarineWars;
 

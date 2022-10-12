@@ -1,6 +1,7 @@
 ﻿using Framework;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using static AxeGameCollection.Screens.ScreenGameTankBattle;
 
 namespace AxeGameCollection.GameObjects.TankBattle;
 

@@ -13,18 +13,35 @@ public class ScreenGameSubmarineWars : GameScreen
         Play,
         End
     }
+    public enum Layer
+    {
+        Mountain = 1,
+        Submarine = 10,
+        Trees = 20,
+        Stars = 40,
+        Planet = 50,
+        Cloud = 60,
+        Bird = 70,
+        Fish = 71,
+        Shot = 80,
+        Explosion = 90,
+        Water = 95,
+        Hud = 100,
+    }
 
     private Color backColor;
     private GameState state;
     private int level;
     private Submarine submarine;
     private Hud hud;
+    private float gameEndTime = 0;
+    private bool acceptEndInput;
+    private const float GameEndTimeout = 2;
 
     public ScreenGameSubmarineWars(Game game, int level) : base(game)
     {
         state = GameState.Load;
         this.level = level;
-
         Manager.Input.CreateHoldingKeys(0.10f, Keys.Up, Keys.Down, Keys.Left, Keys.Right, Keys.W, Keys.S, Keys.A, Keys.D);
         Manager.Input.CreateHoldingButtons(0.10f, Buttons.DPadUp, Buttons.DPadDown, Buttons.DPadLeft, Buttons.DPadRight, Buttons.LeftThumbstickUp, Buttons.LeftThumbstickDown, Buttons.LeftThumbstickLeft, Buttons.LeftThumbstickRight);
     }
@@ -34,9 +51,7 @@ public class ScreenGameSubmarineWars : GameScreen
         Manager.Sound.LoadSong("game");
         Manager.Sound.PlaySong("game");
         Manager.Sound.LoadEffect("fireBurn");
-
         CreateScene();
-
         base.LoadContent();
     }
 
@@ -47,6 +62,7 @@ public class ScreenGameSubmarineWars : GameScreen
         SpriteManager.AddImmediate(hud = new Hud());
         SpriteManager.AddImmediate(submarine = new Submarine(new Vector2(Manager.DesignWidth / 2f, Manager.DesignHeight / 2f), 0, 1, false));
         CreateEnemy();
+        SpriteManager.Update(new GameTime());
     }
 
     private void CreateEnemy()
@@ -60,22 +76,19 @@ public class ScreenGameSubmarineWars : GameScreen
         {
             case GameState.Load:
                 {
-                    SpriteManager.Update(gameTime);
                     break;
                 }
             case GameState.Play:
                 {
-                    if (!SpriteManager.HasEnemy)
-                    {
-                        if (Rand.Bool(1, 500))
-                            CreateEnemy();
-                    }
+                    if (!SpriteManager.HasEnemy && Rand.Bool(1, 500))
+                        CreateEnemy();
                     hud.Energy = submarine.Energy;
                     SpriteManager.Update(gameTime);
                     break;
                 }
             case GameState.End:
                 {
+                    SpriteManager.Update(gameTime);
                     break;
                 }
         }
@@ -97,11 +110,21 @@ public class ScreenGameSubmarineWars : GameScreen
                 }
             case GameState.Play:
                 {
+                    if (submarine.Energy <= 0)
+                        state = GameState.End;
                     SpriteManager.Draw();
                     break;
                 }
             case GameState.End:
                 {
+                    SpriteManager.Draw();
+                    gameEndTime += (float)gameTime.ElapsedGameTime.TotalSeconds;
+                    if (gameEndTime >= GameEndTimeout)
+                    {
+                        acceptEndInput = true;
+                        var str = submarine.Energy > 0 ? $"Level {level} finished!" : "End of game!";
+                        ShowCenterText(str, AxeGameCollection.Games.SubmarineWars.ToString(), Color.Gold, 1);
+                    }
                     break;
                 }
         }
@@ -177,6 +200,12 @@ public class ScreenGameSubmarineWars : GameScreen
                     }
                 case GameState.End:
                     {
+                        if (acceptEndInput)
+                        {
+                            SpriteManager.Clear();
+                            ScreenManager.RemoveScreen(this);
+                            ScreenManager.AddScreen(submarine.Energy <= 0 ? new ScreenMenuMain(game) : new ScreenGameSubmarineWars(game, level + 1));
+                        }
                         break;
                     }
             }

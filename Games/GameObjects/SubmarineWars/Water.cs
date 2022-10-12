@@ -4,6 +4,7 @@ using System.Linq;
 using Framework;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using static AxeGameCollection.Screens.ScreenGameSubmarineWars;
 
 namespace AxeGameCollection.GameObjects.SubmarineWars;
 

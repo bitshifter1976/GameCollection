@@ -16,6 +16,20 @@ public class ScreenGameArenaChase : GameScreen
         Play,
         End
     }
+    public enum Layer
+    {
+        Shot = 1,
+        Mountain = 2,
+        Cannon = 10,
+        Trees = 20,
+        Water = 30,
+        Stars = 40,
+        Planet = 50,
+        Cloud = 60,
+        Bird = 70,
+        Explosion = 90,
+        Hud = 100,
+    }
 
     private GameState state;
     private readonly bool hasAi;
