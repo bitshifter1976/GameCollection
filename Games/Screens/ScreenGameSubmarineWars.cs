@@ -58,7 +58,7 @@ public class ScreenGameSubmarineWars : GameScreen
     {
         backColor = Color.CornflowerBlue;
         SpriteManager.AddImmediate(new Water());
-        SpriteManager.AddImmediate(hud = new Hud());
+        SpriteManager.AddImmediate(hud = new Hud(20));
         SpriteManager.AddImmediate(submarine = new Submarine(new Vector2(Manager.DesignWidth / 2f, Manager.DesignHeight / 2f), 0, 1, false));
         CreateEnemy();
         SpriteManager.Update(new GameTime());
@@ -182,7 +182,19 @@ public class ScreenGameSubmarineWars : GameScreen
                 submarine.Speed += 0.01f;
             SpriteManager.ScrollX(submarine.Speed);
         }
-        // accept message or shoot
+        // shoot
+        if (Manager.Input.KeyPressed(Keys.Enter) || Manager.Input.KeyPressed(Keys.Space) || Manager.Input.GamePadKeyPressed(PlayerIndex.One, Buttons.A))
+        {
+            if (state == GameState.Play)
+            {
+                if (hud.Munition > 0)
+                {
+                    submarine.Shoot();
+                    hud.Munition--;
+                }
+            }
+        }
+        // accept message
         if (Manager.Input.KeyPressed(Keys.Enter) || Manager.Input.GamePadKeyPressed(PlayerIndex.One, Buttons.A))
         {
             switch (state)
@@ -190,11 +202,6 @@ public class ScreenGameSubmarineWars : GameScreen
                 case GameState.Load:
                     {
                         state = GameState.Play;
-                        break;
-                    }
-                case GameState.Play:
-                    {
-                        submarine.Shoot();
                         break;
                     }
                 case GameState.End:
