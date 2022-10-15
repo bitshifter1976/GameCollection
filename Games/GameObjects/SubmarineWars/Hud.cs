@@ -10,7 +10,9 @@ public class Hud : Sprite
     public float MaxHeight => 100f;
     private LifeBar energyBar;
     private MunitionBar torpedoBar;
+    private TotalPointsBar totalPointsBar;
     private int munition;
+    private int totalPoints;
 
     public override float Energy
     {
@@ -28,11 +30,21 @@ public class Hud : Sprite
         set
         {
             munition = value;
-            torpedoBar.MunitionCount = munition;
+            torpedoBar.MunitionCount = value;
         }
     }
 
-    public Hud(int munition) : base((int)Layer.Hud)
+    public int TotalPoints
+    {
+        get => totalPoints;
+        set
+        {
+            totalPoints = value;
+            totalPointsBar.TotalPoints = value;
+        }
+    }
+
+    public Hud() : base((int)Layer.Hud)
     {
         color = new Color(Color.Black.R, Color.Black.G, Color.Black.B, (byte)50);
         texture = new Texture2D(Manager.Graphics.GraphicsDevice, 1, 1);
@@ -42,8 +54,10 @@ public class Hud : Sprite
         Energy = 100;
         var torpedoBarPosX = energyBar.Position.X + energyBar.Width + 50;
         var torpedoBarPosY = energyBar.Position.Y;
-        this.munition = munition;
+        this.munition = 20;
         torpedoBar = new MunitionBar(new Vector2(torpedoBarPosX, torpedoBarPosY), 0.7f, munition);
+        totalPointsBar = new TotalPointsBar(new Vector2(torpedoBar.Position.X + torpedoBar.Width + 50, torpedoBarPosY), 0.7f);
+        TotalPoints = 0;
     }
 
     public override void Draw()
@@ -61,5 +75,6 @@ public class Hud : Sprite
 
         energyBar.Draw();
         torpedoBar.Draw();
+        totalPointsBar.Draw();
     }
 }

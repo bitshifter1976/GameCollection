@@ -6,7 +6,7 @@ namespace AxeGameCollection.GameObjects.SubmarineWars
 {
     public class Submarine : Sprite
     {
-        private bool isAi;
+        private readonly bool isAi;
         private bool diving;
         private bool waterlineReached;
         private bool groundReached;
@@ -36,9 +36,15 @@ namespace AxeGameCollection.GameObjects.SubmarineWars
             }
         }
 
+        public bool IsAi 
+        { 
+            get => isAi; 
+        }
+
         public Submarine(Vector2 position, float rotation, float scale, bool isAi) : base("graphic/submarineWars/submarine", position, rotation, scale, (int)Layer.Submarine, CollisionType.BoundingBoxRotated)
         {
-            flip = this.isAi = isAi;
+            flip = isAi;
+            this.isAi = isAi;
             Energy = 100;
             if (isAi)
             {
@@ -66,7 +72,7 @@ namespace AxeGameCollection.GameObjects.SubmarineWars
                 return this;
             }
             // if computer enemy
-            if (isAi)
+            if (IsAi)
             {
                 if (Rand.Bool(1, 100)) Speed += Rand.Float(-0.5f, 1f);
                 if (Rand.Bool(1, 50))  Rotation += Rand.Float(-0.05f, 0.05f);
@@ -85,7 +91,7 @@ namespace AxeGameCollection.GameObjects.SubmarineWars
                 Energy -= 0.05f;
             }            
             // rotate back if not diving
-            if (!isAi && !diving)
+            if (!IsAi && !diving)
             {
                 if (rotation < 0)
                     Rotation += 0.005f;

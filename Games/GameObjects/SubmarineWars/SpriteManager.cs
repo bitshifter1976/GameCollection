@@ -38,7 +38,7 @@ public static class SpriteManager
         sprites.ForEach(s => s.ScrollX(speed));
     }
 
-    public static void Update(GameTime time)
+    public static int Update(GameTime time, int level)
     {
         // add new sprites
         sprites.AddRange(toAdd);
@@ -46,16 +46,18 @@ public static class SpriteManager
         // update
         var remove = sprites.Select(s => s.Update(time)).ToList();
         // collision?
-        remove.AddRange(CheckCollision());
+        remove.AddRange(CheckCollision(level, out var totalPoints));
         // remove obsolete
         remove.ForEach(s => sprites.Remove(s));
         // sort by layer depth
         sprites.Sort();
+        return totalPoints;
     }
 
-    private static List<Sprite> CheckCollision()
+    private static List<Sprite> CheckCollision(int level, out int totalPoints)
     {   
         var removeSprites = new List<Sprite>();
+        totalPoints = 0;
         var list = sprites.Where(s => s.CollisionType != CollisionType.None).ToList();
         for (var i = 0; i < list.Count - 1; i++)
         {
@@ -64,7 +66,7 @@ public static class SpriteManager
                 if ((list[i] is Submarine s && list[j] is Torpedo t && t.Submarine == s) || (list[j] is Submarine s2 && list[i] is Torpedo t2 && t2.Submarine == s2))
                     continue;
                 if (list[i].Collide(list[j]))
-                    removeSprites.AddRange(DoCollisionReaction(list[i], list[j]));
+                    removeSprites.AddRange(DoCollisionReaction(list[i], list[j], level, out totalPoints));
             }
         }
         var torpedos = sprites.OfType<Torpedo>().ToList();
@@ -81,21 +83,26 @@ public static class SpriteManager
         return removeSprites;
     }
 
-    private static List<Sprite> DoCollisionReaction(Sprite s1, Sprite s2)
+    private static List<Sprite> DoCollisionReaction(Sprite s1, Sprite s2, int level, out int totalPoints)
     {
         var toRemove = new List<Sprite>();
+        totalPoints = 0;
 
-        if (s1 is Torpedo && s2 is Submarine)
+        if (s1 is Torpedo t && s2 is Submarine)
         {
             s2.Energy -= s1.Damage;
             CreateExplosion(s1.Center, 0.5f);
             toRemove.Add(s1);
+            if (!t.Submarine.IsAi)
+                totalPoints += t.Damage * level * 100;
         }
-        if (s2 is Torpedo && s1 is Submarine)
+        if (s2 is Torpedo t2 && s1 is Submarine)
         {
             s1.Energy -= s2.Damage;
             CreateExplosion(s2.Center, 0.5f);
-            toRemove.Add(s2);
+            toRemove.Add(s2); 
+            if (!t2.Submarine.IsAi)
+                totalPoints += t2.Damage * level * 100;
         }
 
         return toRemove;

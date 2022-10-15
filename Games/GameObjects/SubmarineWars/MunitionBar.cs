@@ -10,12 +10,14 @@ namespace AxeGameCollection.GameObjects.SubmarineWars;
 
 public class MunitionBar : Sprite
 {
-    private List<Torpedo> torpedos = new List<Torpedo>();
+    private List<Torpedo> torpedos = new();
     private float torpedoWidth;
     private float torpedoHeight;
     private int munition;
     private readonly int Offset = 50;
     private readonly int MaxMunition;
+
+    public override float Width => (int)(torpedoWidth * MaxMunition + Offset);
 
     public int MunitionCount
     {
@@ -48,7 +50,7 @@ public class MunitionBar : Sprite
     private Torpedo CreateIcon(int i)
     {
         var torpedo = new Torpedo(null, Vector2.Zero, Vector2.Zero, scale, MathHelper.ToRadians(-90), 0);
-        torpedoWidth = torpedo.Height + 20;
+        torpedoWidth = torpedo.Height + 20 * scale;
         torpedoHeight = torpedo.Width;
         torpedo.Position = position + new Vector2(Offset / 2f + torpedoWidth * i, Offset / 2f + torpedo.Height);
         return torpedo;

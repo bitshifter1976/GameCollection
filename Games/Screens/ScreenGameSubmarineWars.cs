@@ -33,6 +33,8 @@ public class ScreenGameSubmarineWars : GameScreen
     private readonly int level;
     private Submarine submarine;
     private Hud hud;
+    private float gamePlayTime = 0;
+    private const float GamePlayTimeout = 60;
     private float gameEndTime = 0;
     private const float GameEndTimeout = 2;
     private bool acceptEndInput;
@@ -58,15 +60,16 @@ public class ScreenGameSubmarineWars : GameScreen
     {
         backColor = Color.CornflowerBlue;
         SpriteManager.AddImmediate(new Water());
-        SpriteManager.AddImmediate(hud = new Hud(20));
+        SpriteManager.AddImmediate(hud = new Hud());
         SpriteManager.AddImmediate(submarine = new Submarine(new Vector2(Manager.DesignWidth / 2f, Manager.DesignHeight / 2f), 0, 1, false));
-        CreateEnemy();
-        SpriteManager.Update(new GameTime());
+        CreateEnemy(1);
+        hud.TotalPoints += SpriteManager.Update(new GameTime(), level);
     }
 
-    private void CreateEnemy()
+    private void CreateEnemy(int possibility)
     {
-        SpriteManager.AddImmediate(new Submarine(new Vector2(Manager.DesignWidth + submarine.Width/2f - 1, Rand.Float(Water.MaxYTopPixel + submarine.Height, Water.MinYGroundPixel - submarine.Height)), 0, 1, true));
+        if (!SpriteManager.HasEnemy && Rand.Bool(1, possibility))
+            SpriteManager.AddImmediate(new Submarine(new Vector2(Manager.DesignWidth + submarine.Width/2f - 1, Rand.Float(Water.MaxYTopPixel + submarine.Height, Water.MinYGroundPixel - submarine.Height)), 0, 1, true));
     }
 
     public override void Update(GameTime gameTime, bool otherScreenHasFocus, bool coveredByOtherScreen)
@@ -79,15 +82,14 @@ public class ScreenGameSubmarineWars : GameScreen
                 }
             case GameState.Play:
                 {
-                    if (!SpriteManager.HasEnemy && Rand.Bool(1, 1000/level))
-                        CreateEnemy();
+                    CreateEnemy(1000 / level);
                     hud.Energy = submarine.Energy;
-                    SpriteManager.Update(gameTime);
+                    hud.TotalPoints += SpriteManager.Update(gameTime, level);
                     break;
                 }
             case GameState.End:
                 {
-                    SpriteManager.Update(gameTime);
+                    hud.TotalPoints += SpriteManager.Update(gameTime, level);
                     break;
                 }
         }
@@ -109,7 +111,8 @@ public class ScreenGameSubmarineWars : GameScreen
                 }
             case GameState.Play:
                 {
-                    if (submarine.Energy <= 0)
+                    gamePlayTime += (float)gameTime.ElapsedGameTime.TotalSeconds;
+                    if (gamePlayTime >= GamePlayTimeout || submarine.Energy <= 0)
                         state = GameState.End;
                     SpriteManager.Draw();
                     break;
