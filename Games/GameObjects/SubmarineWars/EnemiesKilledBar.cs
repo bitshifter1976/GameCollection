@@ -11,6 +11,7 @@ public class EnemiesKilledBar : Sprite
     private SpriteFont font;
     private string text;
     private Vector2 textSize;
+    private int width;
     private int height;
     private int points;
 
@@ -26,10 +27,11 @@ public class EnemiesKilledBar : Sprite
         }
     }
 
-    public EnemiesKilledBar(Vector2 position, float scale, int height) : base((int)Layer.Hud)
+    public EnemiesKilledBar(Vector2 position, float scale, int width, int height) : base((int)Layer.Hud)
     {
         this.position = position;
         this.scale = scale;
+        this.width = width;
         this.height = height;
         color = new Color(Color.Red.R, Color.Red.G, Color.Red.B, (byte)100);
         texture = new Texture2D(Manager.Graphics.GraphicsDevice, 1, 1);
@@ -40,9 +42,9 @@ public class EnemiesKilledBar : Sprite
     private void CreateDrawItems()
     {
         font = Manager.Fonts.Get(AxeGameCollection.Games.SubmarineWars.ToString());
-        text = $"  Kills: {Points:000}  ";
+        text = $"Kills: {Points}";
         textSize = font.MeasureString(text) * scale;
-        backgroundRect = new Rectangle((int)position.X, (int)position.Y, (int)textSize.X, height);
+        backgroundRect = new Rectangle((int)position.X, (int)position.Y, width, height);
     }
 
     public override Sprite Update(GameTime gameTime)

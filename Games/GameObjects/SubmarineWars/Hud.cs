@@ -8,11 +8,16 @@ namespace AxeGameCollection.GameObjects.SubmarineWars;
 
 public class Hud : Sprite
 {
-    private new const int Height = 100;
     private readonly LifeBar energyBar;
     private readonly MunitionBar torpedoBar;
     private readonly EnemiesKilledBar enemiesKilledBar;
     private readonly TimeBar timeBar;
+    private readonly int HudItemCount = 4;
+
+    private new int Height => 100;
+    private new int Width => Manager.DesignWidth;
+    private int ItemWidth => Width / HudItemCount;
+
     public override float Energy
     {
         get => energyBar.Points;
@@ -44,13 +49,13 @@ public class Hud : Sprite
         texture.SetData(new Color[1] { Color.White });
         var posX = 0f;
         var posY = Manager.DesignHeight - Height;
-        torpedoBar = new MunitionBar(new Vector2(posX, posY), 0.7f, 20, Height);
-        posX += torpedoBar.Width;
-        energyBar = new LifeBar(new Vector2(posX, posY), 0.4f, Height);
-        posX += energyBar.Width;
-        enemiesKilledBar = new EnemiesKilledBar(new Vector2(posX, posY), 0.4f, Height);
-        posX += enemiesKilledBar.Width;
-        timeBar = new TimeBar(new Vector2(posX, posY), 0.4f, Height);
+        torpedoBar = new MunitionBar(new Vector2(posX, posY), 0.7f, 20, ItemWidth, Height);
+        posX += ItemWidth;
+        energyBar = new LifeBar(new Vector2(posX, posY), 0.4f, ItemWidth, Height);
+        posX += ItemWidth;
+        enemiesKilledBar = new EnemiesKilledBar(new Vector2(posX, posY), 0.4f, ItemWidth, Height);
+        posX += ItemWidth;
+        timeBar = new TimeBar(new Vector2(posX, posY), 0.4f, ItemWidth, Height);
         Energy = 100;
         Munition = 20;
         EnemiesKilled = 0;

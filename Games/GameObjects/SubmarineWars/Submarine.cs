@@ -12,6 +12,7 @@ namespace AxeGameCollection.GameObjects.SubmarineWars
         private bool diving;
         private bool waterlineReached;
         private bool groundReached;
+        private bool speedChanging;
         private readonly float MinSpeed = -5f;
         private readonly float MaxSpeed = 5f;
 
@@ -25,7 +26,8 @@ namespace AxeGameCollection.GameObjects.SubmarineWars
             {
                 speed = MathHelper.Clamp(value, MinSpeed, MaxSpeed);
                 velocity = Vector2.Transform(new Vector2(1, 0), Matrix.CreateRotationZ(rotation)) * speed;
-                flip = speed > 0;
+                if (speed != 0)
+                    flip = speed < 0;
             }
         }
 
@@ -87,10 +89,45 @@ namespace AxeGameCollection.GameObjects.SubmarineWars
             waterlineReached = (y == minY);
             groundReached = (y == maxY);
             position.Y = MathHelper.Clamp(y, minY, maxY);
-            if (speed <= 0)
+            if (Speed > 0)
                 Rotation += up ? -0.005f : 0.005f;
-            else
+            if (Speed < 0)
                 Rotation -= up ? -0.005f : 0.005f;
+        }
+
+        public void AddSpeed(float delta)
+        {
+            speedChanging = true;
+            Speed += delta;
+        }
+
+        public void SpeedDown(float delta)
+        {
+            var newSpeed = speed;
+            if (newSpeed > 0)
+                newSpeed -= delta;
+            if (newSpeed < 0)
+                newSpeed += delta;
+            if (Math.Abs(newSpeed) < 0.001f)
+                newSpeed = 0;
+            Speed = newSpeed;
+        }
+
+        public void AddRotation(float delta)
+        {
+            Speed += delta;
+        }
+
+        private void RotateBack(float delta)
+        {
+            var newRotation = rotation;
+            if (newRotation < 0)
+                newRotation += delta;
+            if (newRotation > 0)
+                newRotation -= delta;
+            if (Math.Abs(newRotation) < 0.001f)
+                newRotation = 0;
+            Rotation = newRotation;
         }
 
         public override Sprite Update(GameTime gameTime)
@@ -98,10 +135,14 @@ namespace AxeGameCollection.GameObjects.SubmarineWars
             // if computer enemy
             if (IsAi)
             {
-                if (Rand.Bool(1, 50))  Rotation += Rand.Float(-0.05f, 0.05f);
-                if (Rand.Bool(1, 100)) Speed += Rand.Float(-0.5f, 0.5f);
+                if (Rand.Bool(1, 50))  AddRotation(Rand.Float(-0.05f, 0.05f));
+                if (Rand.Bool(1, 100)) AddSpeed(Rand.Float(-0.5f, 0.5f));
                 if (Rand.Bool(1, 300)) Shoot();
                 position -= velocity;
+            }
+            else if (!diving)
+            {
+                RotateBack(0.005f);
             }
             // if water line reached, stay on top
             if (waterlineReached && speed != 0)
@@ -114,14 +155,6 @@ namespace AxeGameCollection.GameObjects.SubmarineWars
                     Manager.Sound.PlayEffect("fireBurn");
                 Energy -= 0.05f;
             }            
-            // rotate back if not diving
-            if (!IsAi && !diving)
-            {
-                if (rotation < 0)
-                    Rotation += 0.005f;
-                else if (rotation > 0)
-                    Rotation -= 0.005f;
-            }
             diving = false;
             return null;
         }

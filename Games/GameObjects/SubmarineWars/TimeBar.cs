@@ -8,15 +8,16 @@ namespace AxeGameCollection.GameObjects.SubmarineWars;
 
 public class TimeBar : Sprite
 { 
-    private readonly int Offset = 50;
+    private readonly int width;
     private readonly int height;
 
     public TimeSpan ElapsedTime;
 
-    public TimeBar(Vector2 position, float scale, int height) : base((int)Layer.Hud)
+    public TimeBar(Vector2 position, float scale, int width, int height) : base((int)Layer.Hud)
     {
         this.position = position;
         this.scale = scale;
+        this.width = width;
         this.height = height;
         color = new Color(Color.Black.R, Color.Black.G, Color.Black.B, (byte)50);
         texture = new Texture2D(Manager.Graphics.GraphicsDevice, 1, 1);
@@ -35,7 +36,7 @@ public class TimeBar : Sprite
         var textSize = font.MeasureString(text) * scale;
 
         // background
-        var backgroundRect = new Rectangle((int)position.X, (int)position.Y, (int)(textSize.X + Offset), height);
+        var backgroundRect = new Rectangle((int)position.X, (int)position.Y, width, height);
         Manager.SpriteBatch.Draw(texture, backgroundRect, null, color, 0, Vector2.Zero, SpriteEffects.None, 0);
 
         // total points

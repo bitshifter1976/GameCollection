@@ -45,17 +45,17 @@ public static class SpriteManager
         sprites.ForEach(s => s.ScrollX(speed));
     }
 
-    public static int Update(GameTime time)
+    public static int Update(GameTime time, bool checkCollision)
     {
+        var numberOfEnemiesKilled = 0;
         // add new sprites
         sprites.AddRange(toAdd);
         toAdd.Clear(); 
         // update
         var remove = sprites.Select(s => s.Update(time)).ToList();
         // collision?
-        remove.AddRange(CheckCollision());
-        // how many enemies died?
-        var numberOfEnemiesKilled = remove.Count(s => s is Submarine && s != player);
+        if (checkCollision)
+            remove.AddRange(CheckCollision(ref numberOfEnemiesKilled));
         // remove obsolete
         remove.ForEach(s => sprites.Remove(s));
         // sort by layer depth
@@ -64,9 +64,10 @@ public static class SpriteManager
         return numberOfEnemiesKilled;
     }
 
-    private static List<Sprite> CheckCollision()
+    private static List<Sprite> CheckCollision(ref int enemyKillCount)
     {   
         var removeSprites = new List<Sprite>();
+        enemyKillCount = 0;
         var list = sprites.Where(s => s.CollisionType != CollisionType.None).ToList();
         for (var i = 0; i < list.Count - 1; i++)
         {
@@ -75,7 +76,7 @@ public static class SpriteManager
                 if ((list[i] is Submarine s && list[j] is Torpedo t && t.Submarine == s) || (list[j] is Submarine s2 && list[i] is Torpedo t2 && t2.Submarine == s2))
                     continue;
                 if (list[i].Collide(list[j]))
-                    removeSprites.AddRange(DoCollisionReaction(list[i], list[j]));
+                    removeSprites.AddRange(DoCollisionReaction(list[i], list[j], ref enemyKillCount));
             }
         }
         var torpedos = sprites.OfType<Torpedo>().ToList();
@@ -92,26 +93,30 @@ public static class SpriteManager
         return removeSprites;
     }
 
-    private static List<Sprite> DoCollisionReaction(Sprite s1, Sprite s2)
+    private static List<Sprite> DoCollisionReaction(Sprite s1, Sprite s2, ref int enemyKillCount)
     {
         var toRemove = new List<Sprite>();
 
-        if (s1 is Torpedo && s2 is Submarine)
+        if (s1 is Torpedo t && s2 is Submarine)
         {
             s2.Energy -= s1.Damage;
             if (s2.Energy <= 0)
             {
+                if (t.Submarine == player)
+                    enemyKillCount++;
                 CreateExplosion(s2.Position, 1);
                 toRemove.Add(s2);
             }
             CreateExplosion(s1.Center, 0.5f);
             toRemove.Add(s1);
         }
-        if (s2 is Torpedo && s1 is Submarine)
+        if (s2 is Torpedo t2 && s1 is Submarine)
         {
             s1.Energy -= s2.Damage;
             if (s1.Energy <= 0)
             {
+                if (t2.Submarine == player)
+                    enemyKillCount++;
                 CreateExplosion(s1.Position, 1);
                 toRemove.Add(s1);
             }

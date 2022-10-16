@@ -37,7 +37,7 @@ public class ScreenGameSubmarineWars : GameScreen
     private const float GameEndTimeout = 2;
     private bool acceptEndInput;
 
-    public int EnemyKillCount => (level + 1) * 2;
+    public int EnemyKillCount => (int)((level+1f) * 1.5f);
 
     public ScreenGameSubmarineWars(Game game, int level) : base(game)
     {
@@ -74,19 +74,20 @@ public class ScreenGameSubmarineWars : GameScreen
                 }
             case GameState.Play:
                 {
+                    var levelFactor = (level + 10f) / 10f;
                     SpriteManager.Add(Fish.Create(100));
-                    SpriteManager.Add(Mine.Create(500 / level));
-                    SpriteManager.Add(Submarine.Create(1000 / level, true));
+                    SpriteManager.Add(Mine.Create((int)(300f / levelFactor)));
+                    SpriteManager.Add(Submarine.Create((int)(500f / levelFactor), true));
                     hud.Energy = submarine.Energy;
                     hud.ElapsedTime += TimeSpan.FromSeconds(gameTime.ElapsedGameTime.TotalSeconds);
-                    hud.EnemiesKilled += SpriteManager.Update(gameTime);
-                    if (hud.EnemiesKilled >= EnemyKillCount)
+                    hud.EnemiesKilled += SpriteManager.Update(gameTime, true);
+                    if (submarine.Energy <= 0 || hud.EnemiesKilled >= EnemyKillCount)
                         state = GameState.End; 
                     break;
                 }
             case GameState.End:
                 {
-                    SpriteManager.Update(gameTime);
+                    SpriteManager.Update(gameTime, false);
                     break;
                 }
         }
@@ -102,7 +103,7 @@ public class ScreenGameSubmarineWars : GameScreen
                 {
                     SpriteManager.Draw();
                     var str = $"Level: {level}\nObjective: Kill {EnemyKillCount} enemies\nPress Enter or A";
-                    ShowCenterText(str, AxeGameCollection.Games.ArenaChase.ToString(), Color.Gold, 1);
+                    ShowCenterText(str, AxeGameCollection.Games.ArenaChase.ToString(), Color.White, 1);
                     break;
                 }
             case GameState.Play:
@@ -119,7 +120,7 @@ public class ScreenGameSubmarineWars : GameScreen
                         acceptEndInput = true;
                         var str = submarine.Energy > 0 ? $"Level {level} finished!" : "End of game!";
                         str += "\nPress Enter or A";
-                        ShowCenterText(str, AxeGameCollection.Games.SubmarineWars.ToString(), Color.Gold, 1);
+                        ShowCenterText(str, AxeGameCollection.Games.SubmarineWars.ToString(), Color.White, 1);
                     }
                     break;
                 }
@@ -162,22 +163,19 @@ public class ScreenGameSubmarineWars : GameScreen
         if (Manager.Input.HoldingKey(Keys.Left, Keys.A) || Manager.Input.GamePadHoldingKey(PlayerIndex.One, Buttons.DPadLeft, Buttons.LeftThumbstickLeft))
         {
             automaticSpeedDown = false;
-            submarine.Speed += 0.01f;
-            SpriteManager.ScrollX(submarine.Speed);
+            submarine.AddSpeed(-0.01f);
+            SpriteManager.ScrollX(-submarine.Speed);
         }
         if (Manager.Input.HoldingKey(Keys.Right, Keys.D) || Manager.Input.GamePadHoldingKey(PlayerIndex.One, Buttons.DPadRight, Buttons.LeftThumbstickRight))
         {
             automaticSpeedDown = false;
-            submarine.Speed -= 0.01f;
-            SpriteManager.ScrollX(submarine.Speed);
+            submarine.AddSpeed(0.01f);
+            SpriteManager.ScrollX(-submarine.Speed);
         }
         if (automaticSpeedDown)
         {
-            if (submarine.Speed > 0)
-                submarine.Speed -= 0.01f;
-            if (submarine.Speed < 0)
-                submarine.Speed += 0.01f;
-            SpriteManager.ScrollX(submarine.Speed);
+            submarine.SpeedDown(0.01f);
+            SpriteManager.ScrollX(-submarine.Speed);
         }
         // shoot
         if (Manager.Input.KeyPressed(Keys.Enter) || Manager.Input.KeyPressed(Keys.Space) || Manager.Input.GamePadKeyPressed(PlayerIndex.One, Buttons.A))

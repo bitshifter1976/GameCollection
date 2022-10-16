@@ -12,13 +12,12 @@ public class MunitionBar : Sprite
 {
     private List<Torpedo> torpedos = new();
     private float torpedoWidth;
-    private float torpedoHeight;
     private int munition;
+    private int width;
     private int height;
-    private readonly int Offset = 50;
     private readonly int MaxMunition;
 
-    public override float Width => (int)(torpedoWidth * MaxMunition + Offset/2f);
+    public override float Width => width;
 
     public int MunitionCount
     {
@@ -37,10 +36,11 @@ public class MunitionBar : Sprite
         }
     }
 
-    public MunitionBar(Vector2 position, float scale, int munitionCount, int height) : base((int)Layer.Hud)
+    public MunitionBar(Vector2 position, float scale, int munitionCount, int width, int height) : base((int)Layer.Hud)
     {
         this.position = position;
         this.scale = scale;
+        this.width = width;
         this.height = height;
         color = new Color(Color.Black.R, Color.Black.G, Color.Black.B, (byte)50);
         texture = new Texture2D(Manager.Graphics.GraphicsDevice, 1, 1);
@@ -52,9 +52,8 @@ public class MunitionBar : Sprite
     private Torpedo CreateIcon(int i)
     {
         var torpedo = new Torpedo(null, position, Vector2.Zero, scale, MathHelper.ToRadians(-90), 0);
-        torpedoWidth = torpedo.Height + 20 * scale;
-        torpedoHeight = torpedo.Width;
-        torpedo.Position += new Vector2(Offset / 2f + torpedoWidth * i, height/2f);
+        torpedoWidth = width / (MaxMunition+1);
+        torpedo.Position += new Vector2(torpedoWidth * (i+1) + 7, height/2f);
         return torpedo;
     }
 
@@ -65,7 +64,7 @@ public class MunitionBar : Sprite
 
     public override void Draw()
     {
-        var backgroundRect = new Rectangle((int)position.X, (int)position.Y, (int)(torpedoWidth * MaxMunition + Offset/2f), height);
+        var backgroundRect = new Rectangle((int)position.X, (int)position.Y, width, height);
         // background
         Manager.SpriteBatch.Draw(
             texture,
