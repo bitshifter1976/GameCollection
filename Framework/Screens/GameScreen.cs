@@ -40,7 +40,7 @@ namespace Framework
             // draw to render target
             Manager.Graphics.GraphicsDevice.SetRenderTarget(renderTarget);
             Manager.Graphics.GraphicsDevice.Clear(color);
-            Manager.SpriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend);
+            Manager.SpriteBatch.Begin(SpriteSortMode.Immediate, BlendState.NonPremultiplied);
         }
 
         public virtual void Draw(GameTime gameTime)

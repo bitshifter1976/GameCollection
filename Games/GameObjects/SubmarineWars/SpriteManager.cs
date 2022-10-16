@@ -10,12 +10,18 @@ public static class SpriteManager
 {
     private static readonly List<Sprite> sprites = new();
     private static readonly List<Sprite> toAdd = new();
+    private static Submarine player;
 
-    public static bool HasEnemy => sprites.OfType<Submarine>().ToList().Count > 1;
+    public static void Init(Submarine player)
+    {
+        SpriteManager.player = player;
+        Add(player);
+    }
 
     public static void AddImmediate(Sprite s)
     {
-        sprites.Add(s);
+        if (s != null)
+            sprites.Add(s);
     }
 
     public static void AddImmediate(List<Sprite> list)
@@ -25,12 +31,13 @@ public static class SpriteManager
 
     public static void Add(Sprite s)
     {
-        toAdd.Add(s);
+        if (s != null)
+            toAdd.Add(s);
     }
 
     public static void Add(List<Sprite> list)
     {
-        toAdd.AddRange(list);
+        list.ForEach(Add);
     }
 
     public static void ScrollX(float speed)
@@ -38,7 +45,7 @@ public static class SpriteManager
         sprites.ForEach(s => s.ScrollX(speed));
     }
 
-    public static int Update(GameTime time, int level)
+    public static int Update(GameTime time)
     {
         // add new sprites
         sprites.AddRange(toAdd);
@@ -46,18 +53,20 @@ public static class SpriteManager
         // update
         var remove = sprites.Select(s => s.Update(time)).ToList();
         // collision?
-        remove.AddRange(CheckCollision(level, out var totalPoints));
+        remove.AddRange(CheckCollision());
+        // how many enemies died?
+        var numberOfEnemiesKilled = remove.Count(s => s is Submarine && s != player);
         // remove obsolete
         remove.ForEach(s => sprites.Remove(s));
         // sort by layer depth
         sprites.Sort();
-        return totalPoints;
+        // return number of enemies killed
+        return numberOfEnemiesKilled;
     }
 
-    private static List<Sprite> CheckCollision(int level, out int totalPoints)
+    private static List<Sprite> CheckCollision()
     {   
         var removeSprites = new List<Sprite>();
-        totalPoints = 0;
         var list = sprites.Where(s => s.CollisionType != CollisionType.None).ToList();
         for (var i = 0; i < list.Count - 1; i++)
         {
@@ -66,7 +75,7 @@ public static class SpriteManager
                 if ((list[i] is Submarine s && list[j] is Torpedo t && t.Submarine == s) || (list[j] is Submarine s2 && list[i] is Torpedo t2 && t2.Submarine == s2))
                     continue;
                 if (list[i].Collide(list[j]))
-                    removeSprites.AddRange(DoCollisionReaction(list[i], list[j], level, out totalPoints));
+                    removeSprites.AddRange(DoCollisionReaction(list[i], list[j]));
             }
         }
         var torpedos = sprites.OfType<Torpedo>().ToList();
@@ -83,26 +92,53 @@ public static class SpriteManager
         return removeSprites;
     }
 
-    private static List<Sprite> DoCollisionReaction(Sprite s1, Sprite s2, int level, out int totalPoints)
+    private static List<Sprite> DoCollisionReaction(Sprite s1, Sprite s2)
     {
         var toRemove = new List<Sprite>();
-        totalPoints = 0;
 
-        if (s1 is Torpedo t && s2 is Submarine)
+        if (s1 is Torpedo && s2 is Submarine)
         {
             s2.Energy -= s1.Damage;
+            if (s2.Energy <= 0)
+            {
+                CreateExplosion(s2.Position, 1);
+                toRemove.Add(s2);
+            }
             CreateExplosion(s1.Center, 0.5f);
             toRemove.Add(s1);
-            if (!t.Submarine.IsAi)
-                totalPoints += t.Damage * level * 100;
         }
-        if (s2 is Torpedo t2 && s1 is Submarine)
+        if (s2 is Torpedo && s1 is Submarine)
         {
             s1.Energy -= s2.Damage;
+            if (s1.Energy <= 0)
+            {
+                CreateExplosion(s1.Position, 1);
+                toRemove.Add(s1);
+            }
             CreateExplosion(s2.Center, 0.5f);
             toRemove.Add(s2); 
-            if (!t2.Submarine.IsAi)
-                totalPoints += t2.Damage * level * 100;
+        }
+        if (s1 is Mine && s2 is Submarine)
+        {
+            s2.Energy -= s1.Damage;
+            if (s2.Energy <= 0)
+            {
+                CreateExplosion(s2.Position, 1);
+                toRemove.Add(s2);
+            }
+            CreateExplosion(s1.Center, 0.5f);
+            toRemove.Add(s1);
+        }
+        if (s2 is Mine && s1 is Submarine)
+        {
+            s1.Energy -= s2.Damage;
+            if (s1.Energy <= 0)
+            {
+                CreateExplosion(s1.Position, 1);
+                toRemove.Add(s1);
+            }
+            CreateExplosion(s2.Center, 0.5f);
+            toRemove.Add(s2);
         }
 
         return toRemove;

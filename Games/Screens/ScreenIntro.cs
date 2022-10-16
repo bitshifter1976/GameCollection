@@ -19,7 +19,7 @@ public class ScreenIntro : GameScreen
     {
         Manager.Sound.LoadSong("intro");
         Manager.Sound.PlaySong("intro");
-        texture = Manager.Content.Load<Texture2D>("graphic/intro");
+        texture = Manager.Content.Load<Texture2D>("graphic/common/intro");
         base.LoadContent();
     }
 

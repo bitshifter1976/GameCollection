@@ -5,7 +5,7 @@ using static AxeGameCollection.Screens.ScreenGameSubmarineWars;
 
 namespace AxeGameCollection.GameObjects.SubmarineWars;
 
-public class LifeBar : Sprite
+public class EnemiesKilledBar : Sprite
 { 
     private Rectangle backgroundRect;
     private SpriteFont font;
@@ -26,12 +26,12 @@ public class LifeBar : Sprite
         }
     }
 
-    public LifeBar(Vector2 position, float scale, int height) : base((int)Layer.Hud)
+    public EnemiesKilledBar(Vector2 position, float scale, int height) : base((int)Layer.Hud)
     {
         this.position = position;
         this.scale = scale;
         this.height = height;
-        color = new Color(Color.Green.R, Color.Green.G, Color.Green.B, (byte)150);
+        color = new Color(Color.Red.R, Color.Red.G, Color.Red.B, (byte)100);
         texture = new Texture2D(Manager.Graphics.GraphicsDevice, 1, 1);
         texture.SetData(new Color[1] { Color.White });
         CreateDrawItems();
@@ -40,7 +40,7 @@ public class LifeBar : Sprite
     private void CreateDrawItems()
     {
         font = Manager.Fonts.Get(AxeGameCollection.Games.SubmarineWars.ToString());
-        text = $"  Energy: {Points:000}  ";
+        text = $"  Kills: {Points:000}  ";
         textSize = font.MeasureString(text) * scale;
         backgroundRect = new Rectangle((int)position.X, (int)position.Y, (int)textSize.X, height);
     }

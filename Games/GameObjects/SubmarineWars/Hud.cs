@@ -1,47 +1,40 @@
 ﻿using Framework;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using System;
 using static AxeGameCollection.Screens.ScreenGameSubmarineWars;
 
 namespace AxeGameCollection.GameObjects.SubmarineWars;
 
 public class Hud : Sprite
 {
-    public float MaxHeight => 100f;
-    private LifeBar energyBar;
-    private MunitionBar torpedoBar;
-    private TotalPointsBar totalPointsBar;
-    private int munition;
-    private int totalPoints;
-
+    private new const int Height = 100;
+    private readonly LifeBar energyBar;
+    private readonly MunitionBar torpedoBar;
+    private readonly EnemiesKilledBar enemiesKilledBar;
+    private readonly TimeBar timeBar;
     public override float Energy
     {
-        get => Energy;
-        set
-        {
-            energy = value;
-            energyBar.Percentage = value;
-        }
+        get => energyBar.Points;
+        set => energyBar.Points = (int)value;
     }
 
-    public int Munition 
+    public int Munition
     {
-        get => munition;
-        set
-        {
-            munition = value;
-            torpedoBar.MunitionCount = value;
-        }
+        get => torpedoBar.MunitionCount;
+        set => torpedoBar.MunitionCount = value;
     }
 
-    public int TotalPoints
+    public int EnemiesKilled
     {
-        get => totalPoints;
-        set
-        {
-            totalPoints = value;
-            totalPointsBar.TotalPoints = value;
-        }
+        get => enemiesKilledBar.Points;
+        set => enemiesKilledBar.Points = value;
+    }
+
+    public TimeSpan ElapsedTime
+    {
+        get => timeBar.ElapsedTime;
+        set => timeBar.ElapsedTime = value;
     }
 
     public Hud() : base((int)Layer.Hud)
@@ -49,15 +42,19 @@ public class Hud : Sprite
         color = new Color(Color.Black.R, Color.Black.G, Color.Black.B, (byte)50);
         texture = new Texture2D(Manager.Graphics.GraphicsDevice, 1, 1);
         texture.SetData(new Color[1] { Color.White });
-        energyBar = new LifeBar(2.5f);
-        energyBar.Position = new Vector2(10, Manager.DesignHeight - MaxHeight / 2f - energyBar.Height / 2f);
+        var posX = 0f;
+        var posY = Manager.DesignHeight - Height;
+        energyBar = new LifeBar(new Vector2(posX, posY), 0.4f, Height);
+        posX += energyBar.Width;
+        torpedoBar = new MunitionBar(new Vector2(posX, posY), 0.7f, 20, Height);
+        posX += torpedoBar.Width;
+        enemiesKilledBar = new EnemiesKilledBar(new Vector2(posX, posY), 0.4f, Height);
+        posX += enemiesKilledBar.Width;
+        timeBar = new TimeBar(new Vector2(posX, posY), 0.4f, Height);
         Energy = 100;
-        var torpedoBarPosX = energyBar.Position.X + energyBar.Width + 50;
-        var torpedoBarPosY = energyBar.Position.Y;
-        this.munition = 20;
-        torpedoBar = new MunitionBar(new Vector2(torpedoBarPosX, torpedoBarPosY), 0.7f, munition);
-        totalPointsBar = new TotalPointsBar(new Vector2(torpedoBar.Position.X + torpedoBar.Width + 50, torpedoBarPosY), 0.7f);
-        TotalPoints = 0;
+        Munition = 20;
+        EnemiesKilled = 0;
+        ElapsedTime = TimeSpan.FromSeconds(0);
     }
 
     public override void Draw()
@@ -65,7 +62,7 @@ public class Hud : Sprite
         // background
         Manager.SpriteBatch.Draw(
             texture,
-            new Rectangle(0, Manager.DesignHeight - (int)MaxHeight, Manager.DesignWidth, Manager.DesignHeight),
+            new Rectangle(0, Manager.DesignHeight - Height, Manager.DesignWidth, Height),
             null,
             color,
             0,
@@ -75,6 +72,7 @@ public class Hud : Sprite
 
         energyBar.Draw();
         torpedoBar.Draw();
-        totalPointsBar.Draw();
+        enemiesKilledBar.Draw();
+        timeBar.Draw();
     }
 }

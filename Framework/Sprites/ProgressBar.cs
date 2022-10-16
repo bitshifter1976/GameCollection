@@ -41,7 +41,7 @@ namespace Framework
 		{
 			Manager.SpriteBatch.Draw(
 				textureWhite, 
-				new Rectangle((int)(Position.X + xOffset), (int)(Position.Y + yOffset), (int)(Width - xOffset * 2), (int)(Height - yOffset * 2)), 
+				new Rectangle((int)(position.X + xOffset), (int)(position.Y + yOffset), (int)(Width - xOffset * 2), (int)(Height - yOffset * 2)), 
 				null, 
 				Color.White, 
 				0, 
@@ -51,7 +51,7 @@ namespace Framework
 
 			Manager.SpriteBatch.Draw(
 				textureWhite, 
-				new Rectangle((int)(Position.X + xOffset), (int)(Position.Y + yOffset), (int)(percentage / MaxValue * (Width - xOffset * 2)), (int)(Height - yOffset * 2)), 
+				new Rectangle((int)(position.X + xOffset), (int)(position.Y + yOffset), (int)(percentage / MaxValue * (Width - xOffset * 2)), (int)(Height - yOffset * 2)), 
 				null, 
 				progressColor, 
 				0, 

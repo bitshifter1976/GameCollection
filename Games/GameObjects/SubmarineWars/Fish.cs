@@ -6,11 +6,18 @@ using static AxeGameCollection.Screens.ScreenGameSubmarineWars;
 
 namespace AxeGameCollection.GameObjects.SubmarineWars;
 
-[Serializable]
 public sealed class Fish : SpriteAnimatedMultiLine
 {
     private readonly float deltaX;
     private readonly int sign;
+
+    public static Sprite Create(int probabilityToCreateNewOne)
+    {
+        Fish obj = null;
+        if (probabilityToCreateNewOne > 0 && Rand.Bool(1, probabilityToCreateNewOne))
+            obj = new Fish();
+        return obj;
+    }
 
     public Fish() : base("graphic/submarineWars/fish", Vector2.Zero, 12, 3, 6, 0f, 0.5f, (int)Layer.Fish)
     {

@@ -2,6 +2,7 @@
 using Framework;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
+using System;
 
 namespace AxeGameCollection.Screens;
 
@@ -27,17 +28,16 @@ public class ScreenGameSubmarineWars : GameScreen
         Water = 95,
         Hud = 100,
     }
-
     private Color backColor;
     private GameState state;
     private readonly int level;
     private Submarine submarine;
     private Hud hud;
-    private float gamePlayTime = 0;
-    private const float GamePlayTimeout = 60;
     private float gameEndTime = 0;
     private const float GameEndTimeout = 2;
     private bool acceptEndInput;
+
+    public int EnemyKillCount => (level + 1) * 2;
 
     public ScreenGameSubmarineWars(Game game, int level) : base(game)
     {
@@ -59,17 +59,9 @@ public class ScreenGameSubmarineWars : GameScreen
     private void CreateScene()
     {
         backColor = Color.CornflowerBlue;
+        SpriteManager.Init(submarine = Submarine.Create(1, false));
         SpriteManager.AddImmediate(new Water());
         SpriteManager.AddImmediate(hud = new Hud());
-        SpriteManager.AddImmediate(submarine = new Submarine(new Vector2(Manager.DesignWidth / 2f, Manager.DesignHeight / 2f), 0, 1, false));
-        CreateEnemy(1);
-        hud.TotalPoints += SpriteManager.Update(new GameTime(), level);
-    }
-
-    private void CreateEnemy(int possibility)
-    {
-        if (!SpriteManager.HasEnemy && Rand.Bool(1, possibility))
-            SpriteManager.AddImmediate(new Submarine(new Vector2(Manager.DesignWidth + submarine.Width/2f - 1, Rand.Float(Water.MaxYTopPixel + submarine.Height, Water.MinYGroundPixel - submarine.Height)), 0, 1, true));
     }
 
     public override void Update(GameTime gameTime, bool otherScreenHasFocus, bool coveredByOtherScreen)
@@ -82,18 +74,22 @@ public class ScreenGameSubmarineWars : GameScreen
                 }
             case GameState.Play:
                 {
-                    CreateEnemy(1000 / level);
+                    SpriteManager.Add(Fish.Create(100));
+                    SpriteManager.Add(Mine.Create(500 / level));
+                    SpriteManager.Add(Submarine.Create(1000 / level, true));
                     hud.Energy = submarine.Energy;
-                    hud.TotalPoints += SpriteManager.Update(gameTime, level);
+                    hud.ElapsedTime += TimeSpan.FromSeconds(gameTime.ElapsedGameTime.TotalSeconds);
+                    hud.EnemiesKilled += SpriteManager.Update(gameTime);
+                    if (hud.EnemiesKilled >= EnemyKillCount)
+                        state = GameState.End; 
                     break;
                 }
             case GameState.End:
                 {
-                    hud.TotalPoints += SpriteManager.Update(gameTime, level);
+                    SpriteManager.Update(gameTime);
                     break;
                 }
         }
-        Fishes.Create(100);
         base.Update(gameTime, otherScreenHasFocus, coveredByOtherScreen);
     }
 
@@ -105,15 +101,12 @@ public class ScreenGameSubmarineWars : GameScreen
             case GameState.Load:
                 {
                     SpriteManager.Draw();
-                    var str = $"Get ready!\n    Level {level}";
+                    var str = $"Level: {level}\nObjective: Kill {EnemyKillCount} enemies\nPress Enter or A";
                     ShowCenterText(str, AxeGameCollection.Games.ArenaChase.ToString(), Color.Gold, 1);
                     break;
                 }
             case GameState.Play:
                 {
-                    gamePlayTime += (float)gameTime.ElapsedGameTime.TotalSeconds;
-                    if (gamePlayTime >= GamePlayTimeout || submarine.Energy <= 0)
-                        state = GameState.End;
                     SpriteManager.Draw();
                     break;
                 }
@@ -125,6 +118,7 @@ public class ScreenGameSubmarineWars : GameScreen
                     {
                         acceptEndInput = true;
                         var str = submarine.Energy > 0 ? $"Level {level} finished!" : "End of game!";
+                        str += "\nPress Enter or A";
                         ShowCenterText(str, AxeGameCollection.Games.SubmarineWars.ToString(), Color.Gold, 1);
                     }
                     break;

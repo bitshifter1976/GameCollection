@@ -1,5 +1,7 @@
-﻿using Framework;
+﻿using AxeGameCollection.GameObjects.TankBattle;
+using Framework;
 using Microsoft.Xna.Framework;
+using System;
 using static AxeGameCollection.Screens.ScreenGameSubmarineWars;
 
 namespace AxeGameCollection.GameObjects.SubmarineWars
@@ -10,7 +12,7 @@ namespace AxeGameCollection.GameObjects.SubmarineWars
         private bool diving;
         private bool waterlineReached;
         private bool groundReached;
-        private readonly float MinSpeed = -1.5f;
+        private readonly float MinSpeed = -5f;
         private readonly float MaxSpeed = 5f;
 
         public override Rectangle BoundingBox => new((int)(position.X - Width / 2f), (int)position.Y, (int)Width, (int)(Height/2f));
@@ -23,6 +25,7 @@ namespace AxeGameCollection.GameObjects.SubmarineWars
             {
                 speed = MathHelper.Clamp(value, MinSpeed, MaxSpeed);
                 velocity = Vector2.Transform(new Vector2(1, 0), Matrix.CreateRotationZ(rotation)) * speed;
+                flip = speed > 0;
             }
         }
 
@@ -38,7 +41,32 @@ namespace AxeGameCollection.GameObjects.SubmarineWars
 
         public bool IsAi 
         { 
-            get => isAi; 
+            get => isAi;
+        }
+
+        public static Submarine Create(int possibility, bool createEnemy)
+        {
+            var scale = 1;
+            Submarine sub = null;
+            if (Rand.Bool(1, possibility))
+                sub = createEnemy ? CreateEnemy(scale) : CreatePlayer(scale);
+            return sub;
+        }
+
+        private static Submarine CreatePlayer(int scale)
+        {
+            return new Submarine(new Vector2(Manager.DesignWidth / 2f, Manager.DesignHeight / 2f), 0, scale, false);
+        }
+
+        private static Submarine CreateEnemy(float scale)
+        {
+            var sub = new Submarine(Vector2.Zero, 0, scale, true);
+            var posX = -sub.Width/2f;
+            if (Rand.Bool(1, 2))
+                posX = Manager.DesignWidth + sub.Width / 2f;
+            var newPos = new Vector2(posX, Rand.Float(Water.MaxYTopPixel + sub.Height, Water.MinYGroundPixel - sub.Height));
+            sub.Position = newPos;
+            return sub;
         }
 
         public Submarine(Vector2 position, float rotation, float scale, bool isAi) : base("graphic/submarineWars/submarine", position, rotation, scale, (int)Layer.Submarine, CollisionType.BoundingBoxRotated)
@@ -47,9 +75,7 @@ namespace AxeGameCollection.GameObjects.SubmarineWars
             this.isAi = isAi;
             Energy = 100;
             if (isAi)
-            {
                 scrolling = true;
-            }
         }
 
         public void Dive(bool up)
@@ -61,21 +87,19 @@ namespace AxeGameCollection.GameObjects.SubmarineWars
             waterlineReached = (y == minY);
             groundReached = (y == maxY);
             position.Y = MathHelper.Clamp(y, minY, maxY);
-            Rotation += up ? -0.005f : 0.005f;
+            if (speed <= 0)
+                Rotation += up ? -0.005f : 0.005f;
+            else
+                Rotation -= up ? -0.005f : 0.005f;
         }
 
         public override Sprite Update(GameTime gameTime)
         {
-            if (Energy <= 0)
-            {
-                SpriteManager.CreateExplosion(position, 1);
-                return this;
-            }
             // if computer enemy
             if (IsAi)
             {
-                if (Rand.Bool(1, 100)) Speed += Rand.Float(-0.5f, 1f);
                 if (Rand.Bool(1, 50))  Rotation += Rand.Float(-0.05f, 0.05f);
+                if (Rand.Bool(1, 100)) Speed += Rand.Float(-0.5f, 0.5f);
                 if (Rand.Bool(1, 300)) Shoot();
                 position -= velocity;
             }
@@ -99,7 +123,7 @@ namespace AxeGameCollection.GameObjects.SubmarineWars
                     Rotation -= 0.005f;
             }
             diving = false;
-            return OnScreen ? null : this;
+            return null;
         }
 
         public void Shoot()
