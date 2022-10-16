@@ -18,7 +18,7 @@ public class MunitionBar : Sprite
     private readonly int Offset = 50;
     private readonly int MaxMunition;
 
-    public override float Width => (int)(torpedoWidth * MaxMunition + Offset);
+    public override float Width => (int)(torpedoWidth * MaxMunition + Offset/2f);
 
     public int MunitionCount
     {

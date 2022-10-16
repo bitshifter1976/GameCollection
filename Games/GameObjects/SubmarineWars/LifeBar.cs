@@ -14,7 +14,7 @@ public class LifeBar : Sprite
     private int height;
     private int points;
 
-    public override float Width => backgroundRect.Width;
+    public override float Width => textSize.X - 10;
 
     public int Points
     {

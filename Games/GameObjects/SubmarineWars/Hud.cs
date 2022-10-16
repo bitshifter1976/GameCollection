@@ -44,10 +44,10 @@ public class Hud : Sprite
         texture.SetData(new Color[1] { Color.White });
         var posX = 0f;
         var posY = Manager.DesignHeight - Height;
-        energyBar = new LifeBar(new Vector2(posX, posY), 0.4f, Height);
-        posX += energyBar.Width;
         torpedoBar = new MunitionBar(new Vector2(posX, posY), 0.7f, 20, Height);
         posX += torpedoBar.Width;
+        energyBar = new LifeBar(new Vector2(posX, posY), 0.4f, Height);
+        posX += energyBar.Width;
         enemiesKilledBar = new EnemiesKilledBar(new Vector2(posX, posY), 0.4f, Height);
         posX += enemiesKilledBar.Width;
         timeBar = new TimeBar(new Vector2(posX, posY), 0.4f, Height);
