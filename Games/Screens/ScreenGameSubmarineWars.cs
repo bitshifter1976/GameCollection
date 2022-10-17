@@ -37,7 +37,8 @@ public class ScreenGameSubmarineWars : GameScreen
     private const float GameEndTimeout = 2;
     private bool acceptEndInput;
 
-    public int EnemyKillCount => (int)((level+1f) * 1.5f);
+    private int EnemyKillCount => (int)((level+1f) * 1.5f);
+    private float LevelFactor => (level + 10f) / 10f;
 
     public ScreenGameSubmarineWars(Game game, int level) : base(game)
     {
@@ -74,10 +75,9 @@ public class ScreenGameSubmarineWars : GameScreen
                 }
             case GameState.Play:
                 {
-                    var levelFactor = (level + 10f) / 10f;
                     SpriteManager.Add(Fish.Create(100));
-                    SpriteManager.Add(Mine.Create((int)(300f / levelFactor)));
-                    SpriteManager.Add(Submarine.Create((int)(500f / levelFactor), true));
+                    SpriteManager.Add(Mine.Create((int)(300f / LevelFactor)));
+                    SpriteManager.Add(Submarine.Create((int)(500f / LevelFactor), true));
                     hud.Energy = submarine.Energy;
                     hud.ElapsedTime += TimeSpan.FromSeconds(gameTime.ElapsedGameTime.TotalSeconds);
                     hud.EnemiesKilled += SpriteManager.Update(gameTime, true);
@@ -151,13 +151,20 @@ public class ScreenGameSubmarineWars : GameScreen
             Manager.Graphics.ApplyChanges();
         }
         // dive
+        var automaticRotateBack = true;
         if (Manager.Input.HoldingKey(Keys.Up, Keys.W) || Manager.Input.GamePadHoldingKey(PlayerIndex.One, Buttons.DPadUp, Buttons.LeftThumbstickUp))
         {
+            automaticRotateBack = false;
             submarine.Dive(true);
         }
         if (Manager.Input.HoldingKey(Keys.Down, Keys.S) || Manager.Input.GamePadHoldingKey(PlayerIndex.One, Buttons.DPadDown, Buttons.LeftThumbstickDown))
         {
+            automaticRotateBack = false;
             submarine.Dive(false);
+        }
+        if (automaticRotateBack)
+        {
+            submarine.RotateBack(0.005f);
         }
         var automaticSpeedDown = true;
         if (Manager.Input.HoldingKey(Keys.Left, Keys.A) || Manager.Input.GamePadHoldingKey(PlayerIndex.One, Buttons.DPadLeft, Buttons.LeftThumbstickLeft))
@@ -205,7 +212,7 @@ public class ScreenGameSubmarineWars : GameScreen
                         {
                             SpriteManager.Clear();
                             ScreenManager.RemoveScreen(this);
-                            ScreenManager.AddScreen(submarine.Energy <= 0 ? new ScreenMenuMain(game) : new ScreenGameSubmarineWars(game, level + 1));
+                            ScreenManager.AddScreen(submarine.Energy <= 0 ? new ScreenMenuSubmarineWars(game) : new ScreenGameSubmarineWars(game, level + 1));
                         }
                         break;
                     }
