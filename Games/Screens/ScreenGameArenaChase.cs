@@ -292,7 +292,7 @@ public class ScreenGameArenaChase : GameScreen
                     {
                         SpriteManager.Clear();
                         ScreenManager.RemoveScreen(this);
-                        ScreenManager.AddScreen(tank.Energy <= 0 ? new ScreenMenuMain(game) : new ScreenGameArenaChase(game, hasAi, level + 1));
+                        ScreenManager.AddScreen(tank.Energy <= 0 ? new ScreenMenuArenaChase(game) : new ScreenGameArenaChase(game, hasAi, level + 1));
                     }
                     break;
                 }

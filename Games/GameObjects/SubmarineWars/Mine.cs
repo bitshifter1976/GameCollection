@@ -7,6 +7,8 @@ namespace AxeGameCollection.GameObjects.SubmarineWars;
 
 public sealed class Mine : Sprite
 {
+    public override Rectangle BoundingBox => new((int)(position.X - Width / 2f), (int)(position.Y - Height / 2f), (int)Width, (int)Height);
+
     public static Sprite Create(int probabilityToCreateNewOne)
     {
         Mine obj = null;
@@ -15,9 +17,9 @@ public sealed class Mine : Sprite
         return obj;
     }
 
-    public Mine() : base("graphic/submarineWars/watermine", Vector2.Zero, 0, 1, (int)Layer.Shot, CollisionType.BoundingBox)
+    public Mine() : base("graphic/submarineWars/watermine", Vector2.Zero, 0, 1, (int)Layer.Shot, CollisionType.BoundingBoxRotated)
     {
-    	scrolling = true;
+        scrolling = true;
         scale = Rand.Float(0.1f, 0.2f);
         color = Color.White;
         var leftSide = Rand.Bool(1, 2);
@@ -29,7 +31,7 @@ public sealed class Mine : Sprite
 
     public override Sprite Update(GameTime gameTime)
     {
-        rotation += Rand.Float(-0.005f, 0.005f);
+        rotation += Rand.Float(-0.01f, 0.01f);
         rotation = MathHelper.Clamp(rotation, -0.7f, 0.7f);
         position.X += Rand.Float(-50, 50) * (float)gameTime.ElapsedGameTime.TotalSeconds;
         position.Y += Rand.Float(-50, 50) * (float)gameTime.ElapsedGameTime.TotalSeconds;

@@ -68,25 +68,27 @@ public static class SpriteManager
     {   
         var removeSprites = new List<Sprite>();
         enemyKillCount = 0;
-        var list = sprites.Where(s => s.CollisionType != CollisionType.None).ToList();
-        for (var i = 0; i < list.Count - 1; i++)
+        var collisionSprites = sprites.Where(s => s.CollisionType != CollisionType.None).ToList();
+        for (var i = 0; i < collisionSprites.Count - 1; i++)
         {
-            for (var j = i + 1; j < list.Count; j++)
+            for (var j = i + 1; j < collisionSprites.Count; j++)
             {
-                if ((list[i] is Submarine s && list[j] is Torpedo t && t.Submarine == s) || (list[j] is Submarine s2 && list[i] is Torpedo t2 && t2.Submarine == s2))
+                if ((collisionSprites[i] is Submarine s && collisionSprites[j] is Torpedo t && t.Submarine == s) || (collisionSprites[j] is Submarine s2 && collisionSprites[i] is Torpedo t2 && t2.Submarine == s2))
                     continue;
-                if (list[i].Collide(list[j]))
-                    removeSprites.AddRange(DoCollisionReaction(list[i], list[j], ref enemyKillCount));
+                if (collisionSprites[i].Collide(collisionSprites[j]))
+                    removeSprites.AddRange(DoCollisionReaction(collisionSprites[i], collisionSprites[j], ref enemyKillCount));
             }
         }
-        var torpedos = sprites.OfType<Torpedo>().ToList();
-        foreach (Torpedo torpedo in torpedos)
+        foreach (var s in collisionSprites)
         {
-            var rect = torpedo.BoundingBoxRotated.CollisionRectangle;
-            for (var x = rect.Left < 0 ? 0 : (int)rect.Left; x <= (int)rect.Right && x <= Manager.DesignWidth; x++)
+            var rect = s.BoundingBoxF;
+            if (s.CollisionType == CollisionType.BoundingBoxRotated)
+                rect = s.BoundingBoxRotated.CollisionRectangle;
+            var possibleCollisionPixel = Water.GroundPixel.Where(p => p.Key >= 0 && p.Key >= rect.Left && p.Key <= rect.Right && p.Key <= Manager.DesignWidth).Select(p => new Vector2(p.Key, p.Value)).ToList();
+            foreach (var p in possibleCollisionPixel)
             {
-                if (rect.Contains(new Vector2(x, Water.GroundPixel[x])))
-                    removeSprites.AddRange(DoGroundCollisionReaction(torpedo, new Vector2(x, Water.GroundPixel[x])));
+                if (rect.Contains(p))
+                    removeSprites.AddRange(DoGroundCollisionReaction(s, p));
             }
         }
 
@@ -145,6 +147,13 @@ public static class SpriteManager
             CreateExplosion(s2.Center, 0.5f);
             toRemove.Add(s2);
         }
+        if ((s1 is Mine && s2 is Torpedo) || (s1 is Torpedo && s2 is Mine))
+        {
+            CreateExplosion(s1.Center, 0.5f);
+            toRemove.Add(s1);
+            CreateExplosion(s2.Center, 0.5f);
+            toRemove.Add(s2);
+        }
 
         return toRemove;
     }
@@ -157,6 +166,13 @@ public static class SpriteManager
         {
             CreateExplosion(collisionPoint, 0.5f);
             toRemove.Add(s);
+        }
+        else if (s is Submarine s2)
+        {
+            s2.Position += new Vector2(0, -2); 
+            if (!Manager.Sound.IsEffectPlaying("metalSlide"))
+                Manager.Sound.PlayEffect("metalSlide");
+            s2.Energy -= 0.5f;
         }
 
         return toRemove;

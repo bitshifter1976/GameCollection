@@ -546,6 +546,12 @@
 /processorParam:Quality=Best
 /build:sound/fx/menu_start.wav
 
+#begin sound/fx/metalSlide.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:sound/fx/metalSlide.wav
+
 #begin sound/fx/option_open.WAV
 /importer:WavImporter
 /processor:SoundEffectProcessor

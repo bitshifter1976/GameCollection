@@ -10,8 +10,6 @@ namespace AxeGameCollection.GameObjects.SubmarineWars
     {
         private readonly bool isAi;
         private bool waterlineReached;
-        private bool groundReached;
-        private bool speedChanging;
         private readonly float MinSpeed = -5f;
         private readonly float MaxSpeed = 5f;
 
@@ -62,16 +60,17 @@ namespace AxeGameCollection.GameObjects.SubmarineWars
         private static Submarine CreateEnemy(float scale)
         {
             var sub = new Submarine(Vector2.Zero, 0, scale, true);
-            var posX = -sub.Width/2f;
+            var posX = -sub.Width / 2f;
             if (Rand.Bool(1, 2))
                 posX = Manager.DesignWidth + sub.Width / 2f;
-            var newPos = new Vector2(posX, Rand.Float(Water.MaxYTopPixel + sub.Height, Water.MinYGroundPixel - sub.Height));
-            sub.Position = newPos;
+            var posY = Rand.Float(Water.MaxYTopPixel + sub.Height, Water.MinYGroundPixel - sub.Height);
+            sub.Position = new Vector2(posX, posY);
             return sub;
         }
 
         public Submarine(Vector2 position, float rotation, float scale, bool isAi) : base("graphic/submarineWars/submarine", position, rotation, scale, (int)Layer.Submarine, CollisionType.BoundingBoxRotated)
         {
+            origin = new Vector2(Width / 2f, Height / 2f);
             flip = isAi;
             this.isAi = isAi;
             Energy = 100;
@@ -86,7 +85,6 @@ namespace AxeGameCollection.GameObjects.SubmarineWars
             var y = MathHelper.Clamp(up ? position.Y - 1 : position.Y + 1, minY, maxY);
             position.Y = y;
             waterlineReached = (y == minY);
-            groundReached = (y == maxY);
             if (Speed > 0)
                 AddRotation(up ? -0.005f : 0.005f);
             if (Speed < 0)
@@ -141,14 +139,6 @@ namespace AxeGameCollection.GameObjects.SubmarineWars
             if (waterlineReached && speed != 0)
             {
                 position.Y = Water.TopPixel[(int)position.X];
-            }
-            // if ground reached, stay on top
-            if (groundReached && speed != 0)
-            {
-                position.Y = Water.GroundPixel[(int)position.X] - Height / 2f;
-                if (!Manager.Sound.IsEffectPlaying("fireBurn"))
-                    Manager.Sound.PlayEffect("fireBurn");
-                Energy -= 0.05f;
             }
             return null;
         }

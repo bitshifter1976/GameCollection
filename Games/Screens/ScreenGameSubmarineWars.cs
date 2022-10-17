@@ -52,7 +52,7 @@ public class ScreenGameSubmarineWars : GameScreen
     {
         Manager.Sound.LoadSong("game");
         Manager.Sound.PlaySong("game");
-        Manager.Sound.LoadEffect("fireBurn");
+        Manager.Sound.LoadEffect("metalSlide");
         CreateScene();
         base.LoadContent();
     }
@@ -103,7 +103,7 @@ public class ScreenGameSubmarineWars : GameScreen
                 {
                     SpriteManager.Draw();
                     var str = $"Level: {level}\nObjective: Kill {EnemyKillCount} enemies\nPress Enter or A";
-                    ShowCenterText(str, AxeGameCollection.Games.ArenaChase.ToString(), Color.White, 1);
+                    ShowCenterText(str, AxeGameCollection.Games.SubmarineWars.ToString(), Color.White, 1);
                     break;
                 }
             case GameState.Play:

@@ -307,7 +307,7 @@ public class ScreenGameTankBattle : GameScreen
                     {
                         SpriteManager.Clear();
                         ScreenManager.RemoveScreen(this);
-                        ScreenManager.AddScreen(tank1.Energy <= 0 ? new ScreenMenuMain(game) : new ScreenGameTankBattle(game, hasAi, level + 1));
+                        ScreenManager.AddScreen(tank1.Energy <= 0 ? new ScreenMenuTankBattle(game) : new ScreenGameTankBattle(game, hasAi, level + 1));
                     }
                     break;
             }
