@@ -17,15 +17,11 @@ public class ScreenGameSubmarineWars : GameScreen
     public enum Layer
     {
         Submarine = 10,
-        Trees = 20,
-        Stars = 40,
-        Planet = 50,
-        Cloud = 60,
-        Bird = 70,
-        Fish = 71,
-        Shot = 80,
-        Explosion = 90,
-        Water = 95,
+        Planet = 20,
+        Fish = 30,
+        Shot = 40,
+        Explosion = 50,
+        Water = 90,
         Hud = 100,
     }
     private Color backColor;
@@ -76,6 +72,7 @@ public class ScreenGameSubmarineWars : GameScreen
             case GameState.Play:
                 {
                     SpriteManager.Add(Fish.Create(100));
+                    SpriteManager.Add(Squid.Create(400));
                     SpriteManager.Add(Mine.Create((int)(300f / LevelFactor)));
                     SpriteManager.Add(Submarine.Create((int)(500f / LevelFactor), true));
                     hud.Energy = submarine.Energy;

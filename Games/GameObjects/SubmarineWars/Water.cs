@@ -29,7 +29,7 @@ public class Water : Sprite
     public Water() : base((int)Layer.Water)
     {
         texture = Manager.Content.Load<Texture2D>("graphic/common/dot");
-        color = new Color(Color.DarkBlue.R, Color.DarkBlue.G, Color.DarkBlue.B, (byte)80);
+        color = new Color(Color.DarkBlue.R, Color.DarkBlue.G, Color.DarkBlue.B, (byte)100);
         groundColor = Color.SaddleBrown;
         waveWidth = Rand.Float(20f, 50f);
         waveHeight = Rand.Float(2f, 20f);
