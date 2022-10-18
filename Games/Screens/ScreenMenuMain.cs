@@ -7,6 +7,8 @@ namespace AxeGameCollection.Screens;
 
 public class ScreenMenuMain : MenuScreen
 {
+    private Texture2D texture;
+
     public ScreenMenuMain(Game game) : base(game, "Games")
     {
         var playGame1MenuEntry = new MenuEntry("Tank Battle");
@@ -46,6 +48,7 @@ public class ScreenMenuMain : MenuScreen
         Manager.Sound.PlayEffect("menu_start");
         Manager.Sound.LoadEffect("menu_next");
         Manager.Sound.LoadEffect("menu_open");
+        texture = Manager.Content.Load<Texture2D>("graphic/common/menu");
 
         base.LoadContent();
     }
@@ -92,11 +95,12 @@ public class ScreenMenuMain : MenuScreen
     public override void Draw(GameTime gameTime)
     {
         InitDraw(Color.Black);
+        Manager.SpriteBatch.Draw(texture, new Rectangle(0, 0, texture.Width, texture.Height), Color.White);
         // Draw the menu title.
         const float titleScale = 1f;
         const float entryScale = 0.7f;
         var position = new Vector2(Manager.DesignWidth / 2f, Manager.DesignHeight / 2f);
-        var titleColor = Color.White;
+        var titleColor = Color.Black;
         var font = Manager.Fonts.Get("Standard");
         var titleSize = font.MeasureString(menuTitle) * titleScale;
         position.Y -= titleSize.Y * 3;
@@ -109,7 +113,7 @@ public class ScreenMenuMain : MenuScreen
             var menuEntry = menuEntries[i];
             var isSelected = (i == selectedEntry);
             var x = position.X - menuEntry.GetWidth(entryScale) / 2f;
-            menuEntry.Draw(this, new Vector2(x, position.Y), isSelected, gameTime, entryScale, Color.Red, Color.White);
+            menuEntry.Draw(this, new Vector2(x, position.Y), isSelected, gameTime, entryScale, Color.DarkRed, Color.Black);
             position.Y += menuEntry.GetHeight(entryScale);
         }
         EndDraw(Color.Black);

@@ -216,6 +216,18 @@
 /processorParam:TextureFormat=Color
 /build:graphic/common/intro.png
 
+#begin graphic/common/menu.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:graphic/common/menu.png
+
 #begin graphic/common/progressBar.png
 /importer:TextureImporter
 /processor:TextureProcessor

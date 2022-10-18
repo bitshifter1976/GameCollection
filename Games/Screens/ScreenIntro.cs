@@ -35,10 +35,7 @@ public class ScreenIntro : GameScreen
         var font = Manager.Fonts.Get("Standard");
         var textSize = font.MeasureString(text) * scale;
 
-        Manager.SpriteBatch.Draw(
-            texture,
-            new Rectangle((int)(Manager.DesignWidth/2f - texture.Width/2f), (int)(Manager.DesignHeight/2f - texture.Height/2f), texture.Width, texture.Height),
-            Color.White);
+        Manager.SpriteBatch.Draw(texture, new Rectangle(0, 0, texture.Width, texture.Height), Color.White);
 
         Manager.SpriteBatch.DrawString(
             font, 
