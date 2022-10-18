@@ -59,6 +59,7 @@ public class ScreenGameSubmarineWars : GameScreen
         SpriteManager.Init(submarine = Submarine.Create(1, false));
         SpriteManager.AddImmediate(new Water());
         SpriteManager.AddImmediate(hud = new Hud());
+        SpriteManager.AddImmediate(new EnemyShip());
     }
 
     public override void Update(GameTime gameTime, bool otherScreenHasFocus, bool coveredByOtherScreen)
@@ -72,9 +73,10 @@ public class ScreenGameSubmarineWars : GameScreen
             case GameState.Play:
                 {
                     SpriteManager.Add(Fish.Create(100));
-                    SpriteManager.Add(Squid.Create(400));
-                    SpriteManager.Add(Mine.Create((int)(300f / LevelFactor)));
-                    SpriteManager.Add(Submarine.Create((int)(500f / LevelFactor), true));
+                    SpriteManager.Add(Mine.Create((int)(500f / LevelFactor)));
+                    SpriteManager.Add(Squid.Create(1000));
+                    SpriteManager.Add(Submarine.Create((int)(1000f / LevelFactor), true));
+                    SpriteManager.Add(EnemyShip.Create((int)(2000f / LevelFactor)));
                     hud.Energy = submarine.Energy;
                     hud.ElapsedTime += TimeSpan.FromSeconds(gameTime.ElapsedGameTime.TotalSeconds);
                     hud.EnemiesKilled += SpriteManager.Update(gameTime, true);

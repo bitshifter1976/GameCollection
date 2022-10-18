@@ -68,7 +68,7 @@ namespace AxeGameCollection.GameObjects.SubmarineWars
             return sub;
         }
 
-        public Submarine(Vector2 position, float rotation, float scale, bool isAi) : base("graphic/submarineWars/submarine", position, rotation, scale, (int)Layer.Submarine, CollisionType.BoundingBoxRotated)
+        public Submarine(Vector2 position, float rotation, float scale, bool isAi) : base(isAi ? "graphic/submarineWars/submarine2" : "graphic/submarineWars/submarine", position, rotation, scale, (int)Layer.Submarine, CollisionType.BoundingBoxRotated)
         {
             origin = new Vector2(Width / 2f, Height / 2f);
             flip = isAi;
@@ -133,7 +133,7 @@ namespace AxeGameCollection.GameObjects.SubmarineWars
                 if (Rand.Bool(1, 50))  AddRotation(Rand.Float(-0.05f, 0.05f));
                 if (Rand.Bool(1, 100)) AddSpeed(Rand.Float(-0.5f, 0.5f));
                 if (Rand.Bool(1, 300)) Shoot();
-                position -= velocity;
+                position += velocity;
             }
             // if water line reached, stay on top
             if (waterlineReached && speed != 0)

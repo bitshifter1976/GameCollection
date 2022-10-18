@@ -264,6 +264,18 @@
 /processorParam:TextureFormat=Color
 /build:graphic/submarineWars/fish.png
 
+#begin graphic/submarineWars/ship.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:graphic/submarineWars/ship.png
+
 #begin graphic/submarineWars/squid.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -287,6 +299,18 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:graphic/submarineWars/submarine.png
+
+#begin graphic/submarineWars/submarine2.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:graphic/submarineWars/submarine2.png
 
 #begin graphic/submarineWars/torpedo.png
 /importer:TextureImporter
