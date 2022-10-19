@@ -152,6 +152,8 @@ namespace AxeGameCollection.GameObjects.SubmarineWars
             shotVelocity.Normalize();
             torpedo.Position = new Vector2(position.X, position.Y + 10) + shotVelocity * Width / 2f;
             SpriteManager.Add(torpedo);
+            Manager.Sound.LoadEffect("shot");
+            Manager.Sound.PlayEffect("shot");
         }
     }
 }

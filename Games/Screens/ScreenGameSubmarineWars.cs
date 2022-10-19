@@ -76,7 +76,7 @@ public class ScreenGameSubmarineWars : GameScreen
                     SpriteManager.Add(Mine.Create((int)(500f / LevelFactor)));
                     SpriteManager.Add(Squid.Create(1000));
                     SpriteManager.Add(Submarine.Create((int)(1000f / LevelFactor), true));
-                    SpriteManager.Add(EnemyShip.Create((int)(2000f / LevelFactor)));
+                    SpriteManager.Add(EnemyShip.Create((int)(1000f / LevelFactor)));
                     hud.Energy = submarine.Energy;
                     hud.ElapsedTime += TimeSpan.FromSeconds(gameTime.ElapsedGameTime.TotalSeconds);
                     hud.EnemiesKilled += SpriteManager.Update(gameTime, true);

@@ -103,6 +103,8 @@ public sealed class Tank : Sprite
         var shotPos = position + shotVelocity * (Width-30) / 2f;
         shot.Position = shotPos;
         SpriteManager.Add(shot);
+        Manager.Sound.LoadEffect("shot");
+        Manager.Sound.PlayEffect("shot");
     }
 
     public void PlaceMine()

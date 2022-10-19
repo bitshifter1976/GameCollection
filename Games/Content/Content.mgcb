@@ -252,6 +252,18 @@
 /processorParam:TextureFormat=Color
 /build:graphic/common/shot.png
 
+#begin graphic/submarineWars/bomb.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:graphic/submarineWars/bomb.png
+
 #begin graphic/submarineWars/fish.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -606,11 +618,23 @@
 /processorParam:Quality=Best
 /build:sound/fx/option_open.WAV
 
+#begin sound/fx/shot.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:sound/fx/shot.wav
+
 #begin sound/fx/shot.WAV
 /importer:WavImporter
 /processor:SoundEffectProcessor
 /processorParam:Quality=Best
 /build:sound/fx/shot.WAV
+
+#begin sound/fx/waterdrop.WAV
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:sound/fx/waterdrop.WAV
 
 #begin sound/song/game.ogg
 /importer:OggImporter

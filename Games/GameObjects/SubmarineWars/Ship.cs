@@ -9,6 +9,7 @@ namespace AxeGameCollection.GameObjects.SubmarineWars;
 public sealed class EnemyShip : Sprite
 {
     private readonly int sign;
+    private int bombAmount;
     
     public override Rectangle BoundingBox => new((int)(position.X - Width / 2f), (int)position.Y, (int)Width, (int)(Height / 2f));
 
@@ -39,10 +40,15 @@ public sealed class EnemyShip : Sprite
         position.Y = Water.TopPixel.Max(p => p.Value) - Height / 3f;
 		speed = Rand.Float(40,80);
         color = Color.White;
+        bombAmount = 3;
     }
 
     public override Sprite Update(GameTime gameTime)
     {
+        if (bombAmount > 0 && Rand.Bool(1, 200))
+        {
+            Shoot();
+        }
         if (Rand.Bool(1, 50))
         {
             rotation += Rand.Float(-0.01f, 0.01f);
@@ -52,5 +58,21 @@ public sealed class EnemyShip : Sprite
         if (Water.TopPixel.ContainsKey((int)position.X))
             position.Y = Water.TopPixel[(int)position.X] - Height / 3f;
         return base.Update(gameTime);
+    }
+
+    public void Shoot()
+    {
+        if (bombAmount > 0)
+        {
+            bombAmount--;
+            var up = new Vector2(0, -1);
+            var rot = MathHelper.ToRadians(flip ? 45 : -45);
+            var rotMatrix = Matrix.CreateRotationZ(rot);
+            var shotVelocity = Vector2.Transform(up, rotMatrix);
+            var shotPos = new Vector2(flip ? position.X + Width / 3f : position.X - Width / 3f, position.Y);
+            SpriteManager.Add(new Bomb(shotPos, shotVelocity, flip, rot));
+            Manager.Sound.LoadEffect("shot");
+            Manager.Sound.PlayEffect("shot");
+        }
     }
 }

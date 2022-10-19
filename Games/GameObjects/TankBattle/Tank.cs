@@ -261,7 +261,6 @@ public class Tank : Sprite
 
     public void Shoot()
     {
-        Log.Out(LogLevel.Dbg1, $"shooting");
         IsShooting = true;
         aiCalculationFinished = false;
         AiShouldShoot = false;
@@ -270,6 +269,8 @@ public class Tank : Sprite
         var shotVelocity = Vector2.Transform(up, rotMatrix);
         var shotPos = positionWeapon + shotVelocity * textureWeapon.Width;
         SpriteManager.Add(new Shot(this, shotPos, shotVelocity * (IsAi ? aiPower : shotPower)));
+        Manager.Sound.LoadEffect("shot");
+        Manager.Sound.PlayEffect("shot");
     }
 
     public void Fall(GameTime gameTime)

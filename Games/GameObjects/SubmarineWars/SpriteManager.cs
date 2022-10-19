@@ -173,11 +173,47 @@ public static class SpriteManager
             CreateExplosion(s2.Center, 1);
             toRemove.Add(s2);
         }
+        if (s1 is Bomb && s2 is Submarine)
+        {
+            s2.Energy -= s1.Damage;
+            if (s2.Energy <= 0)
+            {
+                CreateExplosion(s2.Position, 3);
+                toRemove.Add(s2);
+            }
+            CreateExplosion(s1.Center, 1);
+            toRemove.Add(s1);
+        }
+        if (s2 is Bomb && s1 is Submarine)
+        {
+            s1.Energy -= s2.Damage;
+            if (s1.Energy <= 0)
+            {
+                CreateExplosion(s1.Position, 3);
+                toRemove.Add(s1);
+            }
+            CreateExplosion(s2.Center, 1);
+            toRemove.Add(s2);
+        }
         if ((s1 is Mine && s2 is Torpedo) || (s1 is Torpedo && s2 is Mine))
         {
-            CreateExplosion(s1.Center, 0.5f);
+            CreateExplosion(s1.Center, 1);
             toRemove.Add(s1);
-            CreateExplosion(s2.Center, 0.5f);
+            CreateExplosion(s2.Center, 1);
+            toRemove.Add(s2);
+        }
+        if ((s1 is Bomb && s2 is Torpedo) || (s1 is Torpedo && s2 is Bomb))
+        {
+            CreateExplosion(s1.Center, 1);
+            toRemove.Add(s1);
+            CreateExplosion(s2.Center, 1);
+            toRemove.Add(s2);
+        }
+        if ((s1 is Bomb && s2 is Mine) || (s1 is Mine && s2 is Bomb))
+        {
+            CreateExplosion(s1.Center, 1);
+            toRemove.Add(s1);
+            CreateExplosion(s2.Center, 1);
             toRemove.Add(s2);
         }
 
