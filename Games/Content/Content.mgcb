@@ -618,17 +618,17 @@
 /processorParam:Quality=Best
 /build:sound/fx/option_open.WAV
 
-#begin sound/fx/shot.wav
-/importer:WavImporter
-/processor:SoundEffectProcessor
-/processorParam:Quality=Best
-/build:sound/fx/shot.wav
-
 #begin sound/fx/shot.WAV
 /importer:WavImporter
 /processor:SoundEffectProcessor
 /processorParam:Quality=Best
 /build:sound/fx/shot.WAV
+
+#begin sound/fx/shot2.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:sound/fx/shot2.wav
 
 #begin sound/fx/waterdrop.WAV
 /importer:WavImporter

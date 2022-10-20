@@ -31,8 +31,8 @@ public class Water : Sprite
         texture = Manager.Content.Load<Texture2D>("graphic/common/dot");
         color = new Color(Color.DarkBlue.R, Color.DarkBlue.G, Color.DarkBlue.B, (byte)100);
         groundColor = Color.SaddleBrown;
-        waveWidth = Rand.Float(20f, 50f);
-        waveHeight = Rand.Float(2f, 20f);
+        waveWidth = Rand.Float(30f, 50f);
+        waveHeight = Rand.Float(2f, 10f);
         waveSpeed = Rand.Float(-20f, -30f);
         xWaveOffset = 0;
         yWaveOffset = Manager.DesignHeight / 6f;
@@ -89,6 +89,7 @@ public class Water : Sprite
                 y = GroundPixel[0] + Rand.Int(-5, 5);
             if (deltaX < 0)
                 y = GroundPixel[Manager.DesignWidth] + Rand.Int(-5, 5);
+            y = MathHelper.Clamp(y, Manager.DesignHeight - GroundYMaxOffset, Manager.DesignHeight - GroundYOffset);
             ScrollPixel(deltaX, y, GroundPixel, ref xGroundDelta);
         }
     }

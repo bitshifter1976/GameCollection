@@ -40,12 +40,12 @@ public sealed class EnemyShip : Sprite
         position.Y = Water.TopPixel.Max(p => p.Value) - Height / 3f;
 		speed = Rand.Float(40,80);
         color = Color.White;
-        bombAmount = 3;
+        bombAmount = 5;
     }
 
     public override Sprite Update(GameTime gameTime)
     {
-        if (bombAmount > 0 && Rand.Bool(1, 200))
+        if (Rand.Bool(1, 200))
         {
             Shoot();
         }
@@ -62,7 +62,7 @@ public sealed class EnemyShip : Sprite
 
     public void Shoot()
     {
-        if (bombAmount > 0)
+        if (OnScreen && bombAmount > 0)
         {
             bombAmount--;
             var up = new Vector2(0, -1);

@@ -48,7 +48,6 @@ public class ScreenGameSubmarineWars : GameScreen
     {
         Manager.Sound.LoadSong("game");
         Manager.Sound.PlaySong("game");
-        Manager.Sound.LoadEffect("metalSlide");
         CreateScene();
         base.LoadContent();
     }
@@ -76,7 +75,7 @@ public class ScreenGameSubmarineWars : GameScreen
                     SpriteManager.Add(Mine.Create((int)(500f / LevelFactor)));
                     SpriteManager.Add(Squid.Create(1000));
                     SpriteManager.Add(Submarine.Create((int)(1000f / LevelFactor), true));
-                    SpriteManager.Add(EnemyShip.Create((int)(1000f / LevelFactor)));
+                    SpriteManager.Add(EnemyShip.Create((int)(2000f / LevelFactor)));
                     hud.Energy = submarine.Energy;
                     hud.ElapsedTime += TimeSpan.FromSeconds(gameTime.ElapsedGameTime.TotalSeconds);
                     hud.EnemiesKilled += SpriteManager.Update(gameTime, true);
@@ -102,7 +101,7 @@ public class ScreenGameSubmarineWars : GameScreen
                 {
                     SpriteManager.Draw();
                     var str = $"Level: {level}\nObjective: Kill {EnemyKillCount} enemies\nPress Enter or A";
-                    ShowCenterText(str, AxeGameCollection.Games.SubmarineWars.ToString(), Color.White, 1);
+                    ShowCenterText(str, AxeGameCollection.Games.SubmarineWars.ToString(), Color.Black, 1);
                     break;
                 }
             case GameState.Play:
@@ -113,14 +112,14 @@ public class ScreenGameSubmarineWars : GameScreen
             case GameState.End:
                 {
                     SpriteManager.Draw();
+                    var str = submarine.Energy > 0 ? $"Level {level} finished!" : "End of game!";
                     gameEndTime += (float)gameTime.ElapsedGameTime.TotalSeconds;
                     if (gameEndTime >= GameEndTimeout)
                     {
-                        acceptEndInput = true;
-                        var str = submarine.Energy > 0 ? $"Level {level} finished!" : "End of game!";
                         str += "\nPress Enter or A";
-                        ShowCenterText(str, AxeGameCollection.Games.SubmarineWars.ToString(), Color.White, 1);
+                        acceptEndInput = true;
                     }
+                    ShowCenterText(str, AxeGameCollection.Games.SubmarineWars.ToString(), Color.Black, 1);
                     break;
                 }
         }

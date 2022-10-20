@@ -145,15 +145,18 @@ namespace AxeGameCollection.GameObjects.SubmarineWars
 
         public void Shoot()
         {
-            var right = new Vector2(1, 0);
-            var rotMatrix = Matrix.CreateRotationZ(rotation + (flip ? MathHelper.ToRadians(180) : 0));
-            var shotVelocity = Vector2.Transform(right, rotMatrix);
-            var torpedo = new Torpedo(this, Vector2.Zero, shotVelocity, 0.5f, rotation, 500);
-            shotVelocity.Normalize();
-            torpedo.Position = new Vector2(position.X, position.Y + 10) + shotVelocity * Width / 2f;
-            SpriteManager.Add(torpedo);
-            Manager.Sound.LoadEffect("shot");
-            Manager.Sound.PlayEffect("shot");
+            if (OnScreen)
+            {
+                var right = new Vector2(1, 0);
+                var rotMatrix = Matrix.CreateRotationZ(rotation + (flip ? MathHelper.ToRadians(180) : 0));
+                var shotVelocity = Vector2.Transform(right, rotMatrix);
+                var torpedo = new Torpedo(this, Vector2.Zero, shotVelocity, 0.5f, rotation, 500);
+                shotVelocity.Normalize();
+                torpedo.Position = new Vector2(position.X, position.Y + 10) + shotVelocity * Width / 2f;
+                SpriteManager.Add(torpedo);
+                Manager.Sound.LoadEffect("shot2");
+                Manager.Sound.PlayEffect("shot2");
+            }
         }
     }
 }

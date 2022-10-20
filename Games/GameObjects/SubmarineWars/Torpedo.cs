@@ -18,7 +18,7 @@ public class Torpedo : Sprite
         this.velocity = velocity;
         this.speed = speed;
         flip = velocity.X < 0;
-        damage = 100;
+        damage = Rand.Int(40, 120);
     }
 
     public override Sprite Update(GameTime gameTime)

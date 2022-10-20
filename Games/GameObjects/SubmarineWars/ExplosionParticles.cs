@@ -15,15 +15,17 @@ public class ExplosionParticles
         texture = Manager.Content.Load<Texture2D>("graphic/common/dotBig");
     }
 
-    public static List<Sprite> Create(int count, Color color, Vector2 position)
+    public static List<Sprite> Create(Vector2 position, float scale)
     {
+        var count = Rand.Int((int)(100 * scale), (int)(200 * scale));
+        var color = new Color(Color.White.R, Color.White.G, Color.White.B, (byte)200);
         List<Sprite> list = new();
         for (var i = 0; i < count; i++)
         {
-            var velocity = new Vector2(Rand.Float(-0.1f, 0.1f), Rand.Float(-0.1f, 0.1f));
-            var scale = Rand.Float(0.2f, 0.4f);
-            var ttl = Rand.Float(3.5f, 5.5f);
-            list.Add(new Particle(texture, position, velocity, 0, 0, color, (int)Layer.Explosion, scale, ttl, 0, 0, false, true));
+            var rotation = MathHelper.ToRadians(Rand.Int(0,359));
+            var velocity = Vector2.Transform(new Vector2(0, -1), Matrix.CreateRotationZ(rotation)) * scale * Rand.Float(-0.5f, 0.5f);
+            var ttl = Rand.Float(3, 5);
+            list.Add(new Particle(texture, position, velocity, 0, 0, color, (int)Layer.Explosion, 0.25f, ttl, 0, 0, false, true));
         }
         return list;
     }

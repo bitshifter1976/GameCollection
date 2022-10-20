@@ -16,6 +16,7 @@ public static class SpriteManager
     {
         SpriteManager.player = player;
         Add(player);
+        Manager.Sound.LoadEffect("metalSlide");
     }
 
     public static void AddImmediate(Sprite s)
@@ -84,7 +85,7 @@ public static class SpriteManager
             var rect = s.BoundingBoxF;
             if (s.CollisionType == CollisionType.BoundingBoxRotated)
                 rect = s.BoundingBoxRotated.CollisionRectangle;
-            var possibleCollisionPixel = Water.GroundPixel.Where(p => p.Key >= 0 && p.Key >= rect.Left && p.Key <= rect.Right && p.Key <= Manager.DesignWidth).Select(p => new Vector2(p.Key, p.Value)).ToList();
+            var possibleCollisionPixel = Water.GroundPixel.Where(p => p.Key >= rect.Left && p.Key <= rect.Right).Select(p => new Vector2(p.Key, p.Value)).ToList();
             foreach (var p in possibleCollisionPixel)
             {
                 if (rect.Contains(p))
@@ -106,7 +107,7 @@ public static class SpriteManager
             {
                 if (t.Submarine == player)
                     enemyKillCount++;
-                CreateExplosion(s2.Position, 3);
+                CreateExplosion(s2.Position, 2);
                 toRemove.Add(s2);
             }
             CreateExplosion(s1.Center, 1);
@@ -119,7 +120,7 @@ public static class SpriteManager
             {
                 if (t2.Submarine == player)
                     enemyKillCount++;
-                CreateExplosion(s1.Position, 3);
+                CreateExplosion(s1.Position, 2);
                 toRemove.Add(s1);
             }
             CreateExplosion(s2.Center, 1);
@@ -132,11 +133,11 @@ public static class SpriteManager
             {
                 if (t3.Submarine == player)
                     enemyKillCount++;
-                CreateExplosion(s2.Position, 1);
+                CreateExplosion(s2.Position, 2, false);
                 toRemove.Add(s2);
             }
-            CreateExplosion(s2.Center, 3);
-            toRemove.Add(s2);
+            CreateExplosion(s1.Center, 2, false);
+            toRemove.Add(s1);
         }
         if (s2 is Torpedo t4 && s1 is EnemyShip)
         {
@@ -145,18 +146,18 @@ public static class SpriteManager
             {
                 if (t4.Submarine == player)
                     enemyKillCount++;
-                CreateExplosion(s2.Position, 1);
-                toRemove.Add(s2);
+                CreateExplosion(s1.Position, 2, false);
+                toRemove.Add(s1);
             }
-            CreateExplosion(s1.Center, 3);
-            toRemove.Add(s1);
+            CreateExplosion(s2.Center, 2, false);
+            toRemove.Add(s2);
         }
         if (s1 is Mine && s2 is Submarine)
         {
             s2.Energy -= s1.Damage;
             if (s2.Energy <= 0)
             {
-                CreateExplosion(s2.Position, 3);
+                CreateExplosion(s2.Position, 2);
                 toRemove.Add(s2);
             }
             CreateExplosion(s1.Center, 1);
@@ -167,7 +168,7 @@ public static class SpriteManager
             s1.Energy -= s2.Damage;
             if (s1.Energy <= 0)
             {
-                CreateExplosion(s1.Position, 3);
+                CreateExplosion(s1.Position, 2);
                 toRemove.Add(s1);
             }
             CreateExplosion(s2.Center, 1);
@@ -178,7 +179,7 @@ public static class SpriteManager
             s2.Energy -= s1.Damage;
             if (s2.Energy <= 0)
             {
-                CreateExplosion(s2.Position, 3);
+                CreateExplosion(s2.Position, 2);
                 toRemove.Add(s2);
             }
             CreateExplosion(s1.Center, 1);
@@ -189,7 +190,7 @@ public static class SpriteManager
             s1.Energy -= s2.Damage;
             if (s1.Energy <= 0)
             {
-                CreateExplosion(s1.Position, 3);
+                CreateExplosion(s1.Position, 2);
                 toRemove.Add(s1);
             }
             CreateExplosion(s2.Center, 1);
@@ -226,7 +227,12 @@ public static class SpriteManager
 
         if (s is Torpedo)
         {
-            CreateExplosion(collisionPoint, 0.5f);
+            CreateExplosion(collisionPoint, 1f);
+            toRemove.Add(s);
+        }
+        else if (s is Bomb)
+        {
+            CreateExplosion(collisionPoint, 1f);
             toRemove.Add(s);
         }
         else if (s is Submarine s2)
@@ -250,10 +256,11 @@ public static class SpriteManager
         }
     }
 
-    public static void CreateExplosion(Vector2 pos, float scale)
+    public static void CreateExplosion(Vector2 pos, float scale, bool withParticles = true)
     {
         Add(new Explosion(pos, scale));
-        Add(ExplosionParticles.Create(Rand.Int(20, 50), new Color(Color.White.R, Color.White.G, Color.White.B, (byte)50), pos));
+        if (withParticles)
+            Add(ExplosionParticles.Create(pos, scale));
     }
 
     public static void Clear()
