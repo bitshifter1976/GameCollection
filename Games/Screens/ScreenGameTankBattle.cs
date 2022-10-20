@@ -59,8 +59,7 @@ public class ScreenGameTankBattle : GameScreen
     public override void LoadContent()
     {
         texture = new Texture2D(Manager.Graphics.GraphicsDevice, 1, 1);
-        texture.SetData(new Color[1] { Color.White });
-
+        texture.SetData(new Color[1] { Color.White }); 
         Manager.Sound.LoadSong("game");
         Manager.Sound.PlaySong("game");
         Manager.Sound.LoadEffect("helicopter");

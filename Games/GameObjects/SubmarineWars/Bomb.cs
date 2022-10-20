@@ -19,7 +19,7 @@ public class Bomb : Sprite
         scrolling = true;
         gravity = new Gravity(GravityType.UpDown, velocity, 0.1f);
         this.flip = flip;
-        damage = 33;
+        damage = Rand.Int(25, 50);
         speed = 100;
         sign = flip ? 1 : -1;
         goalRotation = MathHelper.ToRadians(180*sign);

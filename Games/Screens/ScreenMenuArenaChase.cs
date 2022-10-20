@@ -46,6 +46,11 @@ public class ScreenMenuArenaChase : MenuScreen
 
     public override void LoadContent()
     {
+        if (!Manager.Sound.IsSongPlaying("intro"))
+        {
+            Manager.Sound.LoadSong("intro");
+            Manager.Sound.PlaySong("intro");
+        }
         Manager.Sound.LoadEffect("menu_start");
         Manager.Sound.PlayEffect("menu_start");
         Manager.Sound.LoadEffect("menu_next");

@@ -107,6 +107,7 @@ public class ScreenGameSubmarineWars : GameScreen
             case GameState.Play:
                 {
                     SpriteManager.Draw();
+                    SpriteManager.ScrollX(-submarine.Speed);
                     break;
                 }
             case GameState.End:
@@ -168,19 +169,16 @@ public class ScreenGameSubmarineWars : GameScreen
         if (Manager.Input.HoldingKey(Keys.Left, Keys.A) || Manager.Input.GamePadHoldingKey(PlayerIndex.One, Buttons.DPadLeft, Buttons.LeftThumbstickLeft))
         {
             automaticSpeedDown = false;
-            submarine.AddSpeed(-0.01f);
-            SpriteManager.ScrollX(-submarine.Speed);
+            submarine.AddSpeed(-0.02f);
         }
         if (Manager.Input.HoldingKey(Keys.Right, Keys.D) || Manager.Input.GamePadHoldingKey(PlayerIndex.One, Buttons.DPadRight, Buttons.LeftThumbstickRight))
         {
             automaticSpeedDown = false;
-            submarine.AddSpeed(0.01f);
-            SpriteManager.ScrollX(-submarine.Speed);
+            submarine.AddSpeed(0.02f);
         }
         if (automaticSpeedDown)
         {
-            submarine.SpeedDown(0.01f);
-            SpriteManager.ScrollX(-submarine.Speed);
+            submarine.SpeedDown(0.02f);
         }
         // shoot
         if (Manager.Input.KeyPressed(Keys.Enter) || Manager.Input.KeyPressed(Keys.Space) || Manager.Input.GamePadKeyPressed(PlayerIndex.One, Buttons.A))

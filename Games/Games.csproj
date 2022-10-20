@@ -88,9 +88,8 @@
     <None Remove="Content\sound\fx\menu_start.wav" />
     <None Remove="Content\sound\fx\option_open.WAV" />
     <None Remove="Content\sound\fx\shot.WAV" />
-    <None Remove="Content\sound\song\game.ogg" />
+    <None Remove="Content\sound\song\game0.ogg" />
     <None Remove="Content\sound\song\intro.ogg" />
-    <None Remove="Content\sound\song\On the Short spree.ogg" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\graphic\tankBattle\bird.png">
@@ -210,13 +209,7 @@
     <Content Include="Content\sound\fx\shot.WAV">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\sound\song\game.ogg">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
     <Content Include="Content\sound\song\intro.ogg">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Content\sound\song\On the Short spree.ogg">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Icon.ico" />

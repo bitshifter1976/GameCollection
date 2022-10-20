@@ -81,6 +81,11 @@ namespace Framework
             }
         }
 
+        public bool IsSongPlaying(string songName)
+        {
+            return CurrentSong == songName && MediaPlayer.State == MediaState.Playing;
+        }
+
         public void PauseSong()
         {
             if (currentSong != null && !isMusicPaused)

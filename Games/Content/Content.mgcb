@@ -648,9 +648,3 @@
 /processorParam:Quality=Best
 /build:sound/song/intro.ogg
 
-#begin sound/song/On the Short spree.ogg
-/importer:OggImporter
-/processor:SongProcessor
-/processorParam:Quality=Best
-/build:sound/song/On the Short spree.ogg
-
