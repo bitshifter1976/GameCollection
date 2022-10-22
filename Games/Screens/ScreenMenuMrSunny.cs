@@ -5,47 +5,34 @@ using Microsoft.Xna.Framework.Input;
 
 namespace AxeGameCollection.Screens;
 
-public class ScreenMenuMain : MenuScreen
+public class ScreenMenuMrSunny : MenuScreen
 {
     private Texture2D texture;
 
-    public ScreenMenuMain(Game game) : base(game, "Games")
+    public ScreenMenuMrSunny(Game game) : base(game, "Mr Sunny")
     {
-        var playGame1MenuEntry = new MenuEntry("Tank Battle");
-        var playGame2MenuEntry = new MenuEntry("Arena Chase");
-        var playGame3MenuEntry = new MenuEntry("Submarine Wars");
-        var playGame4MenuEntry = new MenuEntry("Mr Sunny");
-        var exitMenuEntry = new MenuEntry("Exit");
+        var playGame1MenuEntry = new MenuEntry("Play against AI");
+        var controls = new MenuEntry("Controls");
+        var exitMenuEntry = new MenuEntry("Back");
 
         playGame1MenuEntry.Selected += (s, e) =>
         {
             ScreenManager.RemoveScreen(this);
-            ScreenManager.AddScreen(new ScreenMenuTankBattle(game));
+            ScreenManager.AddScreen(new ScreenGameMrSunny(game, Config.LevelMrSunny));
         };
-        playGame2MenuEntry.Selected += (s, e) =>
+        controls.Selected += (s, e) =>
         {
             ScreenManager.RemoveScreen(this);
-            ScreenManager.AddScreen(new ScreenMenuArenaChase(game));
-        };
-        playGame3MenuEntry.Selected += (s, e) =>
-        {
-            ScreenManager.RemoveScreen(this);
-            ScreenManager.AddScreen(new ScreenMenuSubmarineWars(game));
-        }; 
-        playGame4MenuEntry.Selected += (s, e) =>
-        {
-            ScreenManager.RemoveScreen(this);
-            ScreenManager.AddScreen(new ScreenMenuMrSunny(game));
+            ScreenManager.AddScreen(new ScreenControlsMrSunny(game));
         };
         exitMenuEntry.Selected += (s, e) =>
         {
-            game.Exit();
+            ScreenManager.RemoveScreen(this);
+            ScreenManager.AddScreen(new ScreenMenuMain(game));
         };
 
         menuEntries.Add(playGame1MenuEntry);
-        menuEntries.Add(playGame2MenuEntry);
-        menuEntries.Add(playGame3MenuEntry);
-        menuEntries.Add(playGame4MenuEntry);
+        menuEntries.Add(controls);
         menuEntries.Add(exitMenuEntry);
     }
 
@@ -116,7 +103,7 @@ public class ScreenMenuMain : MenuScreen
         var font = Manager.Fonts.Get("Standard");
         var titleSize = font.MeasureString(menuTitle) * titleScale;
         position.Y -= titleSize.Y * 3;
-        var titlePosition = new Vector2(position.X - titleSize.X / 2f - 450, position.Y);
+        var titlePosition = new Vector2(position.X - titleSize.X / 2f - 350, position.Y);
         Manager.SpriteBatch.DrawString(font, menuTitle, titlePosition, titleColor, 0, Vector2.Zero, titleScale, SpriteEffects.None, 0);
         // Draw each menu entry in turn.
         position.Y += titleSize.Y * 3;

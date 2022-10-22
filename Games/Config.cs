@@ -19,5 +19,6 @@ namespace AxeGameCollection
         public static int LevelArenaChase { get; set; } = GetOrDefault("LevelArenaChase", 1);
         public static int LevelTankBattle { get; set; } = GetOrDefault("LevelTankBattle", 1);
         public static int LevelSubmarineWars { get; set; } = GetOrDefault("LevelSubmarineWars", 1);
+        public static int LevelMrSunny { get; set; } = GetOrDefault("LevelMrSunny", 1);
     }
 }

@@ -12,6 +12,7 @@ public class AxeGameCollection : Game
     {
         None,
         ArenaChase,
+        MrSunny,
         TankBattle,
         SubmarineWars
     }
@@ -42,7 +43,7 @@ public class AxeGameCollection : Game
         // order important!
         Content.RootDirectory = "Content";
         Log.Init(Config.LogDir, Config.LogLevel);
-        Manager.Create(Content, graphics, this, Config.SoundEnabled, new Size(Config.DesignWidth,Config.DesignHeight), Config.Debug, "font", new List<string> { "Debug", "Standard", Games.ArenaChase.ToString(), Games.TankBattle.ToString(), Games.SubmarineWars.ToString() });
+        Manager.Create(Content, graphics, this, Config.SoundEnabled, new Size(Config.DesignWidth,Config.DesignHeight), Config.Debug, "font", new List<string> { "Debug", "Standard", Games.ArenaChase.ToString(), Games.MrSunny.ToString(), Games.TankBattle.ToString(), Games.SubmarineWars.ToString() });
         Debug.Create(new Vector2(10, 10), new Vector2(200, 10), true, "Debug", 2f);
         base.Initialize();
     }

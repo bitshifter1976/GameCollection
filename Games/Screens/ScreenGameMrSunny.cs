@@ -1,0 +1,178 @@
+﻿using AxeGameCollection.GameObjects.MrSunny;
+using Framework;
+using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Input;
+
+namespace AxeGameCollection.Screens;
+
+public class ScreenGameMrSunny : GameScreen
+{
+    public enum GameState
+    {
+        Load,
+        Play,
+        End
+    }
+    public enum Layer
+    {
+        Submarine = 10,
+        Planet = 20,
+        Fish = 30,
+        Shot = 40,
+        Explosion = 50,
+        Water = 90,
+        Hud = 100,
+    }
+
+    private Color backColor;
+    private GameState state;
+    private readonly int level;
+    private float gameEndTime = 0;
+    private const float GameEndTimeout = 2;
+    private bool acceptEndInput;
+
+    public ScreenGameMrSunny(Game game, int level) : base(game)
+    {
+        state = GameState.Load;
+        this.level = level;
+        Manager.Input.CreateHoldingKeys(0.10f, Keys.Up, Keys.Down, Keys.Left, Keys.Right, Keys.W, Keys.S, Keys.A, Keys.D);
+        Manager.Input.CreateHoldingButtons(0.10f, Buttons.DPadUp, Buttons.DPadDown, Buttons.DPadLeft, Buttons.DPadRight, Buttons.LeftThumbstickUp, Buttons.LeftThumbstickDown, Buttons.LeftThumbstickLeft, Buttons.LeftThumbstickRight);
+    }
+
+    public override void LoadContent()
+    {
+        Manager.Sound.LoadSong("game");
+        Manager.Sound.PlaySong("game");
+        CreateScene();
+        base.LoadContent();
+    }
+
+    private void CreateScene()
+    {
+        backColor = Color.CornflowerBlue;
+        Player.Create();
+    }
+
+    public override void Update(GameTime gameTime, bool otherScreenHasFocus, bool coveredByOtherScreen)
+    {
+        Player.Update(gameTime);
+        Manager.Update(gameTime);
+        base.Update(gameTime, otherScreenHasFocus, coveredByOtherScreen);
+    }
+
+    public override void Draw(GameTime gameTime)
+    {
+        InitDraw(backColor);
+        Player.Draw();
+        SpriteManager.Draw();
+        switch (state)
+        {
+            case GameState.Load:
+                {
+                    var text = CreateCenteredText(AxeGameCollection.Games.MrSunny.ToString(), 1, $"Level: {level}", $"Objective: RUN", "Press Enter or A");
+                    ShowCenterText(text, AxeGameCollection.Games.MrSunny.ToString(), Color.Black, 1);
+                    break;
+                }
+            case GameState.Play:
+                {
+                    SpriteManager.ScrollX(-Player.Speed);
+                    break;
+                }
+            case GameState.End:
+                {
+                    var text = Player.Energy > 0 ? $"Level {level} finished!" : "End of game!";
+                    gameEndTime += (float)gameTime.ElapsedGameTime.TotalSeconds;
+                    if (gameEndTime >= GameEndTimeout)
+                    {
+                        text = CreateCenteredText(AxeGameCollection.Games.MrSunny.ToString(), 1, text, "Press Enter or A"); ;
+                        acceptEndInput = true;
+                    }
+                    ShowCenterText(text, AxeGameCollection.Games.MrSunny.ToString(), Color.Black, 1);
+                    break;
+                }
+        }
+        EndDraw(Color.Black);
+    }
+
+    public override void HandleInput()
+    {
+        Player.HandleInput();
+        // exit
+        if (Manager.Input.KeyPressed(Keys.Escape) || Manager.Input.GamePadKeyPressed(PlayerIndex.One, Buttons.Start))
+        {
+            ExitGame();
+        }
+        // next level
+        if (Manager.Input.KeyPressed(Keys.F1))
+        {
+            SpriteManager.Clear();
+            ScreenManager.RemoveScreen(this);
+            ScreenManager.AddScreen(new ScreenGameSubmarineWars(game, level + 1));
+        }
+        // toggle debug
+        if (Manager.Input.KeyPressed(Keys.F2))
+        {
+            Manager.Debug = !Manager.Debug;
+        }
+        // toggle fullscreen
+        if (Manager.Input.KeyPressed(Keys.F3))
+        {
+            Manager.Graphics.IsFullScreen = !Manager.Graphics.IsFullScreen;
+            Manager.Graphics.ApplyChanges();
+        }
+        // accept message
+        if (Manager.Input.KeyPressed(Keys.Enter) || Manager.Input.GamePadKeyPressed(PlayerIndex.One, Buttons.A))
+        {
+            switch (state)
+            {
+                case GameState.Load:
+                    {
+                        state = GameState.Play;
+                        break;
+                    }
+                case GameState.End:
+                    {
+                        if (acceptEndInput)
+                        {
+                            SpriteManager.Clear();
+                            ScreenManager.RemoveScreen(this);
+                            ScreenManager.AddScreen(Player.Energy <= 0 ? new ScreenMenuMrSunny(game) : new ScreenGameMrSunny(game, level + 1));
+                        }
+                        break;
+                    }
+            }
+        }
+
+        base.HandleInput();
+    }
+
+    private void ExitGame()
+    {
+        if (Manager.Debug)
+        {
+            game.Exit();
+        }
+        else
+        {
+            Manager.Sound.PauseSong();
+            var messageBox = new ScreenMessage(game, "Want to exit?", "Yes: Press Enter or A", "No: Press Escape or B", Color.Gold, Color.Red, Color.Gold);
+            messageBox.Accepted += (sender, e) =>
+            {
+                Manager.Sound.StopSong();
+                ScreenManager.RemoveScreen(this);
+                ScreenManager.AddScreen(new ScreenMenuMain(game));
+            };
+            messageBox.Cancelled += (sender, e) =>
+            {
+                Manager.Sound.ResumeSong();
+            };
+            ScreenManager.AddScreen(messageBox);
+        }
+    }
+
+    public override void UnloadContent()
+    {
+        SpriteManager.Clear();
+        base.UnloadContent();
+    }
+}

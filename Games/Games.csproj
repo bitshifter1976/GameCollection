@@ -252,6 +252,7 @@
     </None>
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="Content\graphic\mrSunny\" />
     <Folder Include="Content\graphic\submarineWars\" />
   </ItemGroup>
 </Project>

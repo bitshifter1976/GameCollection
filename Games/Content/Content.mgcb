@@ -27,6 +27,13 @@
 /processorParam:TextureFormat=Compressed
 /build:font/Debug.spritefont
 
+#begin font/MrSunny.spritefont
+/importer:FontDescriptionImporter
+/processor:FontDescriptionProcessor
+/processorParam:PremultiplyAlpha=True
+/processorParam:TextureFormat=Compressed
+/build:font/MrSunny.spritefont
+
 #begin font/Standard.spritefont
 /importer:FontDescriptionImporter
 /processor:FontDescriptionProcessor
@@ -251,6 +258,18 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:graphic/common/shot.png
+
+#begin graphic/mrSunny/sunny.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:graphic/mrSunny/sunny.png
 
 #begin graphic/submarineWars/bomb.png
 /importer:TextureImporter
