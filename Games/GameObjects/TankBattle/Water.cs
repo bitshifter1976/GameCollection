@@ -8,15 +8,16 @@ namespace AxeGameCollection.GameObjects.TankBattle;
 public sealed class Water : SpriteAnimatedMultiLine
 {
     private readonly Rectangle destRect;
+    private static int TopY = 0;
 
-    public static int Top = Manager.DesignHeight - 200;
+    public static int Top => TopY;
 
-	public Water() : base("graphic/tankBattle/water", new Vector2(0,0), 20, 4, 10, 0f, 1f, (int)Layer.Water)
+	public Water() : base("graphic/tankBattle/water", new Vector2(0,0), 4, 4, 10, 0f, 1f, (int)Layer.Water)
     {
-        Position = new Vector2(0, Manager.DesignHeight - Height / RowCount);
+        TopY = (int)(Manager.DesignHeight - Height);
+        Position = new Vector2(0, TopY);
         scrolling = false;
-        destRect = new Rectangle(0, Manager.DesignHeight - texture.Height / RowCount, Manager.DesignWidth, SpriteHeight);
-        Top = (int)Position.Y;
+        destRect = new Rectangle(0, TopY, Manager.DesignWidth, SpriteHeight);
     }
 
     public override void Draw()

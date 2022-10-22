@@ -18,16 +18,16 @@ public static class Trees
             var scale = Rand.Float(0.3f, 0.6f);
             var yStart = mountainTopY + 10;
             var yEnd = Water.Top - 10;
-            if (yEnd < yStart)
-                yEnd = yStart;
-            var position = new Vector2(x, Rand.Int(yStart, yEnd));
-            
-            var tree = new Tree(position, scale);
-            var collisionDetected = trees.Any(t => tree.Collide(t));
-            if (!collisionDetected)
+            if (yEnd > yStart)
             {
-                SpriteManager.Add(tree);
-                trees.Add(tree);
+                var position = new Vector2(x, Rand.Int(yStart, yEnd));
+                var tree = new Tree(position, scale);
+                var collisionDetected = trees.Any(t => tree.Collide(t));
+                if (!collisionDetected)
+                {
+                    SpriteManager.Add(tree);
+                    trees.Add(tree);
+                }
             }
         }
     }
