@@ -66,7 +66,7 @@ public class ScreenGameArenaChase : GameScreen
         lifeBar = new LifeBar(2f) { Percentage = LifeBar.MaxValue };
         lifeBar.Position = new Vector2(Manager.DesignWidth / 2f - lifeBar.Width / 2f, 10);
         SpriteManager.AddImmediate(lifeBar);
-        tank = new Tank(new Vector2(Manager.DesignWidth / 2f, Manager.DesignHeight / 2f), 0.4f, 0,false);
+        tank = new Tank(new Vector2(Manager.DesignWidth / 2f, Manager.DesignHeight / 2f), 0.4f, 0, false);
         enemies = CreateEnemies(hasAi ? enemyCount : 1);
         SpriteManager.AddImmediate(tank);
         enemies.ForEach(e => SpriteManager.AddImmediate(e));
@@ -76,7 +76,7 @@ public class ScreenGameArenaChase : GameScreen
         SpriteManager.AddImmediate(trees);
         notToCollideWith.AddRange(trees);
         var stones = Stones.Create(Rand.Int(0, 20), notToCollideWith);
-        SpriteManager.AddImmediate(stones); 
+        SpriteManager.AddImmediate(stones);
         notToCollideWith.AddRange(stones);
         var mines = Mines.Create(Rand.Int(1, 10), notToCollideWith);
         SpriteManager.AddImmediate(mines);
@@ -106,36 +106,36 @@ public class ScreenGameArenaChase : GameScreen
         switch (state)
         {
             case GameState.Load:
-            {
-                break;
-            }
+                {
+                    break;
+                }
             case GameState.Play:
-            {
-
-                if (tank.Energy <= 0)
-                    state = GameState.End;
-
-                lifeBar.Percentage = tank.Energy;
-
-                if (hasAi)
                 {
-                    enemies.Where(e => e.Energy <= 0).ToList().ForEach(e => enemies.Remove(e));
-                    if (enemies.Count == 0)
+
+                    if (tank.Energy <= 0)
                         state = GameState.End;
+
+                    lifeBar.Percentage = tank.Energy;
+
+                    if (hasAi)
+                    {
+                        enemies.Where(e => e.Energy <= 0).ToList().ForEach(e => enemies.Remove(e));
+                        if (enemies.Count == 0)
+                            state = GameState.End;
+                    }
+                    else
+                    {
+                        if (enemies[0].Energy <= 0)
+                            state = GameState.End;
+                    }
+                    SpriteManager.Update(gameTime);
+                    break;
                 }
-                else
-                {
-                    if (enemies[0].Energy <= 0)
-                        state = GameState.End;
-                }
-                SpriteManager.Update(gameTime);
-                break;
-            }
             case GameState.End:
-            {
-                SpriteManager.Update(gameTime);
-                break;
-            }
+                {
+                    SpriteManager.Update(gameTime);
+                    break;
+                }
         }
         base.Update(gameTime, otherScreenHasFocus, coveredByOtherScreen);
     }
@@ -146,31 +146,33 @@ public class ScreenGameArenaChase : GameScreen
         switch (state)
         {
             case GameState.Load:
-            {
-                tank.Draw();
-                if (!hasAi) 
-                    enemies[0].Draw();
-                var str = $"Get ready!{(hasAi ? $"\nLevel {level}" : "")}";
-                ShowCenterText(str, AxeGameCollection.Games.ArenaChase.ToString(), Color.Gold, 1);
-                break;
-            }
-            case GameState.Play:
-            {
-                SpriteManager.Draw();
-                break;
-            }
-            case GameState.End:
-            {                
-                SpriteManager.Draw();
-                gameEndTime += (float)gameTime.ElapsedGameTime.TotalSeconds;
-                if (gameEndTime >= GameEndTimeout)
                 {
-                    acceptEndInput = true;
-                    var str = hasAi ? (tank.Energy > 0 ? $"Level {level} finished!" : "End of game!") : $"Winner is Player {(tank.Energy > 0 ? "1" : "2")}";
-                    ShowCenterText(str, AxeGameCollection.Games.ArenaChase.ToString(), Color.Gold, 1);
+                    tank.Draw();
+                    if (!hasAi)
+                        enemies[0].Draw();
+                    var text = $"{(hasAi ? $"Level {level}" : "Get ready!")}";
+                    text = CreateCenteredText(AxeGameCollection.Games.ArenaChase.ToString(), 1, text, "Press Enter or A");
+                    ShowCenterText(text, AxeGameCollection.Games.ArenaChase.ToString(), Color.Gold, 1);
+                    break;
                 }
-                break;
-            }
+            case GameState.Play:
+                {
+                    SpriteManager.Draw();
+                    break;
+                }
+            case GameState.End:
+                {
+                    SpriteManager.Draw();
+                    var text = hasAi ? (tank.Energy > 0 ? $"Level {level} finished!" : "End of game!") : $"Winner is Player {(tank.Energy > 0 ? "1" : "2")}";
+                    gameEndTime += (float)gameTime.ElapsedGameTime.TotalSeconds;
+                    if (gameEndTime >= GameEndTimeout)
+                    {
+                        acceptEndInput = true;
+                        text = CreateCenteredText(AxeGameCollection.Games.ArenaChase.ToString(), 1, text, "Press Enter or A");
+                    }
+                    ShowCenterText(text, AxeGameCollection.Games.ArenaChase.ToString(), Color.Gold, 1);
+                    break;
+                }
         }
         EndDraw(Color.Black);
     }
@@ -214,7 +216,7 @@ public class ScreenGameArenaChase : GameScreen
         // steer left
         if (hasAi)
         {
-            if (Manager.Input.HoldingKey(Keys.Left) || Manager.Input.GamePadHoldingKey(PlayerIndex.One, new[] { Buttons.DPadLeft, Buttons.LeftThumbstickLeft}))
+            if (Manager.Input.HoldingKey(Keys.Left) || Manager.Input.GamePadHoldingKey(PlayerIndex.One, new[] { Buttons.DPadLeft, Buttons.LeftThumbstickLeft }))
                 tank.Rotate(true);
         }
         else
@@ -277,25 +279,25 @@ public class ScreenGameArenaChase : GameScreen
                 enemies[0].PlaceMine();
         }
         // navigation
-        if (Manager.Input.KeyPressed(Keys.Enter) ||  Manager.Input.GamePadKeyPressed(PlayerIndex.One, Buttons.A))
+        if (Manager.Input.KeyPressed(Keys.Enter) || Manager.Input.GamePadKeyPressed(PlayerIndex.One, Buttons.A))
         {
             switch (state)
             {
                 case GameState.Load:
-                {
-                    state = GameState.Play;
-                    break;
-                }
-                case GameState.End:
-                {
-                    if (acceptEndInput)
                     {
-                        SpriteManager.Clear();
-                        ScreenManager.RemoveScreen(this);
-                        ScreenManager.AddScreen(tank.Energy <= 0 ? new ScreenMenuArenaChase(game) : new ScreenGameArenaChase(game, hasAi, level + 1));
+                        state = GameState.Play;
+                        break;
                     }
-                    break;
-                }
+                case GameState.End:
+                    {
+                        if (acceptEndInput)
+                        {
+                            SpriteManager.Clear();
+                            ScreenManager.RemoveScreen(this);
+                            ScreenManager.AddScreen(tank.Energy <= 0 ? new ScreenMenuArenaChase(game) : new ScreenGameArenaChase(game, hasAi, level + 1));
+                        }
+                        break;
+                    }
             }
         }
         base.HandleInput();
@@ -313,7 +315,7 @@ public class ScreenGameArenaChase : GameScreen
             var messageBox = new ScreenMessage(game, "Want to exit?", "Yes: Press Enter or A", "No: Press Escape or B", Color.Gold, Color.Red, Color.Gold);
             messageBox.Accepted += (sender, e) =>
             {
-                Manager.Sound.StopSong(); 
+                Manager.Sound.StopSong();
                 ScreenManager.RemoveScreen(this);
                 ScreenManager.AddScreen(new ScreenMenuMain(game));
             };

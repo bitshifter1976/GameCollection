@@ -183,7 +183,10 @@ public class ScreenGameTankBattle : GameScreen
                     }
                     Mountain.Draw(gameTime, mountainWidth);
                     if (mountainWidth > Manager.DesignWidth)
-                        ShowCenterText($"Get ready!{(hasAi ? $"\nLevel {level}" : "")}", AxeGameCollection.Games.TankBattle.ToString(), Color.Gold, 1);
+                    {
+                        var text = CreateCenteredText(AxeGameCollection.Games.TankBattle.ToString(), 1, $"Get ready!", $"{(hasAi ? $"Level {level}" : "")}", "Press Enter or A");
+                        ShowCenterText(text, AxeGameCollection.Games.TankBattle.ToString(), Color.Gold, 1);
+                    }
                     break;
                 }
             case GameState.Start:
@@ -208,8 +211,9 @@ public class ScreenGameTankBattle : GameScreen
                     if (gameEndTime >= GameEndTimeout)
                     {
                         acceptEndInput = true;
-                        var str = hasAi ? (tank1.Energy > 0 ? $"Level {level} finished!" : "End of game!") : $"Winner is Player {(tank1.Energy > 0 ? "1" : "2")}";
-                        ShowCenterText(str, AxeGameCollection.Games.TankBattle.ToString(), Color.Gold, 1);
+                        var text = hasAi ? (tank1.Energy > 0 ? $"Level {level} finished!" : "End of game!") : $"Winner is Player {(tank1.Energy > 0 ? "1" : "2")}";
+                        text = CreateCenteredText(AxeGameCollection.Games.TankBattle.ToString(), 1, text, "Press Enter or A");
+                        ShowCenterText(text, AxeGameCollection.Games.TankBattle.ToString(), Color.Gold, 1);
                     }
                     break;
                 }

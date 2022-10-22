@@ -24,6 +24,7 @@ public class ScreenGameSubmarineWars : GameScreen
         Water = 90,
         Hud = 100,
     }
+
     private Color backColor;
     private GameState state;
     private readonly int level;
@@ -58,7 +59,6 @@ public class ScreenGameSubmarineWars : GameScreen
         SpriteManager.Init(submarine = Submarine.Create(1, false));
         SpriteManager.AddImmediate(new Water());
         SpriteManager.AddImmediate(hud = new Hud());
-        SpriteManager.AddImmediate(new EnemyShip());
     }
 
     public override void Update(GameTime gameTime, bool otherScreenHasFocus, bool coveredByOtherScreen)
@@ -75,7 +75,7 @@ public class ScreenGameSubmarineWars : GameScreen
                     SpriteManager.Add(Mine.Create((int)(500f / LevelFactor)));
                     SpriteManager.Add(Squid.Create(1000));
                     SpriteManager.Add(Submarine.Create((int)(1000f / LevelFactor), true));
-                    SpriteManager.Add(EnemyShip.Create((int)(2000f / LevelFactor)));
+                    SpriteManager.Add(EnemyShip.Create((int)(1000f / LevelFactor)));
                     hud.Energy = submarine.Energy;
                     hud.ElapsedTime += TimeSpan.FromSeconds(gameTime.ElapsedGameTime.TotalSeconds);
                     hud.EnemiesKilled += SpriteManager.Update(gameTime, true);
@@ -100,8 +100,8 @@ public class ScreenGameSubmarineWars : GameScreen
             case GameState.Load:
                 {
                     SpriteManager.Draw();
-                    var str = $"Level: {level}\nObjective: Kill {EnemyKillCount} enemies\nPress Enter or A";
-                    ShowCenterText(str, AxeGameCollection.Games.SubmarineWars.ToString(), Color.Black, 1);
+                    var text = CreateCenteredText(AxeGameCollection.Games.SubmarineWars.ToString(), 1, $"Level: {level}", $"Objective: Kill {EnemyKillCount} enemies", "Press Enter or A");
+                    ShowCenterText(text, AxeGameCollection.Games.SubmarineWars.ToString(), Color.Black, 1);
                     break;
                 }
             case GameState.Play:
@@ -113,14 +113,14 @@ public class ScreenGameSubmarineWars : GameScreen
             case GameState.End:
                 {
                     SpriteManager.Draw();
-                    var str = submarine.Energy > 0 ? $"Level {level} finished!" : "End of game!";
+                    var text = submarine.Energy > 0 ? $"Level {level} finished!" : "End of game!";
                     gameEndTime += (float)gameTime.ElapsedGameTime.TotalSeconds;
                     if (gameEndTime >= GameEndTimeout)
                     {
-                        str += "\nPress Enter or A";
+                        text = CreateCenteredText(AxeGameCollection.Games.SubmarineWars.ToString(), 1, text, "Press Enter or A"); ;
                         acceptEndInput = true;
                     }
-                    ShowCenterText(str, AxeGameCollection.Games.SubmarineWars.ToString(), Color.Black, 1);
+                    ShowCenterText(text, AxeGameCollection.Games.SubmarineWars.ToString(), Color.Black, 1);
                     break;
                 }
         }
@@ -129,21 +129,24 @@ public class ScreenGameSubmarineWars : GameScreen
 
     public override void HandleInput()
     {
-        // helping keys
+        // exit
         if (Manager.Input.KeyPressed(Keys.Escape) || Manager.Input.GamePadKeyPressed(PlayerIndex.One, Buttons.Start))
         {
             ExitGame();
         }
+        // next level
         if (Manager.Input.KeyPressed(Keys.F1))
         {
             SpriteManager.Clear();
             ScreenManager.RemoveScreen(this);
             ScreenManager.AddScreen(new ScreenGameSubmarineWars(game, level + 1));
         }
+        // toggle debug
         if (Manager.Input.KeyPressed(Keys.F2))
         {
             Manager.Debug = !Manager.Debug;
         }
+        // toggle fullscreen
         if (Manager.Input.KeyPressed(Keys.F3))
         {
             Manager.Graphics.IsFullScreen = !Manager.Graphics.IsFullScreen;

@@ -87,5 +87,39 @@ namespace Framework
             var pos = new Vector2(Manager.DesignWidth / 2f - textSize.X / 2f, Manager.DesignHeight / 2f - textSize.Y / 2f);
             Manager.SpriteBatch.DrawString(font, text, pos, color, 0, Vector2.Zero, scale, SpriteEffects.None, 0);
         }
+
+        public static string CreateCenteredText(string fontName, float scale, string firstLine, string secondLine)
+        {
+            var font = Manager.Fonts.Get(fontName);
+            var textWidth1 = font.MeasureString(firstLine).X * scale;
+            var textWidth2 = font.MeasureString(secondLine).X * scale;
+            var maxWidth = MathHelper.Max(textWidth1, textWidth2);
+            firstLine = AddSpaces(firstLine, textWidth1, maxWidth, font, scale);
+            secondLine = AddSpaces(secondLine, textWidth2, maxWidth, font, scale);
+            return $"{firstLine}\n{secondLine}";
+        }
+
+        public static string CreateCenteredText(string fontName, float scale, string firstLine, string secondLine, string thirdLine)
+        {
+            var font = Manager.Fonts.Get(fontName);
+            var textWidth1 = font.MeasureString(firstLine).X * scale;
+            var textWidth2 = font.MeasureString(secondLine).X * scale;
+            var textWidth3 = font.MeasureString(thirdLine).X * scale;
+            var maxWidth = MathHelper.Max(MathHelper.Max(textWidth1, textWidth2), textWidth3);
+            firstLine = AddSpaces(firstLine, textWidth1, maxWidth, font, scale);
+            secondLine = AddSpaces(secondLine, textWidth2, maxWidth, font, scale);
+            thirdLine = AddSpaces(thirdLine, textWidth3, maxWidth, font, scale);
+            return $"{firstLine}\n{secondLine}\n{thirdLine}";
+        }
+
+        private static string AddSpaces(string str, float strWidth, float maxWidth, SpriteFont font, float scale)
+        {
+            while (strWidth < maxWidth)
+            {
+                str = $" {str} ";
+                strWidth = font.MeasureString(str).X * scale;
+            }
+            return str;
+        }
     }
 }

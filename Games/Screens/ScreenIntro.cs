@@ -34,7 +34,7 @@ public class ScreenIntro : GameScreen
         var time = gameTime.TotalGameTime.TotalSeconds;
         var pulsate = (float)Math.Sin(time * 6);
         var scale = 0.5f + pulsate * 0.025f;
-        var text = "Press Enter or A to continue!";
+        var text = "Press Enter or A";
         var font = Manager.Fonts.Get("Standard");
         var textSize = font.MeasureString(text) * scale;
 
