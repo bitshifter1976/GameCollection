@@ -15,7 +15,7 @@ public class MunitionBar : Sprite
     private int munition;
     private int width;
     private int height;
-    private readonly int MaxMunition;
+    public readonly int MaxMunition;
 
     public override float Width => width;
 

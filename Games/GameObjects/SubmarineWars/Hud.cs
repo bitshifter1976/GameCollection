@@ -13,6 +13,7 @@ public class Hud : Sprite
     private readonly EnemiesKilledBar enemiesKilledBar;
     private readonly TimeBar timeBar;
     private readonly int HudItemCount = 4;
+    private float addMunitionCount;
 
     private new int Height => 100;
     private new int Width => Manager.DesignWidth;
@@ -28,6 +29,10 @@ public class Hud : Sprite
     {
         get => torpedoBar.MunitionCount;
         set => torpedoBar.MunitionCount = value;
+    }
+    public int MaxMunition
+    {
+        get => torpedoBar.MaxMunition;
     }
 
     public int EnemiesKilled
@@ -79,5 +84,15 @@ public class Hud : Sprite
         torpedoBar.Draw();
         enemiesKilledBar.Draw();
         timeBar.Draw();
+    }
+
+    public void AddMunition(float minuitionPart)
+    {
+        addMunitionCount += minuitionPart;
+        if (Munition < MaxMunition && addMunitionCount >= 1)
+        {
+            Munition++;
+            addMunitionCount = 0;
+        }
     }
 }

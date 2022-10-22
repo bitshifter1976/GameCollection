@@ -3,6 +3,7 @@ using Framework;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 using System;
+using System.Linq;
 
 namespace AxeGameCollection.Screens;
 
@@ -33,9 +34,12 @@ public class ScreenGameSubmarineWars : GameScreen
     private float gameEndTime = 0;
     private const float GameEndTimeout = 2;
     private bool acceptEndInput;
+    private TankShip tankShip;
 
     private int EnemyKillCount => (int)((level+1f) * 1.5f);
     private float LevelFactor => (level + 10f) / 10f;
+
+    public static int TankShipCount => SpriteManager.Sprites.OfType<TankShip>().Count();
 
     public ScreenGameSubmarineWars(Game game, int level) : base(game)
     {
@@ -57,8 +61,8 @@ public class ScreenGameSubmarineWars : GameScreen
     {
         backColor = Color.CornflowerBlue;
         SpriteManager.Init(submarine = Submarine.Create(1, false));
-        SpriteManager.AddImmediate(new Water());
         SpriteManager.AddImmediate(hud = new Hud());
+        SpriteManager.AddImmediate(new Water());
     }
 
     public override void Update(GameTime gameTime, bool otherScreenHasFocus, bool coveredByOtherScreen)
@@ -76,9 +80,13 @@ public class ScreenGameSubmarineWars : GameScreen
                     SpriteManager.Add(Squid.Create(1000));
                     SpriteManager.Add(Submarine.Create((int)(1000f / LevelFactor), true));
                     SpriteManager.Add(EnemyShip.Create((int)(1000f / LevelFactor)));
+                    if (hud.Munition < 4 && TankShipCount == 0) 
+                        SpriteManager.Add(tankShip = TankShip.Create((int)300f));
                     hud.Energy = submarine.Energy;
                     hud.ElapsedTime += TimeSpan.FromSeconds(gameTime.ElapsedGameTime.TotalSeconds);
                     hud.EnemiesKilled += SpriteManager.Update(gameTime, true);
+                    if (tankShip != null && submarine.BoundingBoxRotated.CollisionRectangle.Intersects(tankShip.BoundingBoxForMissiles))
+                        hud.AddMunition(0.03f);
                     if (submarine.Energy <= 0 || hud.EnemiesKilled >= EnemyKillCount)
                         state = GameState.End; 
                     break;

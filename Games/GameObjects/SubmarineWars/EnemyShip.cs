@@ -2,6 +2,7 @@
 using System.Linq;
 using Framework;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 using static AxeGameCollection.Screens.ScreenGameSubmarineWars;
 
 namespace AxeGameCollection.GameObjects.SubmarineWars;
@@ -57,7 +58,11 @@ public sealed class EnemyShip : Sprite
         position.X += speed * sign * (float)gameTime.ElapsedGameTime.TotalSeconds;
         if (Water.TopPixel.ContainsKey((int)position.X))
             position.Y = Water.TopPixel[(int)position.X] - Height / 3f;
-        return base.Update(gameTime);
+        if (position.X < 0)
+            return position.X < -Manager.DesignWidth * 2 ? this : null;
+        if (position.X > Manager.DesignWidth)
+            return position.X > Manager.DesignWidth * 2 ? this : null;
+        return null;
     }
 
     public void Shoot()

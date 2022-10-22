@@ -12,6 +12,8 @@ public static class SpriteManager
     private static readonly List<Sprite> toAdd = new();
     private static Submarine player;
 
+    public static List<Sprite> Sprites => sprites;
+
     public static void Init(Submarine player)
     {
         SpriteManager.player = player;
@@ -146,6 +148,28 @@ public static class SpriteManager
             {
                 if (t4.Submarine == player)
                     enemyKillCount++;
+                CreateExplosion(s1.Position, 2, false);
+                toRemove.Add(s1);
+            }
+            CreateExplosion(s2.Center, 2, false);
+            toRemove.Add(s2);
+        }
+        if (s1 is Torpedo && s2 is TankShip)
+        {
+            s2.Energy -= s1.Damage;
+            if (s2.Energy <= 0)
+            {
+                CreateExplosion(s2.Position, 2, false);
+                toRemove.Add(s2);
+            }
+            CreateExplosion(s1.Center, 2, false);
+            toRemove.Add(s1);
+        }
+        if (s2 is Torpedo && s1 is EnemyShip)
+        {
+            s1.Energy -= s2.Damage;
+            if (s1.Energy <= 0)
+            {
                 CreateExplosion(s1.Position, 2, false);
                 toRemove.Add(s1);
             }
