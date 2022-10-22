@@ -56,6 +56,7 @@ public class ScreenGameMrSunny : GameScreen
     public override void Update(GameTime gameTime, bool otherScreenHasFocus, bool coveredByOtherScreen)
     {
         Player.Update(gameTime);
+        SpriteManager.Update(gameTime, true);
         Manager.Update(gameTime);
         base.Update(gameTime, otherScreenHasFocus, coveredByOtherScreen);
     }
@@ -75,7 +76,7 @@ public class ScreenGameMrSunny : GameScreen
                 }
             case GameState.Play:
                 {
-                    SpriteManager.ScrollX(-Player.Speed);
+                    SpriteManager.ScrollX(Player.VelocityX);
                     break;
                 }
             case GameState.End:

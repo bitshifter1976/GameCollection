@@ -211,7 +211,7 @@ public static class ContinuousEllipsoidCollision
                 Debug.Log("    Collider:  {0}", colliderSprite.GetType().Name);
                 Debug.Log("    Bounds:    {0}", colliderSprite.BoundingBox);
 #endif
-                collLines = Line.GetFromRectangle(colliderSprite.BoundingBox);
+                collLines = Line.GetFromRectangle(colliderSprite.BoundingBoxRotated);
                 foreach (var t in collLines)
                 {
                     t.Start *= worldScale;
@@ -409,7 +409,7 @@ public static class ContinuousEllipsoidCollision
         iteration++;
         if (iteration > 10)
         {
-            Log.Out(LogLevel.Error, "Collision.CollideWithWorld Iteration > 100");
+            Log.Out(LogLevel.Error, "Collision.CollideWithWorld Iteration > 10");
             return true;
         }
         return false;

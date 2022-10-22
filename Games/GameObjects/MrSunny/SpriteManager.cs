@@ -49,7 +49,7 @@ public static class SpriteManager
         var remove = sprites.Select(s => s.Update(time)).ToList();
         // collision?
         if (checkCollision)
-            remove.AddRange(CheckCollision());
+            remove.AddRange(CheckCollision(time));
         // remove obsolete
         remove.ForEach(s => sprites.Remove(s));
         // sort by layer depth
@@ -58,10 +58,25 @@ public static class SpriteManager
         return numberOfEnemiesKilled;
     }
 
-    private static List<Sprite> CheckCollision()
-    {   
+    private static List<Sprite> CheckCollision(GameTime time)
+    {
+        // test if there is any collision
+        var sprites2 = sprites.ToList();
         var removeSprites = new List<Sprite>();
-        var collisionSprites = sprites.Where(s => s.CollisionType != CollisionType.None).ToList();
+        // player collision
+        Ellipse ellipse = Player.Sprite.GetScaledBEllipse(Player.WorldScale);
+        Vector2 center = Player.Sprite.CenterBEllipse;
+        Vector2 velocity = Player.Sprite.Velocity;
+        Vector2 gravity = Player.Gravity;
+        // collision
+        var remSprites = ContinuousEllipsoidCollision.Do(Player.Sprite, sprites2, ellipse, ref center, Player.Sprite.Position, ref velocity, gravity, Player.Sprite.Friction, Player.WorldScale, time);
+        removeSprites.AddRange(remSprites);
+        // update player
+        float scrollX = center.X - Player.Sprite.CenterBEllipse.X + velocity.X;
+        ScrollX(-scrollX);
+        Player.Sprite.CenterBEllipse = new Vector2(Player.Sprite.CenterBEllipse.X, center.Y);
+        Player.Sprite.Velocity = velocity;
+        /*var collisionSprites = sprites.Where(s => s.CollisionType != CollisionType.None).ToList();
         for (var i = 0; i < collisionSprites.Count - 1; i++)
         {
             for (var j = i + 1; j < collisionSprites.Count; j++)
@@ -69,7 +84,7 @@ public static class SpriteManager
                 if (collisionSprites[i].Collide(collisionSprites[j]))
                     removeSprites.AddRange(DoCollisionReaction(collisionSprites[i], collisionSprites[j]));
             }
-        }
+        }*/
 
         return removeSprites;
     }

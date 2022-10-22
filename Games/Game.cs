@@ -58,6 +58,9 @@ public class AxeGameCollection : Game
             case Games.ArenaChase:
                 ScreenManager.AddScreen(new ScreenGameArenaChase(this, true, Config.LevelArenaChase));
                 break;
+            case Games.MrSunny:
+                ScreenManager.AddScreen(new ScreenGameMrSunny(this, Config.LevelMrSunny));
+                break;
             case Games.TankBattle:
                 ScreenManager.AddScreen(new ScreenGameArenaChase(this, true, Config.LevelTankBattle));
                 break;
