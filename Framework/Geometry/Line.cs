@@ -6,7 +6,14 @@ namespace Framework
 {
     public class Line
     {
-        private readonly Texture2D sprite;
+        #region members
+
+        private static Texture2D sprite;
+        private static readonly bool spriteInitialized;
+
+        #endregion
+
+        #region properties
 
         public Vector2 Normal
         {
@@ -18,6 +25,7 @@ namespace Framework
                 return new Vector2(dy, -dx);
             }
         }
+
         public Vector2 Center
         {
             get
@@ -28,18 +36,34 @@ namespace Framework
                 return v;
             }
         }
+
         public Vector2 Start { get; set; }
+
         public Vector2 End { get; set; }
 
-        public Line(float x1, float y1, float x2, float y2) : this(new Vector2(x1, y1), new Vector2(x2, y2))
+        #endregion
+
+        #region methods
+
+		static Line()
+		{
+			if (!spriteInitialized)
+			{
+				sprite = Manager.Content.Load<Texture2D>("graphic/common/dot");
+				spriteInitialized = true;
+			}
+		}
+
+        public Line(float x1, float y1, float x2, float y2)
         {
+            Start = new Vector2(x1, y1);
+            End = new Vector2(x2, y2);
         }
 
-        public Line(Vector2 p1, Vector2 p2)
+        public Line(Vector2 pos, Vector2 velocity)
         {
-            Start = p1;
-            End = p2;
-            sprite = Manager.Content.Load<Texture2D>("graphic/common/dot");
+            Start = pos;
+            End = Start + velocity;
         }
 
         public static Line[] GetFromRectangle(Rectangle rect)
@@ -79,7 +103,7 @@ namespace Framework
             Vector2 oldEnd = End;
             Vector2 newEnd = Start + direction;
             Vector2 newStart = oldEnd - direction;
-            return new Line(newStart.X, newStart.Y, newEnd.X, newEnd.Y);
+            return new Line(newStart.X,newStart.Y,newEnd.X,newEnd.Y);
         }
 
         public bool ContainsPoint(Vector2 point)
@@ -137,6 +161,17 @@ namespace Framework
             return Start + direction * distance;
         }
 
+
+        /// <summary>
+        /// This is based off an explanation and expanded math presented by Paul Bourke:
+        /// It takes two lines as inputs and returns true if they intersect, false if they don't.
+        /// If they do, ptIntersection returns the point where the two lines intersect.  
+        /// </summary>
+        /// <param name="L1">The first line</param>
+        /// <param name="line">The second line</param>
+        /// <param name="ptIntersection">The point where both lines intersect (if they do).</param>
+        /// <returns></returns>
+        /// <remarks>See http://local.wasp.uwa.edu.au/~pbourke/geometry/lineline2d/</remarks>
         public bool IntersectLine(Line line, out Vector2 intersectionPoint)
         {
             intersectionPoint = new Vector2();
@@ -178,5 +213,7 @@ namespace Framework
         {
             return Start + " - " + End;
         }
+
+        #endregion
     }
 }

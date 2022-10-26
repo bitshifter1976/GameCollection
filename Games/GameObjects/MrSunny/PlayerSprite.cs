@@ -49,7 +49,6 @@ public sealed class PlayerSprite : SpriteMultipleAnimated
     {
         collisionType = CollisionType.BoundingBox;
         Position = new Vector2(Manager.DesignWidth / 2 - spriteWidth / 2, Position.Y);
-        mass = 12;
     }
 
     public override void Draw()
@@ -102,7 +101,6 @@ public sealed class PlayerSprite : SpriteMultipleAnimated
     public override Sprite Update(GameTime gameTime)
     {
         base.Update(gameTime);
-        Player.Update(gameTime);
         //Weapon.Update(gameTime);
         return null;
     }

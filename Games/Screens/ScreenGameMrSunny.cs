@@ -11,13 +11,14 @@ public class ScreenGameMrSunny : GameScreen
     {
         Load,
         Play,
+        Paused,
         End
     }
     public enum Layer
     {
         Submarine = 10,
-        Planet = 20,
-        Fish = 30,
+        Beach = 20,
+        Player = 30,
         Shot = 40,
         Explosion = 50,
         Water = 90,
@@ -51,12 +52,38 @@ public class ScreenGameMrSunny : GameScreen
     {
         backColor = Color.CornflowerBlue;
         Player.Create();
+        Floor.Create(new Color(Color.SandyBrown.R, Color.SandyBrown.G, Color.SandyBrown.B, (byte)200), "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
     }
 
     public override void Update(GameTime gameTime, bool otherScreenHasFocus, bool coveredByOtherScreen)
     {
-        Player.Update(gameTime);
-        SpriteManager.Update(gameTime, true);
+        switch (state)
+        {
+            case GameState.Load:
+                {
+                    Player.Update(gameTime);
+                    SpriteManager.Update(gameTime, false);
+                    break;
+                }
+            case GameState.Play:
+                {
+                    Player.Update(gameTime);
+                    SpriteManager.Update(gameTime, true);
+                    SpriteManager.ScrollX(Player.VelocityX);
+                    break;
+                }
+            case GameState.Paused:
+                {
+                    break;
+                }
+            case GameState.End:
+                {
+                    Player.Update(gameTime);
+                    SpriteManager.Update(gameTime, false);
+                    break;
+                }
+        }
+        
         Manager.Update(gameTime);
         base.Update(gameTime, otherScreenHasFocus, coveredByOtherScreen);
     }
@@ -75,8 +102,8 @@ public class ScreenGameMrSunny : GameScreen
                     break;
                 }
             case GameState.Play:
+            case GameState.Paused:
                 {
-                    SpriteManager.ScrollX(Player.VelocityX);
                     break;
                 }
             case GameState.End:
@@ -108,7 +135,7 @@ public class ScreenGameMrSunny : GameScreen
         {
             SpriteManager.Clear();
             ScreenManager.RemoveScreen(this);
-            ScreenManager.AddScreen(new ScreenGameSubmarineWars(game, level + 1));
+            ScreenManager.AddScreen(new ScreenGameMrSunny(game, level + 1));
         }
         // toggle debug
         if (Manager.Input.KeyPressed(Keys.F2))
@@ -120,6 +147,13 @@ public class ScreenGameMrSunny : GameScreen
         {
             Manager.Graphics.IsFullScreen = !Manager.Graphics.IsFullScreen;
             Manager.Graphics.ApplyChanges();
+        }
+        if (Manager.Input.KeyPressed(Keys.F4))
+        {
+            if (state == GameState.Paused)
+                state = GameState.Play;
+            else
+                state = GameState.Paused;
         }
         // accept message
         if (Manager.Input.KeyPressed(Keys.Enter) || Manager.Input.GamePadKeyPressed(PlayerIndex.One, Buttons.A))

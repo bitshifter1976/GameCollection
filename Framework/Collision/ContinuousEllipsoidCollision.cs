@@ -22,7 +22,6 @@ public static class ContinuousEllipsoidCollision
         Vector2 worlScale,
         GameTime gameTime)
     {
-        LogDebugHeader(ellipseScaled, position, velocity, gravity);
 
         // We need to do any pre-collision detection work here. Such as adding gravity to our veoclity vector. 
         // We want to do it in this separate routine because the following routine is recursive, and we don't want to recursively add gravity.
@@ -33,6 +32,7 @@ public static class ContinuousEllipsoidCollision
         var centerScaled = center * worlScale;
         var positionScaled = position * worlScale;
 
+        LogDebugHeader(ellipseScaled, positionScaled, centerScaled, velocityScaled, gravity);
         // collide
         int iteration = 0;
         var removeSprites = new List<Sprite>();
@@ -63,11 +63,12 @@ public static class ContinuousEllipsoidCollision
             var distanceToTravel = velocity.Length();
             // What's our destination?
             var destinationPoint = center + velocity;
-
             // ++++++++++++++++++++++++++++++++++ Potential colliders +++++++++++++++++++++++++++++++++++++++++++++++++
             if (!IsCollisionPossible(itself, allSprites, ref center, position, velocity, worldScale, distanceToTravel, ref iteration, out List<Sprite> potentialColliders))
+            {
+                center += velocity;
                 return;
-
+            }
             // ++++++++++++++++++++++++++++++++++ Nearest collider ++++++++++++++++++++++++++++++++++++++++++++++++++++
             var collisionFound = DetermineNearestCollider(ellipse, ref center, ref velocity, worldScale, potentialColliders, distanceToTravel, out Vector2 nearestIntersectionPoint, out float nearestDistance, out List<Sprite> collidedSprites);
             // If we never found a collision, we can safely move to the destination
@@ -76,17 +77,14 @@ public static class ContinuousEllipsoidCollision
                 center += velocity;
                 return;
             }
-
             // ++++++++++++++++++++++++++++++++++ New velocity and position (slide) +++++++++++++++++++++++++++++++++++++
             var nearestCollVect = CalculateNearestCollVect(velocity, nearestDistance);
             velocity = CalculateVelocity(center, friction, destinationPoint, nearestIntersectionPoint);
-            position = CalculatePosition(ref position, ref center, nearestCollVect);
-
+            CalculatePosition(ref position, ref center, nearestCollVect);
             // ++++++++++++++++++++++++++++++++++ React to collision ++++++++++++++++++++++++++++++++++++++++++++++++++++
             removeSprites.AddRange(collidedSprites.Select(s => itself.ReactToCollision(s)));
-
             // ++++++++++++++++++++++++++++++++++ Debug information +++++++++++++++++++++++++++++++++++++++++++++++++++++
-            DebugLog(position, velocity, iteration, nearestIntersectionPoint);
+            DebugLog(position, velocity, iteration, nearestDistance, nearestCollVect, nearestIntersectionPoint);
         }
         catch (Exception ex)
         {
@@ -120,16 +118,9 @@ public static class ContinuousEllipsoidCollision
 
         potentialColliders = GetPotentialColliders(itself, allSprites, position / worldScale, velocity / worldScale);
 #if DBG_COLL
-        Debug.Log("++++++++++++++ CollideWithWorld for {0} sprite(s) iteration: {1} +++++++++++++++", potentialColliders.Count, iteration);
+        Log.Out(LogLevel.Info, $"++++++++++++++ CollideWithWorld for {potentialColliders.Count} sprite(s) iteration: {iteration} +++++++++++++++");
 #endif
-        // If there are none, we can safely move to the destination
-        if (potentialColliders.Count == 0)
-        {
-            center += velocity;
-            return false;
-        }
-
-        return true;
+        return potentialColliders.Count > 0;
     }
 
     /// <summary>
@@ -203,13 +194,13 @@ public static class ContinuousEllipsoidCollision
         {
             spriteIdx++;
 #if DBG_COLL
-            Debug.Log("---------------------- sprite {0} ---------------------------", spriteIdx);
+            Log.Out(LogLevel.Info, $"---------------------- sprite {spriteIdx} ---------------------------");
 #endif
             if (colliderSprite.CollisionType != CollisionType.None)
             {
 #if DBG_COLL
-                Debug.Log("    Collider:  {0}", colliderSprite.GetType().Name);
-                Debug.Log("    Bounds:    {0}", colliderSprite.BoundingBox);
+                Log.Out(LogLevel.Info, $"    Collider:  {colliderSprite.GetType().Name}");
+                Log.Out(LogLevel.Info, $"    Bounds:    {colliderSprite.BoundingBox}");
 #endif
                 collLines = Line.GetFromRectangle(colliderSprite.BoundingBoxRotated);
                 foreach (var t in collLines)
@@ -218,11 +209,10 @@ public static class ContinuousEllipsoidCollision
                     t.End *= worldScale;
                 }
             }
-            CollideLines(ref collidedSprites, ellipse, ref center, ref velocity,
-                         collLines, colliderSprite, distanceToTravel, ref collisionFound, ref nearestDistance, ref nearestCollider, ref nearestIntersectionPoint, ref nearestIntersectionLine);
+            CollideLines(ref collidedSprites, ellipse, ref center, ref velocity, collLines, colliderSprite, distanceToTravel, ref collisionFound, ref nearestDistance, ref nearestCollider, ref nearestIntersectionPoint, ref nearestIntersectionLine);
         }
 #if DBG_COLL
-        Debug.Log("-------------------------------------------------");
+        Log.Out(LogLevel.Info, $"-------------------------------------------------");
 #endif
         return collisionFound;
     }
@@ -230,7 +220,7 @@ public static class ContinuousEllipsoidCollision
     private static void CollideLines(
         ref List<Sprite> collidedSprites,
         Ellipse ellipse,
-        ref Vector2 position,
+        ref Vector2 center,
         ref Vector2 velocity,
         IEnumerable<Line> collLines,
         Sprite colliderSprite,
@@ -251,23 +241,23 @@ public static class ContinuousEllipsoidCollision
             lineNormalNormalized.Normalize();
 #if DBG_COLL
             Debug.Lines.Add(new LineDebug(collLine, $"collLine {lineIdx}", Color.Yellow));
-
+            Log.Out(LogLevel.Info, $"       collision line: {collLine}");
 #endif
             // Determine the distance from the line to the position
             var lineNormalNegative = -lineNormalNormalized * 100;
             var lineRay = collLine.MakeEndless();
-            var lineNormalNeg = new Line(position, lineNormalNegative);
+            var lineNormalNeg = new Line(center, lineNormalNegative);
             if (!lineRay.IntersectLine(lineNormalNeg, out Vector2 lineNormalIntersection))
                 continue;
-            var lineNormalPosDistance = Vector2.Distance(position, lineNormalIntersection);
+            var lineNormalPosDistance = Vector2.Distance(center, lineNormalIntersection);
             // The radius of the ellipse in the direction of the collision line normal 
             var directionalRadius = lineNormalNegative;
             directionalRadius.Normalize();
             directionalRadius *= ellipse.RadiusVector;
             var radius = directionalRadius.Length();
 #if DBG_COLL
-            Debug.Lines.Add(new LineDebug(lineNormalNeg, "lineNormalNegThroughPos", Color.LightBlue));
-            Debug.Lines.Add(new LineDebug(lineRay, $"lineRay {lineIdx}", Color.LightPink));
+            //Debug.Lines.Add(new LineDebug(lineNormalNeg, "lineNormalNegThroughPos", Color.LightBlue));
+            //Debug.Lines.Add(new LineDebug(lineRay, $"lineRay {lineIdx}", Color.LightPink));
             //Debug.Points.Add(new PointDebug(new Dot(lineNormalIntersection), "lineNormalPosIntersectionPoint", Color.LightBlue));
             //Debug.Points.Add(new PointDebug(new Dot(position), "position", Color.LightGreen));
             //Debug.Log("    lineNormalPosDistance: {0}", lineNormalPosDistance);
@@ -280,11 +270,10 @@ public static class ContinuousEllipsoidCollision
                 // Calculate the line intersection point
                 // -lineNormal with length set to lineDistance
                 Vector2 temp = -lineNormalNormalized * lineNormalPosDistance;
-                lineIntersectionPoint = position + temp;
+                lineIntersectionPoint = center + temp;
 #if DBG_COLL
                 //Debug.Points.Add(new PointDebug(new Dot(lineIntersectionPoint), "lineIntersectionPoint", Color.DarkGoldenrod));
-                //Debug.Log("    abs(lineNormalPosDistance) <= radius");
-                //Debug.Log("    lineIntersectionPoint: {0}", lineIntersectionPoint);
+                Log.Out(LogLevel.Info, $"           abs(lineNormalPosDistance) <= radius");
 #endif
             }
             else
@@ -292,14 +281,14 @@ public static class ContinuousEllipsoidCollision
                 // Calculate the ellipsoid intersection point
                 // -lineNormal with length set to radius;
                 var lineNormalInRadiusLength = -lineNormalNormalized * radius;
-                var ellipseIntersectionPoint = position + lineNormalInRadiusLength;
+                var ellipseIntersectionPoint = center + lineNormalInRadiusLength;
                 // Calculate the line velocity intersection point
                 var velNormalized = velocity;
                 velNormalized.Normalize();
                 var ellipseLineVelPoint = ellipseIntersectionPoint + velNormalized * 100;
                 collLine.IntersectLine(new Line(ellipseIntersectionPoint.X, ellipseIntersectionPoint.Y, ellipseLineVelPoint.X, ellipseLineVelPoint.Y), out lineIntersectionPoint);
 #if DBG_COLL
-                //Debug.Log("    abs(lineNormalPosDistance) > radius");
+                Log.Out(LogLevel.Info, $"           abs(lineNormalPosDistance) > radius");
                 //Debug.Points.Add(new PointDebug(new Dot(ellipseIntersectionPoint), "ellipseIntersectionPoint", Color.Blue));
                 //Debug.Points.Add(new PointDebug(new Dot(lineIntersectionPoint), "lineIntersectionPoint", Color.Green));
 #endif
@@ -321,29 +310,27 @@ public static class ContinuousEllipsoidCollision
             Vector2 negativeVel = -velocity;
             negativeVel.Normalize();
             Vector2 pointOnNegativeVel = intersectionPoint + negativeVel * 100;
-            ellipse.Position = position;
             var reverseIntersectLine = new Line(intersectionPoint.X, intersectionPoint.Y, pointOnNegativeVel.X, pointOnNegativeVel.Y);
             var eIPs = new Vector2[2];
-            var intersectionCount = new Circle(ellipse.Position, radius).IntersectSegment(reverseIntersectLine.Start, reverseIntersectLine.End, out eIPs[0], out eIPs[1]);
+            var intersectionCount = new Circle(center, radius).IntersectSegment(reverseIntersectLine.Start, reverseIntersectLine.End, out eIPs[0], out eIPs[1]);
             var ellipseIntersectionPointDistance = -100f;
-            //ellipseIntersectionPoint = new Vector2(-100, -100);
-            var dist2 = 100f;
-            if (intersectionCount == 2)
-                dist2 = Vector2.Distance(eIPs[1], intersectionPoint);
             if (intersectionCount > 0)
             {
-                var dist1 = Vector2.Distance(eIPs[0], intersectionPoint);
-                //ellipseIntersectionPoint = (dist1 <= dist2) ? eIPs[0] : eIPs[1];
-                ellipseIntersectionPointDistance = (dist1 <= dist2) ? dist1 : dist2;
+                var dist1 = eIPs[0] != Vector2.Zero ? Vector2.Distance(eIPs[0],intersectionPoint) : 1000;
+                var dist2 = eIPs[1] != Vector2.Zero ? Vector2.Distance(eIPs[1],intersectionPoint) : 1000;
+                ellipseIntersectionPointDistance = Math.Min(dist1,dist2);
             }
 #if DBG_COLL
-            //Debug.Log("    lineIntersectionPoint: {0}", lineIntersectionPoint);
-            //Debug.Log("    ellipseIntersectionPoint: {0}", ellipseIntersectionPoint);
-            //Debug.Log("    ellipseIntersectionPointDistance: {0}", ellipseIntersectionPointDistance);
+            Log.Out(LogLevel.Info, $"           lineIntersectionPoint: {lineIntersectionPoint}");
+            Log.Out(LogLevel.Info, $"           ellipseIntersectionPoint1: {eIPs[0]}");
+            Log.Out(LogLevel.Info, $"           ellipseIntersectionPoint2: {eIPs[1]}");
+            Log.Out(LogLevel.Info, $"           distanceToTravel: {distanceToTravel}");
+            Log.Out(LogLevel.Info, $"           ellipseIntersectionPointDistance: {ellipseIntersectionPointDistance}");
             //Debug.Lines.Add(new LineDebug(reverseIntersectLine, "reverseIntersectLine", Color.Black));
-            //Debug.Points.Add(new PointDebug(new Dot(lineIntersectionPoint), "lineIntersectionPoint" + lineIdx, Color.Yellow));
-            //Debug.Points.Add(new PointDebug(new Dot(intersectionPoint), "intersectionPoint" + lineIdx, Color.Yellow));
-            //Debug.Points.Add(new PointDebug(new Dot(ellipseIntersectionPoint), "ellipseIntersectionPoint" + lineIdx, Color.Red));
+            Debug.Points.Add(new PointDebug(new Dot(lineIntersectionPoint), "lineIntersectionPoint" + lineIdx, Color.Yellow));
+            Debug.Points.Add(new PointDebug(new Dot(intersectionPoint), "intersectionPoint" + lineIdx, Color.Yellow));
+            Debug.Points.Add(new PointDebug(new Dot(eIPs[0]), "ellipseIntersectionPoint1" + lineIdx, Color.Red));
+            Debug.Points.Add(new PointDebug(new Dot(eIPs[1]), "ellipseIntersectionPoint2" + lineIdx, Color.Red));
 #endif
             // Will there be an intersection with the ellipse?
             if (ellipseIntersectionPointDistance >= 0.0 && ellipseIntersectionPointDistance <= distanceToTravel)
@@ -353,7 +340,7 @@ public static class ContinuousEllipsoidCollision
                 // Where did we intersect the ellipse?
                 var intersection = intersectionPoint + v;
 #if DBG_COLL
-                //Debug.Log("    collision detected at {0}", intersection);
+                Log.Out(LogLevel.Info, $"    collision detected at {intersection}");
 #endif
                 if (!collidedSprites.Contains(colliderSprite))
                     collidedSprites.Add(colliderSprite);
@@ -366,8 +353,8 @@ public static class ContinuousEllipsoidCollision
                     nearestIntersectionLine = collLine;
                     collisionFound = true;
 #if DBG_COLL
-                    //Debug.Points.Add(new PointDebug(new Dot(nearestIntersectionPoint), "nearestIntersectionPoint", Color.Black));
-                    //Debug.Log("    nearestIntersectionPoint {0}", nearestIntersectionPoint);
+                    Debug.Points.Add(new PointDebug(new Dot(nearestIntersectionPoint), "nearestIntersectionPoint", Color.Black));
+                    Log.Out(LogLevel.Info, $"    nearestIntersectionPoint {nearestIntersectionPoint}");
 #endif
                 }
             }
@@ -380,8 +367,7 @@ public static class ContinuousEllipsoidCollision
         // Vector V = velocity with length set to (nearestDistance - EPSILON);
         var moveToNearestCollVect = velocity;
         moveToNearestCollVect.Normalize();
-        //moveToNearestCollVect *= nearestDistance - 0.5f;
-        moveToNearestCollVect *= nearestDistance - (velocity.Length() / 10.0f);
+        moveToNearestCollVect *= nearestDistance - 0.5f;
         return moveToNearestCollVect;
     }
 
@@ -397,17 +383,16 @@ public static class ContinuousEllipsoidCollision
         return velocity;
     }
 
-    private static Vector2 CalculatePosition(ref Vector2 position, ref Vector2 center, Vector2 moveToNearestCollVect)
+    private static void CalculatePosition(ref Vector2 position, ref Vector2 center, Vector2 moveToNearestCollVect)
     {
         center += moveToNearestCollVect;
         position += moveToNearestCollVect;
-        return position;
     }
 
     private static bool AvoidEndlessLoop(ref int iteration)
     {
         iteration++;
-        if (iteration > 10)
+        if (iteration > 100)
         {
             Log.Out(LogLevel.Error, "Collision.CollideWithWorld Iteration > 10");
             return true;
@@ -415,27 +400,32 @@ public static class ContinuousEllipsoidCollision
         return false;
     }
 
-    private static void LogDebugHeader(Ellipse ellipseScaled, Vector2 position, Vector2 velocity, Vector2 gravity)
+    private static void LogDebugHeader(Ellipse ellipseScaled, Vector2 position, Vector2 center, Vector2 velocity, Vector2 gravity)
     {
 #if DBG_COLL
         Debug.Clear();
-        Debug.Log("###############################################");
-        Debug.Log("### DoContinuousEllipseDetectionAndReaction ###");
-        Debug.Log("###############################################");
-        Debug.Log("    Position:  {0}", position);
-        Debug.Log("    Velocity:  {0}", velocity);
-        Debug.Log("    Gravity:   {0}", gravity);
+        Log.Out(LogLevel.Info, "###############################################");
+        Log.Out(LogLevel.Info, "### DoContinuousEllipseDetectionAndReaction ###");
+        Log.Out(LogLevel.Info, "###############################################");
+        Log.Out(LogLevel.Info, $"    Position:  {position}");
+        Log.Out(LogLevel.Info, $"    Center:    {center}");
+        Log.Out(LogLevel.Info, $"    Velocity:  {velocity}");
+        Log.Out(LogLevel.Info, $"    Gravity:   {gravity}");
         //Debug.Points.Add(new PointDebug(new Dot(center), "Center", Color.Blue));
         Debug.Ellipses.Add(new EllipseDebug(ellipseScaled, "bounding ellipse", Color.Red, 30));
 #endif
     }
 
-    private static void DebugLog(Vector2 position, Vector2 velocity, int iteration, Vector2 nearestIntersectionPoint)
+    private static void DebugLog(Vector2 position, Vector2 velocity, int iteration, float nearestDistance, Vector2 nearestCollVect, Vector2 nearestIntersectionPoint)
     {
 #if DBG_COLL
-        Debug.Log("    new Position:  {0}", position);
-        Debug.Log("    new Velocity:  {0}", velocity);
-        Debug.Log("    iteration:     {0}", iteration);
+        Log.Out(LogLevel.Info, $"    new Position:  {position}");
+        Log.Out(LogLevel.Info, $"    new Velocity:  {velocity}");
+        Log.Out(LogLevel.Info, $"    iteration:     {iteration}");
+        Log.Out(LogLevel.Info, $"    nearest distance {nearestDistance}");
+        Log.Out(LogLevel.Info, $"    nearest collision vector {nearestCollVect}");
+        Log.Out(LogLevel.Info, $"    nearest intersection point {nearestIntersectionPoint}");
+        Log.Out(LogLevel.Info, "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
         //Debug.Points.Add(new PointDebug(new Dot(center), "move to nearest collision (center)", Color.Green));
         //Debug.Points.Add(new PointDebug(new Dot(slidingPoint), "slidingPoint", Color.Pink));
         //Debug.Points.Add(new PointDebug(new Dot(destinationPoint), "destinationPoint", Color.Green));
@@ -444,16 +434,6 @@ public static class ContinuousEllipsoidCollision
         //Debug.Lines.Add(new LineDebug(slideLine, "slideLine", Color.Red));
         //Debug.Lines.Add(new LineDebug(slideLineNormal, "slidingVect", Color.Green));
         //Debug.Lines.Add(new LineDebug(new Line(center, velocity*100), "new velocity", Color.Red));
-        //Debug.Log("    move to nearest collision {0} (center)", center);
-        //Debug.Log("    velCutOff (distanceToTravel - nearestDistance) {0}", velCutOff);
-        //Debug.Log("    destinationPoint (nearestLineIntersectionPoint + velCutOff) {0}", destinationPoint);
-        //Debug.Log("    newDestinationPoint (nearestIntersectionLine.Intersect(projectSlideOnLine)) {0}", newDestinationPoint);
-        //Debug.Log("    slideDist {0}", slideDist);
-        //Debug.Log("    slideLineNormal {0}", slideLineNormalVect);
-        //Debug.Log("    slide to point {0}", newDestinationPoint);
-        //Debug.Log("    new velocity {0}", velocity);
-        //Debug.Log("    iteration {0}", iteration);
-        //Debug.Log("+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
 #endif
     }
 }

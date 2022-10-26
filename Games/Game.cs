@@ -1,6 +1,7 @@
 ﻿using AxeGameCollection.Screens;
 using Framework;
 using Microsoft.Xna.Framework;
+using System;
 using System.Collections.Generic;
 using System.Drawing;
 
@@ -22,6 +23,9 @@ public class AxeGameCollection : Game
     public AxeGameCollection()
     {
         graphics = new GraphicsDeviceManager(this);
+        IsFixedTimeStep = true;
+        MaxElapsedTime = TimeSpan.FromSeconds(1f);
+        TargetElapsedTime = TimeSpan.FromSeconds(1f / Config.Fps);
     }
 
     protected override void Initialize()

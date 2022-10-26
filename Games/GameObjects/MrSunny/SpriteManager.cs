@@ -61,22 +61,20 @@ public static class SpriteManager
     private static List<Sprite> CheckCollision(GameTime time)
     {
         // test if there is any collision
-        var sprites2 = sprites.ToList();
-        var removeSprites = new List<Sprite>();
         // player collision
-        Ellipse ellipse = Player.Sprite.GetScaledBEllipse(Player.WorldScale);
-        Vector2 center = Player.Sprite.CenterBEllipse;
-        Vector2 velocity = Player.Sprite.Velocity;
-        Vector2 gravity = Player.Gravity;
+        var ellipse = Player.Sprite.GetScaledBEllipse(Player.WorldScale);
+        var center = Player.Sprite.CenterBEllipse;
+        var velocity = Player.Sprite.Velocity;
+        var gravity = Player.Gravity;
         // collision
-        var remSprites = ContinuousEllipsoidCollision.Do(Player.Sprite, sprites2, ellipse, ref center, Player.Sprite.Position, ref velocity, gravity, Player.Sprite.Friction, Player.WorldScale, time);
-        removeSprites.AddRange(remSprites);
+        var removeSprites = ContinuousEllipsoidCollision.Do(Player.Sprite, sprites.ToList(), ellipse, ref center, Player.Sprite.Position, ref velocity, gravity, Player.Sprite.Friction, Player.WorldScale, time);
         // update player
-        float scrollX = center.X - Player.Sprite.CenterBEllipse.X + velocity.X;
+        var scrollX = center.X - Player.Sprite.CenterBEllipse.X + velocity.X;
         ScrollX(-scrollX);
         Player.Sprite.CenterBEllipse = new Vector2(Player.Sprite.CenterBEllipse.X, center.Y);
         Player.Sprite.Velocity = velocity;
-        /*var collisionSprites = sprites.Where(s => s.CollisionType != CollisionType.None).ToList();
+        // do all other collisions
+        var collisionSprites = sprites.Where(s => s.CollisionType != CollisionType.None).ToList();
         for (var i = 0; i < collisionSprites.Count - 1; i++)
         {
             for (var j = i + 1; j < collisionSprites.Count; j++)
@@ -84,7 +82,7 @@ public static class SpriteManager
                 if (collisionSprites[i].Collide(collisionSprites[j]))
                     removeSprites.AddRange(DoCollisionReaction(collisionSprites[i], collisionSprites[j]));
             }
-        }*/
+        }
 
         return removeSprites;
     }

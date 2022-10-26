@@ -11,6 +11,12 @@
     <ApplicationIcon>Icon.ico</ApplicationIcon>
     <RootNamespace>AxeGameCollection</RootNamespace>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <DefineConstants>$(DefineConstants)TRACE</DefineConstants>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <DefineConstants>$(DefineConstants)TRACE</DefineConstants>
+  </PropertyGroup>
   <ItemGroup>
     <Compile Remove="Content\bin\**" />
     <Compile Remove="Content\graphic\design\**" />
@@ -252,7 +258,6 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Content\graphic\mrSunny\" />
     <Folder Include="Content\graphic\submarineWars\" />
   </ItemGroup>
 </Project>

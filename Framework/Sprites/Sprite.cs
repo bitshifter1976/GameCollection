@@ -97,7 +97,11 @@ namespace Framework
             get => velocity;
             set => velocity = value;
         }
-        public float Mass => mass;
+        public float Mass
+        {
+            get => mass;
+            set => mass = value;
+        }
         public float Friction
         {
             get => friction;

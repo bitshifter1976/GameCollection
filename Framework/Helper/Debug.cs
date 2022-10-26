@@ -116,6 +116,14 @@ public static class Debug
         }
     }
 
+    public static void Log(string format, params object[] parameter)
+    {
+        if (ShowText)
+        {
+            DebugText += string.Format(format, parameter);
+        }
+    }
+
     public static void Draw()
     {
         ShapeInfoPos = ShapeInfoPosOrig;

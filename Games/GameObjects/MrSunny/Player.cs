@@ -211,9 +211,10 @@ public static class Player
         unduckElapsedTime = 0f;
         jumpAccelleration = 7;
         startFallVelocity = 2f;
-        worldScale = new Vector2(dude.BoundingBox.Height / dude.BoundingBox.Width, 1);
-        gravity = Physics.Gravity * Mass;
+        dude.Mass = 0.1f;
         dude.Friction = 0.8f;
+        worldScale = new Vector2((float)dude.BoundingBox.Height / dude.BoundingBox.Width, 1);
+        gravity = Physics.Gravity * Mass;
         forceStandAfterCollision = false;
         //Weapon.Select(WeaponType.WaterBall);
     }
