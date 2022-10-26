@@ -273,7 +273,7 @@ public static class ContinuousEllipsoidCollision
                 lineIntersectionPoint = center + temp;
 #if DBG_COLL
                 //Debug.Points.Add(new PointDebug(new Dot(lineIntersectionPoint), "lineIntersectionPoint", Color.DarkGoldenrod));
-                Log.Out(LogLevel.Info, $"           abs(lineNormalPosDistance) <= radius");
+                Log.Out(LogLevel.Info, $"           lineNormalPosDistance <= radius");
 #endif
             }
             else
@@ -288,7 +288,7 @@ public static class ContinuousEllipsoidCollision
                 var ellipseLineVelPoint = ellipseIntersectionPoint + velNormalized * 100;
                 collLine.IntersectLine(new Line(ellipseIntersectionPoint.X, ellipseIntersectionPoint.Y, ellipseLineVelPoint.X, ellipseLineVelPoint.Y), out lineIntersectionPoint);
 #if DBG_COLL
-                Log.Out(LogLevel.Info, $"           abs(lineNormalPosDistance) > radius");
+                Log.Out(LogLevel.Info, $"           lineNormalPosDistance > radius");
                 //Debug.Points.Add(new PointDebug(new Dot(ellipseIntersectionPoint), "ellipseIntersectionPoint", Color.Blue));
                 //Debug.Points.Add(new PointDebug(new Dot(lineIntersectionPoint), "lineIntersectionPoint", Color.Green));
 #endif
