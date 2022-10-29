@@ -14,6 +14,8 @@ namespace AxeGameCollection.GameObjects.MrSunny
         public  static int TopOffset = 20;
         private RectangleF boundingBox;
 
+        public override Rectangle BoundingBox => boundingBox.ToRectangle();
+
         public FloorTile(Vector2 position, float scale, FloorTileProps tile) : base("graphic/mrSunny/" + tile.name, position, 0f, scale, (int)Layer.Beach, CollisionType.BoundingBox)
         {
             this.tile = tile;

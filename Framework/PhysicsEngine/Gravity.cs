@@ -36,5 +36,10 @@ namespace Framework
                 gravity = 0;
             return velocity;
         }
+
+        public override string ToString()
+        {
+            return velocity.ToString();
+        }
     }
 }

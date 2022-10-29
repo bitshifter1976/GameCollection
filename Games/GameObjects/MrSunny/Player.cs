@@ -211,7 +211,7 @@ public static class Player
         unduckElapsedTime = 0f;
         jumpAccelleration = 7;
         startFallVelocity = 2f;
-        dude.Mass = 0.1f;
+        dude.Mass = 12f;
         dude.Friction = 0.8f;
         worldScale = new Vector2((float)dude.BoundingBox.Height / dude.BoundingBox.Width, 1);
         gravity = Physics.Gravity * Mass;
@@ -278,7 +278,7 @@ public static class Player
             dude.Flip("Stand", !directionRight);
             Animation = "Stand";
             walkSpeed = walkStartSpeed;
-            VelocityY = 0;
+            //VelocityY = 0;
         }
     }
 

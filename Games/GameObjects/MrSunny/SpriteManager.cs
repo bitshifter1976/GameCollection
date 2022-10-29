@@ -65,7 +65,7 @@ public static class SpriteManager
         var ellipse = Player.Sprite.GetScaledBEllipse(Player.WorldScale);
         var center = Player.Sprite.CenterBEllipse;
         var velocity = Player.Sprite.Velocity;
-        var gravity = Player.Gravity;
+        var gravity = new Gravity(GravityType.UpDown, velocity, Player.Mass);
         // collision
         var removeSprites = ContinuousEllipsoidCollision.Do(Player.Sprite, sprites.ToList(), ellipse, ref center, Player.Sprite.Position, ref velocity, gravity, Player.Sprite.Friction, Player.WorldScale, time);
         // update player
@@ -100,7 +100,7 @@ public static class SpriteManager
         if (Manager.Debug)
         {
             Debug.Draw();
-            Debug.Clear();
+            //Debug.Clear();
         }
     }
 

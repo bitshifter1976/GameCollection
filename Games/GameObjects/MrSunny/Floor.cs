@@ -25,14 +25,16 @@ public static class Floor
 
     public static void Create(Color color, string pattern)
     {
-        var tileBlock = new List<FloorTile>();
         var xNext = 0;
-        var blockWidth = 0;
         for (int i = 0; i < pattern.Length; i++)
         {
             var c = pattern[i];
-                
-            if (c != 'g')
+
+            if (c == 'g')
+            {
+                xNext += gapWidth;
+            }
+            else
             {
                 // should we draw a left end
                 tiles[c].leftEnd = false;
@@ -58,29 +60,13 @@ public static class Floor
                 }
                 // add tile
                 tiles[c].color = color;
-                tileBlock.Add(new FloorTile(new Vector2(xNext, Manager.DesignHeight - Height), 2, tiles[c].Clone()));
-                xNext += tiles[c].width;
-                blockWidth += tiles[c].width;
+                var pos = new Vector2(xNext, Manager.DesignHeight - Height);
+                var tile = new FloorTile(pos, 2, tiles[c].Clone());
+                var width = tiles[c].width;
+                tile.SetBoundingBox(new RectangleF(pos.X, pos.Y + FloorTile.TopOffset, width, Height - FloorTile.TopOffset));
+                SpriteManager.AddImmediate(tile);
+                xNext += width;
             }
-            else
-            {
-                for (int j = 0; j < tileBlock.Count; j++)
-                {
-                    if (j == 0)
-                        tileBlock[j].SetBoundingBox(new RectangleF(tileBlock[0].Position.X, tileBlock[0].Position.Y + FloorTile.TopOffset, blockWidth, Height - FloorTile.TopOffset));
-                    else
-                        tileBlock[j].CollisionType = CollisionType.None;
-                    SpriteManager.AddImmediate(tileBlock[j]);
-                }
-                tileBlock.Clear();
-                xNext += gapWidth;
-                blockWidth = 0;
-            }
-        }
-        // calculate the new bounding boxes
-        for (int j = 0; j < tileBlock.Count; j++)
-        {
-            SpriteManager.AddImmediate(tileBlock[j]);
         }
         width = xNext;
     }
