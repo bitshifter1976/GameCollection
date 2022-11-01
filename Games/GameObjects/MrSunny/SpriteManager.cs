@@ -64,14 +64,16 @@ public static class SpriteManager
         // player collision
         var ellipse = Player.Sprite.GetScaledBEllipse(Player.WorldScale);
         var center = Player.Sprite.CenterBEllipse;
+        var position = Player.Sprite.Position;
         var velocity = Player.Sprite.Velocity;
-        var gravity = new Gravity(GravityType.UpDown, velocity, Player.Mass);
+        var gravity = new Vector2(0, Player.Mass);
         // collision
-        var removeSprites = ContinuousEllipsoidCollision.Do(Player.Sprite, sprites.ToList(), ellipse, ref center, Player.Sprite.Position, ref velocity, gravity, Player.Sprite.Friction, Player.WorldScale, time);
+        var removeSprites = ContinuousEllipsoidCollision.Do(Player.Sprite, ellipse, ref center, ref position, ref velocity, gravity, Player.Sprite.Friction, Player.WorldScale, time, sprites.ToList());
         // update player
         var scrollX = center.X - Player.Sprite.CenterBEllipse.X + velocity.X;
         ScrollX(-scrollX);
-        Player.Sprite.CenterBEllipse = new Vector2(Player.Sprite.CenterBEllipse.X, center.Y);
+        Player.Position = new Vector2(Player.PositionX, position.Y);
+        //Player.Sprite.CenterBEllipse = new Vector2(Player.Sprite.CenterBEllipse.X, center.Y);
         Player.Sprite.Velocity = velocity;
         // do all other collisions
         var collisionSprites = sprites.Where(s => s.CollisionType != CollisionType.None).ToList();

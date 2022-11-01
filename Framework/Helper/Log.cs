@@ -50,6 +50,11 @@ namespace Framework
 			}
         }
 
+        public static void Out(LogLevel logLevel, string format, params object[] parameter)
+        {
+            Out(logLevel, string.Format(format, parameter));
+        }
+
         public static void Close()
         {
             if (active)

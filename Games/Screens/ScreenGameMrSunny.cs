@@ -19,8 +19,9 @@ public class ScreenGameMrSunny : GameScreen
         Submarine = 10,
         Beach = 20,
         Player = 30,
-        Shot = 40,
-        Explosion = 50,
+        Platform = 40,
+        Shot = 50,
+        Explosion = 60,
         Water = 90,
         Hud = 100,
     }
@@ -52,7 +53,9 @@ public class ScreenGameMrSunny : GameScreen
     {
         backColor = Color.CornflowerBlue;
         Player.Create();
-        Floor.Create(new Color(Color.SandyBrown.R, Color.SandyBrown.G, Color.SandyBrown.B, (byte)200), "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
+        Player.Position = new Vector2(Manager.DesignWidth / 2 - Player.SpriteWidth / 2f, 200);
+        Floor.Create(new Color(Color.SandyBrown.R, Color.SandyBrown.G, Color.SandyBrown.B, (byte)200), "AgAgA");
+        SpriteManager.AddImmediate(new Platform(new Vector2(Player.PositionX, Player.PositionY + 200f), Color.White, 0, 4));
     }
 
     public override void Update(GameTime gameTime, bool otherScreenHasFocus, bool coveredByOtherScreen)
@@ -86,6 +89,8 @@ public class ScreenGameMrSunny : GameScreen
         
         Manager.Update(gameTime);
         base.Update(gameTime, otherScreenHasFocus, coveredByOtherScreen);
+        // activate to debug frame for frame with F4
+        //state = GameState.Paused;
     }
 
     public override void Draw(GameTime gameTime)

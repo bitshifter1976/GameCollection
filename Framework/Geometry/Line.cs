@@ -99,10 +99,10 @@ namespace Framework
         public Line MakeEndless()
         {
             Vector2 direction = End - Start;
+            direction.Normalize();
             direction *= 100;
-            Vector2 oldEnd = End;
-            Vector2 newEnd = Start + direction;
-            Vector2 newStart = oldEnd - direction;
+            Vector2 newStart = Start - direction;
+            Vector2 newEnd = End + direction;
             return new Line(newStart.X,newStart.Y,newEnd.X,newEnd.Y);
         }
 

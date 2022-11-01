@@ -153,6 +153,8 @@ public static class Player
 
     public static int Speed => speed;
 
+    public static int SpriteWidth => dude.SpriteWidth;
+
     public static void Create()
     {
         dude = new PlayerSprite();

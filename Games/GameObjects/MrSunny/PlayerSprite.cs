@@ -2,6 +2,7 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Framework;
+using static AxeGameCollection.Screens.ScreenGameMrSunny;
 
 namespace AxeGameCollection.GameObjects.MrSunny;
 
@@ -11,8 +12,8 @@ public sealed class PlayerSprite : SpriteMultipleAnimated
     private bool alphaGrowing;
     private const int boundingXOffset = 25;
     private const int boundingTopOffset = 25;
-    private const int boundingBottomOffset = 11;
-    private const int boundingHeightOffset = boundingBottomOffset + boundingTopOffset;
+    private const int boundingBottomOffset = 0;
+    private const int boundingHeightOffset = boundingTopOffset + boundingBottomOffset;
     private static bool energyLost;
 
     public bool EnergyLost
@@ -43,12 +44,13 @@ public sealed class PlayerSprite : SpriteMultipleAnimated
         get { return new Ellipse(CenterBEllipse, BoundingBox.Width, BoundingBox.Height); }
     }
 
-    public override Rectangle BoundingBox => new((int)Position.X + boundingXOffset, (int)Position.Y + boundingTopOffset, spriteWidth - boundingXOffset * 2, spriteHeight - boundingHeightOffset);
+    public override Rectangle BoundingBox => GetBBox(Position);
 
-    public PlayerSprite() : base("graphic/mrSunny/sunny", Vector2.Zero, 162, 9, 0f, 1f, 15)
+    public int SpriteWidth => spriteWidth;
+
+    public PlayerSprite() : base("graphic/mrSunny/sunny", Vector2.Zero, 162, 9, 0f, 1f, (int)Layer.Player)
     {
         collisionType = CollisionType.BoundingBox;
-        Position = new Vector2(Manager.DesignWidth / 2 - spriteWidth / 2, Position.Y);
     }
 
     public override void Draw()
@@ -115,9 +117,14 @@ public sealed class PlayerSprite : SpriteMultipleAnimated
         //Weapon.Shoot(Center, power, ducking, direction);
     }
 
+    private Rectangle GetBBox(Vector2 pos)
+    {
+        return new Rectangle((int)pos.X + boundingXOffset, (int)pos.Y + boundingTopOffset, spriteWidth - boundingXOffset * 2, spriteHeight - boundingHeightOffset);
+    }
+
     public override RotatedRectangle GetBoundingBox(Vector2 pos)
     {
-        return new RotatedRectangle(new RectangleF(pos.X + boundingXOffset, pos.Y + boundingTopOffset, spriteWidth - boundingXOffset * 2, spriteHeight - boundingHeightOffset),rotation);
+        return new RotatedRectangle(new RectangleF(GetBBox(pos)),rotation);
     }
 
     public override Sprite ReactToCollision(Sprite s)
