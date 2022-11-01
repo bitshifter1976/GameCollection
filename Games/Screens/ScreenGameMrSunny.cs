@@ -54,7 +54,7 @@ public class ScreenGameMrSunny : GameScreen
         backColor = Color.CornflowerBlue;
         Player.Create();
         Player.Position = new Vector2(Manager.DesignWidth / 2 - Player.SpriteWidth / 2f, 200);
-        Floor.Create(new Color(Color.SandyBrown.R, Color.SandyBrown.G, Color.SandyBrown.B, (byte)200), "AgAgA");
+        Floor.Create(new Color(Color.SandyBrown.R, Color.SandyBrown.G, Color.SandyBrown.B, (byte)200), "AgAgA", 2);
         SpriteManager.AddImmediate(new Platform(new Vector2(Player.PositionX, Player.PositionY + 200f), Color.White, 0, 4));
     }
 

@@ -1,9 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using Microsoft.Xna.Framework;
-using System.Collections;
 using Framework;
-using static AxeGameCollection.Screens.ScreenGameMrSunny;
 
 namespace AxeGameCollection.GameObjects.MrSunny;
 public static class Floor
@@ -23,7 +20,7 @@ public static class Floor
     public static float Height => 100;
     public static float Width => width;
 
-    public static void Create(Color color, string pattern)
+    public static void Create(Color color, string pattern, float scale)
     {
         var xNext = 0;
         for (int i = 0; i < pattern.Length; i++)
@@ -32,7 +29,7 @@ public static class Floor
 
             if (c == 'g')
             {
-                xNext += gapWidth;
+                xNext += (int)(gapWidth*scale);
             }
             else
             {
@@ -60,10 +57,9 @@ public static class Floor
                 }
                 // add tile
                 tiles[c].color = color;
-                var pos = new Vector2(xNext, Manager.DesignHeight - Height);
-                var tile = new FloorTile(pos, 2, tiles[c].Clone());
-                var width = tiles[c].width;
-                tile.SetBoundingBox(new RectangleF(pos.X, pos.Y + FloorTile.TopOffset, width, Height - FloorTile.TopOffset));
+                var pos = new Vector2(xNext, Manager.DesignHeight - Height*scale);
+                var tile = new FloorTile(pos, scale, tiles[c].Clone());
+                var width = (int)(tiles[c].width*scale);
                 SpriteManager.AddImmediate(tile);
                 xNext += width;
             }

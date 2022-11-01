@@ -11,33 +11,36 @@ namespace AxeGameCollection.GameObjects.MrSunny
         private readonly FloorTileProps tile;
         private readonly Texture2D left;
         private readonly Texture2D right;
-        public  static int TopOffset = 20;
-        private RectangleF boundingBox;
+        public new float Width;
 
-        public override Rectangle BoundingBox => boundingBox.ToRectangle();
+        public int TopOffset => (int)(10*scale);
+
+        public override Rectangle BoundingBox => new((int)position.X, (int)position.Y+TopOffset, (int)Width, (int)Height-TopOffset);
 
         public FloorTile(Vector2 position, float scale, FloorTileProps tile) : base("graphic/mrSunny/" + tile.name, position, 0f, scale, (int)Layer.Beach, CollisionType.BoundingBox)
         {
             this.tile = tile;
             scrolling = true;
+            Width = tile.width*scale;
             if (tile.leftEnd)
+            {
                 left = Manager.Content.Load<Texture2D>("graphic/mrSunny/" + tile.left);
+                Width += left.Width * scale;
+            }
             if (tile.rightEnd)
+            {
                 right = Manager.Content.Load<Texture2D>("graphic/mrSunny/" + tile.right);
-        }
-
-        public void SetBoundingBox(RectangleF bb)
-        {
-            boundingBox = bb;
+                Width += right.Width * scale;
+            }
         }
 
         public override void Draw()
         {
-            Manager.SpriteBatch.Draw(texture, Position, tile.color);
+            Manager.SpriteBatch.Draw(texture, Position, null, tile.color, 0f, Vector2.Zero, scale, SpriteEffects.None, 0);
             if (tile.leftEnd)
-                Manager.SpriteBatch.Draw(left, new Vector2(Position.X - 10, Position.Y), tile.color);
+                Manager.SpriteBatch.Draw(left, new Vector2(Position.X - 10*scale, Position.Y), null, tile.color, 0f, Vector2.Zero, scale, SpriteEffects.None, 0);
             if (tile.rightEnd)
-                Manager.SpriteBatch.Draw(right, new Vector2(Position.X + texture.Width, Position.Y), tile.color);
+                Manager.SpriteBatch.Draw(right, new Vector2(Position.X + texture.Width*scale, Position.Y), null, tile.color, 0f, Vector2.Zero, scale, SpriteEffects.None, 0);
         }
     }
 

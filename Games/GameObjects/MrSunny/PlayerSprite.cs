@@ -12,7 +12,7 @@ public sealed class PlayerSprite : SpriteMultipleAnimated
     private bool alphaGrowing;
     private const int boundingXOffset = 25;
     private const int boundingTopOffset = 25;
-    private const int boundingBottomOffset = 0;
+    private const int boundingBottomOffset = 11;
     private const int boundingHeightOffset = boundingTopOffset + boundingBottomOffset;
     private static bool energyLost;
 
@@ -28,15 +28,6 @@ public sealed class PlayerSprite : SpriteMultipleAnimated
     public Vector2 CenterBEllipse
     {
         get { return new Vector2(BoundingBox.Center.X, BoundingBox.Center.Y); }
-        set
-        {
-            Vector2 dist = Center - CenterBEllipse;
-            Vector2 newPos = value;
-            newPos += dist;
-            newPos.X -= Width / 2;
-            newPos.Y -= Height / 2;
-            position = newPos;
-        }
     }
 
     public Ellipse BoundingEllipse

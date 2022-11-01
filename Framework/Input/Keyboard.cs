@@ -31,7 +31,7 @@ public class Keyboard
 
     public bool IsKeyUp(Keys key)
     {
-        return State.IsKeyUp(key);
+        return PrevState.IsKeyDown(key) && State.IsKeyUp(key);
     }
 
     public bool IsKeyDown(Keys key)

@@ -394,7 +394,7 @@ public static class ContinuousEllipsoidCollision
         Vector2 moveToNearestCollVect = velocity;
         moveToNearestCollVect.Normalize();
         //moveToNearestCollVect *= nearestDistance - 0.5f;
-        moveToNearestCollVect *= nearestDistance - 2f;
+        moveToNearestCollVect *= nearestDistance - 0.5f;
         return moveToNearestCollVect;
     }
 
