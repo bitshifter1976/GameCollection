@@ -113,7 +113,7 @@ public class ScreenGameMrSunny : GameScreen
         {
             case GameState.Load:
                 {
-                    var text = CreateCenteredText(AxeGameCollection.Games.MrSunny.ToString(), 1, $"Level: {level}", $"Objective: RUN", "Press Enter or A");
+                    var text = CreateCenteredText(AxeGameCollection.Games.MrSunny.ToString(), 1, $"Level: {level}", $"Kill the enemy BOSS at end of level", "Press Enter or A");
                     ShowCenterText(text, AxeGameCollection.Games.MrSunny.ToString(), Color.Black, 1);
                     break;
                 }
@@ -206,7 +206,7 @@ public class ScreenGameMrSunny : GameScreen
         else
         {
             Manager.Sound.PauseSong();
-            var messageBox = new ScreenMessage(game, "Want to exit?", "Yes: Press Enter or A", "No: Press Escape or B", Color.Gold, Color.Red, Color.Gold);
+            var messageBox = new ScreenMessage(game, AxeGameCollection.Games.MrSunny.ToString(), "Want to exit?", "Yes: Press Enter or A", "No: Press Escape or B", Color.Gold, Color.Red, Color.Gold);
             messageBox.Accepted += (sender, e) =>
             {
                 Manager.Sound.StopSong();

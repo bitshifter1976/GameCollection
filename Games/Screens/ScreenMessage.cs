@@ -12,13 +12,15 @@ public class ScreenMessage : GameScreen
     private readonly Color backColor;
     private readonly Color borderColor;
     private Texture2D texture;
+    private readonly string fontName;
     private readonly string message;
     public event EventHandler<EventArgs> Accepted;
     public event EventHandler<EventArgs> Cancelled;
     private readonly bool cancelEnabled = true;
 
-    public ScreenMessage(Game game, string message, string acceptText, string cancelText, Color textColor, Color backColor, Color borderColor) : base(game)
+    public ScreenMessage(Game game, string font, string message, string acceptText, string cancelText, Color textColor, Color backColor, Color borderColor) : base(game)
     {
+        fontName = font;
         this.textColor = textColor;
         this.backColor = backColor;
         this.borderColor = borderColor;
@@ -57,7 +59,7 @@ public class ScreenMessage : GameScreen
     {
         // center the message text in the viewport
         const float scale = 0.5f;
-        var font = Manager.Fonts.Get("Standard");
+        var font = Manager.Fonts.Get(fontName);
         var textSize = font.MeasureString(message) * scale;
         var position = new Vector2(Manager.Graphics.PreferredBackBufferWidth/2f - textSize.X/2f, Manager.Graphics.PreferredBackBufferHeight / 2f - textSize.Y/2f);
         // the background includes a border somewhat larger than the text itself

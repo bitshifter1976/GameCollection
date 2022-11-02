@@ -328,7 +328,7 @@ public class ScreenGameTankBattle : GameScreen
         else
         {
             Manager.Sound.PauseSong();
-            var messageBox = new ScreenMessage(game, "Want to exit?", "Yes: Press Enter or A", "No: Press Escape or B", Color.Gold, Color.Red, Color.Gold);
+            var messageBox = new ScreenMessage(game, AxeGameCollection.Games.TankBattle.ToString(), "Want to exit?", "Yes: Press Enter or A", "No: Press Escape or B", Color.Gold, Color.Red, Color.Gold);
             messageBox.Accepted += (sender, e) =>
             {
                 Manager.Sound.StopSong();
