@@ -75,9 +75,16 @@ public class ScreenGameMrSunny : GameScreen
                 }
             case GameState.Play:
                 {
-                    Player.Update(gameTime);
-                    SpriteManager.Update(gameTime, true);
-                    SpriteManager.ScrollX(Player.VelocityX);
+                    if (Player.Energy <= 0)
+                    {
+                        state = GameState.End;
+                    }
+                    else
+                    {
+                        Player.Update(gameTime);
+                        SpriteManager.Update(gameTime, true);
+                        SpriteManager.ScrollX(Player.VelocityX);
+                    }
                     break;
                 }
             case GameState.Paused:

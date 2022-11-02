@@ -406,6 +406,9 @@ public static class Player
 
     public static void Update(GameTime time)
     {
+        if (PositionY > Manager.DesignHeight)
+            Energy = 0;
+
         if (VelocityY > startFallVelocity)
             Fall();
 
@@ -448,11 +451,13 @@ public static class Player
 
     public static Sprite ReactToCollision(Sprite s)
     {
-        //Log.Out(LogLevel.DBG1, "ReactToCollision");
         Sprite removeSprite = null;
 
-        if (Animation == "Fall" || Animation == "Jump")
-            forceStandAfterCollision = true;
+        if (s is Platform || s is FloorTile)
+        {
+            if (Animation == "Fall" || Animation == "Jump")
+                forceStandAfterCollision = true;
+        }
 
         return removeSprite;
     }
