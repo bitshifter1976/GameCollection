@@ -53,6 +53,7 @@
     <None Remove="Content\graphic\mine.jpg" />
     <None Remove="Content\graphic\mine.pdn" />
     <None Remove="Content\graphic\moon.png" />
+    <None Remove="Content\graphic\mrSunny\gap.png" />
     <None Remove="Content\graphic\progressBar.png" />
     <None Remove="Content\graphic\shot.pdn" />
     <None Remove="Content\graphic\shot.png" />
@@ -98,6 +99,9 @@
     <None Remove="Content\sound\song\intro.ogg" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Content\graphic\mrSunny\gap.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Content>
     <Content Include="Content\graphic\tankBattle\bird.png">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </Content>

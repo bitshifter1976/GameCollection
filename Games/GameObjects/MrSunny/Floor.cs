@@ -1,12 +1,13 @@
 ﻿using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Framework;
+using System;
+using System.Linq;
 
 namespace AxeGameCollection.GameObjects.MrSunny;
 public static class Floor
 {
     private static float width;
-    private const int gapWidth = 50;
     private static readonly Dictionary<char, FloorTileProps> tiles = new() 
     {
         { 'A', new FloorTileProps("beachA", "beachLeft", "beachRightA", 400) },
@@ -14,56 +15,76 @@ public static class Floor
         { 'C', new FloorTileProps("beachC", "beachLeft", "beachRightC", 200) },
         { 'D', new FloorTileProps("beachD", "beachLeft", "beachRightD", 100) },
         { 'E', new FloorTileProps("beachE", "beachLeft", "beachRightE", 50)  },
-        { 'F', new FloorTileProps("beachF", "beachLeft", "beachRightF", 25)  }
+        { 'F', new FloorTileProps("beachF", "beachLeft", "beachRightF", 25)  },
+        { 'g', new FloorTileProps("gap",    "gap",       "gap",         50)  }
     };
+    private static string[] AllowedPatternPairs = new[] { "AA", "AB", "AC", "AD", "AE", "AF", "Ag", "Bg", "Cg", "Dg", "Eg", "Fg", "gg", "gA", "gB", "gC", "gD", "gE", "gF" };
 
     public static float Height => 100;
     public static float Width => width;
 
-    public static void Create(Color color, string pattern, float scale)
+    public static List<Sprite> Create(Color color, int distanceToBoss, int level)
     {
+        var list = new List<FloorTile>();
         var xNext = 0;
-        for (int i = 0; i < pattern.Length; i++)
+        var pattern = string.Empty;
+        var currIdx = -1;
+        char currChar, prevChar = 'g', prevprevChar = 'g';
+        FloorTile floorTile;
+        while (xNext < distanceToBoss)
         {
-            var c = pattern[i];
+            currIdx++;
+            if (currIdx > 0)
+                prevChar = pattern[currIdx - 1];
+            if (currIdx > 1)
+                prevprevChar = pattern[currIdx - 2];
+            currChar = GetRandomChar(prevChar, prevprevChar, level);
+            pattern += currChar;
 
-            if (c == 'g')
+            var pos = new Vector2(xNext, Manager.DesignHeight - Height);
+            var floorTileProps = tiles[currChar].Clone();
+            floorTileProps.color = color;
+            floorTile = new FloorTile(pos, floorTileProps);
+            xNext += (int)floorTile.Width;
+
+            if (currChar == 'g')
             {
-                xNext += (int)(gapWidth*scale);
+                if (prevChar != 'g' && list.Count > 0)
+                    list[list.Count-1].RightEnd = true;
             }
             else
             {
-                // should we draw a left end
-                tiles[c].leftEnd = false;
-                if (i > 0)
-                {
-                    if (pattern[i - 1] == 'g')
-                        tiles[c].leftEnd = true;
-                }
-                else
-                {
-                    tiles[c].leftEnd = true;
-                }
-                // should we draw a right end
-                tiles[c].rightEnd = false;
-                if (i + 1 < pattern.Length)
-                {
-                    if (pattern[i + 1] == 'g')
-                        tiles[c].rightEnd = true;
-                }
-                else
-                {
-                    tiles[c].rightEnd = true;
-                }
-                // add tile
-                tiles[c].color = color;
-                var pos = new Vector2(xNext, Manager.DesignHeight - Height*scale);
-                var tile = new FloorTile(pos, scale, tiles[c].Clone());
-                var width = (int)(tiles[c].width*scale);
-                SpriteManager.AddImmediate(tile);
-                xNext += width;
+                if (prevChar == 'g')
+                    floorTile.LeftEnd = true;
+                if (xNext >= distanceToBoss)
+                    floorTile.RightEnd = true;
+                list.Add(floorTile);
             }
         }
         width = xNext;
+        return list.Select(s => (Sprite)s).ToList();
+    }
+
+    private static char GetRandomChar(char prevChar, char prevprevChar, int level)
+    {
+        char currChar;
+        if (Rand.Bool(1, level))
+        {
+            currChar = 'A';
+        }
+        else
+        {
+            var allowed = AllowedPatternPairs.Where(p => p[0] == prevChar).Select(p => p[1]).ToList();
+            if (prevChar == 'g' && prevprevChar == 'g')
+                allowed.Remove('g');
+            currChar = allowed[Rand.Int(0, allowed.Count - 1)];
+        }
+
+        return currChar;
+    }
+
+    private static char GetCharFromPattern(string possiblePatterns)
+    {
+        return possiblePatterns[Rand.Int(0, possiblePatterns.Length - 1)];
     }
 }

@@ -155,7 +155,7 @@ public static class Player
 
     public static int SpriteWidth => dude.SpriteWidth;
 
-    public static void Create()
+    public static Sprite Create()
     {
         dude = new PlayerSprite();
         var ani = new Animation {Fps = 20};
@@ -187,6 +187,7 @@ public static class Player
         Manager.Sound.LoadEffect("collect");
         Manager.Sound.LoadEffect("autsch");
         Manager.Sound.LoadEffect("fireDelete");
+        return dude;
     }
 
     private static void Init()

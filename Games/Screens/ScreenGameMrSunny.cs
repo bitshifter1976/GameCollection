@@ -16,10 +16,9 @@ public class ScreenGameMrSunny : GameScreen
     }
     public enum Layer
     {
-        Submarine = 10,
         Beach = 20,
-        Player = 30,
-        Platform = 40,
+        Platform = 30,
+        Player = 40,
         Shot = 50,
         Explosion = 60,
         Water = 90,
@@ -52,9 +51,15 @@ public class ScreenGameMrSunny : GameScreen
     private void CreateScene()
     {
         backColor = Color.CornflowerBlue;
-        Player.Create();
+        // how many screens to boss?
+        var distanceToBoss = Manager.DesignWidth * (level/4+3);
+        // create player
+        SpriteManager.AddImmediate(Player.Create());
         Player.Position = new Vector2(Manager.DesignWidth / 2 - Player.SpriteWidth / 2f, 200);
-        Floor.Create(new Color(Color.SandyBrown.R, Color.SandyBrown.G, Color.SandyBrown.B, (byte)200), "AgAgA", 2);
+        // create floor
+        var floorColor = new Color(Color.Brown.R, Color.Brown.G, Color.Brown.B, (byte)200);
+        SpriteManager.AddImmediate(Floor.Create(floorColor, distanceToBoss, level));
+        // create platforms
         SpriteManager.AddImmediate(new Platform(new Vector2(Player.PositionX, Player.PositionY + 200f), Color.White, 0, 4));
     }
 
@@ -96,7 +101,6 @@ public class ScreenGameMrSunny : GameScreen
     public override void Draw(GameTime gameTime)
     {
         InitDraw(backColor);
-        Player.Draw();
         SpriteManager.Draw();
         switch (state)
         {
