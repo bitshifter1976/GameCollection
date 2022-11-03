@@ -70,6 +70,7 @@ namespace Framework
             }
             animation.Frames = frames;
             animation.Rectangles = recs;
+            animation.Scale = scale;
             animations.Add(name, animation);
         }
 

@@ -39,7 +39,7 @@ public sealed class PlayerSprite : SpriteMultipleAnimated
 
     public int SpriteWidth => spriteWidth;
 
-    public PlayerSprite() : base("graphic/mrSunny/sunny", Vector2.Zero, 162, 9, 0f, 1f, (int)Layer.Player)
+    public PlayerSprite(float scale) : base("graphic/mrSunny/sunny", Vector2.Zero, 162, 9, 0f, scale, (int)Layer.Player)
     {
         collisionType = CollisionType.BoundingBox;
     }
@@ -110,7 +110,7 @@ public sealed class PlayerSprite : SpriteMultipleAnimated
 
     private Rectangle GetBBox(Vector2 pos)
     {
-        return new Rectangle((int)pos.X + boundingXOffset, (int)pos.Y + boundingTopOffset, spriteWidth - boundingXOffset * 2, spriteHeight - boundingHeightOffset);
+        return new Rectangle((int)(pos.X + boundingXOffset * scale), (int)(pos.Y + boundingTopOffset * scale), (int)(Width - boundingXOffset * scale * 2), (int)(Height - boundingHeightOffset * scale));
     }
 
     public override RotatedRectangle GetBoundingBox(Vector2 pos)

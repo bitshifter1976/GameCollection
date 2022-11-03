@@ -155,9 +155,9 @@ public static class Player
 
     public static int SpriteWidth => dude.SpriteWidth;
 
-    public static Sprite Create()
+    public static Sprite Create(float scale)
     {
-        dude = new PlayerSprite();
+        dude = new PlayerSprite(scale);
         var ani = new Animation {Fps = 20};
         dude.AddAnimation("Stand", 1, 18, ani.Copy());
         dude.AddAnimation("WalkRight", 2, 12, ani.Copy());
@@ -200,20 +200,20 @@ public static class Player
         shotPowerBonus = 3;
         Water = maxEnergy;
         WaterChanged = false;
-        walkSpeedMax = 2f;
+        walkSpeedMax = 4f;
         walkStartSpeed = 0.5f;
         walkSpeed = walkStartSpeed;
-        walkSpeedAcceleration = 0.03f;
+        walkSpeedAcceleration = 0.1f;
         runSpeed = walkSpeedMax;
         runSpeedMax = walkSpeedMax * 1.5f;
-        runSpeedAcceleration = 0.03f;
+        runSpeedAcceleration = 0.2f;
         shotStartTime = 0.2f;
         shotStartTimeElapsed = 0f;
         timeToShoot = false;
         unduckTime = 0.5f;
         unduckElapsedTime = 0f;
-        jumpAccelleration = 7;
-        startFallVelocity = 2f;
+        jumpAccelleration = 15;
+        startFallVelocity = 1f;
         dude.Mass = 12f;
         dude.Friction = 0.8f;
         worldScale = new Vector2((float)dude.BoundingBox.Height / dude.BoundingBox.Width, 1);
@@ -281,7 +281,6 @@ public static class Player
             dude.Flip("Stand", !directionRight);
             Animation = "Stand";
             walkSpeed = walkStartSpeed;
-            //VelocityY = 0;
         }
     }
 
@@ -331,9 +330,11 @@ public static class Player
             Animation = "WalkLeft";
             walkSpeed = walkStartSpeed;
         }
-        if (walkSpeed < walkSpeedMax)
+        else
+        {
             walkSpeed += walkSpeedAcceleration;
-        runSpeed = walkSpeed;
+            walkSpeed = MathHelper.Clamp(walkSpeed, walkStartSpeed, walkSpeedMax);
+        }
         VelocityX = -walkSpeed;
     }
 
@@ -345,9 +346,11 @@ public static class Player
             Animation = "WalkRight";
             walkSpeed = walkStartSpeed;
         }
-        if (walkSpeed < walkSpeedMax)
+        else
+        {
             walkSpeed += walkSpeedAcceleration;
-        runSpeed = walkSpeed;
+            walkSpeed = MathHelper.Clamp(walkSpeed, walkStartSpeed, walkSpeedMax);
+        }
         VelocityX = walkSpeed;
     }
 
@@ -359,10 +362,12 @@ public static class Player
             Animation = "RunLeft";
             runSpeed = walkSpeedMax;
         }
-        if (runSpeed < runSpeedMax)
+        else
+        {
             runSpeed += runSpeedAcceleration;
-        walkSpeed = runSpeed;
-        VelocityX = -walkSpeed;
+            runSpeed = MathHelper.Clamp(runSpeed, walkSpeedMax, runSpeedMax);
+        }
+        VelocityX = -runSpeed;
     }
 
     private static void RunRight()
@@ -373,10 +378,12 @@ public static class Player
             Animation = "RunRight";
             runSpeed = walkSpeedMax;
         }
-        if (runSpeed < runSpeedMax)
+        else
+        {
             runSpeed += runSpeedAcceleration;
-        walkSpeed = runSpeed;
-        VelocityX = walkSpeed;
+            runSpeed = MathHelper.Clamp(runSpeed, walkSpeedMax, runSpeedMax);
+        }
+        VelocityX = runSpeed;
     }
 
     private static void Fall()
@@ -390,17 +397,37 @@ public static class Player
 
     private static void SteerFall()
     {
-        if (Action.WalkLeft)
+        if (Action.RunLeft)
         {
             directionRight = false;
             dude.Flip("Fall", true);
-            VelocityX -= runSpeedAcceleration;
+            runSpeed += runSpeedAcceleration;
+            runSpeed = MathHelper.Clamp(runSpeed, walkSpeedMax, runSpeedMax);
+            VelocityX = -runSpeed;
+        }
+        else if (Action.RunRight)
+        {
+            directionRight = true;
+            dude.Flip("Fall", false);
+            runSpeed += runSpeedAcceleration;
+            runSpeed = MathHelper.Clamp(runSpeed, walkSpeedMax, runSpeedMax);
+            VelocityX = runSpeed;
+        }
+        else if (Action.WalkLeft)
+        {
+            directionRight = false;
+            dude.Flip("Fall", true);
+            walkSpeed += walkSpeedAcceleration;
+            walkSpeed = MathHelper.Clamp(walkSpeed, walkStartSpeed, walkSpeedMax);
+            VelocityX = -walkSpeed;
         }
         else if (Action.WalkRight)
         {
             directionRight = true;
             dude.Flip("Fall", false);
-            VelocityX += runSpeedAcceleration;
+            walkSpeed += walkSpeedAcceleration;
+            walkSpeed = MathHelper.Clamp(walkSpeed, walkStartSpeed, walkSpeedMax);
+            VelocityX = walkSpeed;
         }
     }
 

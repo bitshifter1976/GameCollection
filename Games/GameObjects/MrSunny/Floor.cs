@@ -23,22 +23,21 @@ public static class Floor
     public static float Height => 100;
     public static float Width => width;
 
-    public static List<Sprite> Create(Color color, int distanceToBoss, int level)
+    public static List<Sprite> Create(Color color, int distanceToBoss, int level, out List<Line> gaps)
     {
         var list = new List<FloorTile>();
+        gaps = new List<Line>();
         var xNext = 0;
         var pattern = string.Empty;
         var currIdx = -1;
-        char currChar, prevChar = 'g', prevprevChar = 'g';
+        char currChar, prevChar = 'g';
         FloorTile floorTile;
         while (xNext < distanceToBoss)
         {
             currIdx++;
             if (currIdx > 0)
                 prevChar = pattern[currIdx - 1];
-            if (currIdx > 1)
-                prevprevChar = pattern[currIdx - 2];
-            currChar = GetRandomChar(prevChar, prevprevChar, level);
+            currChar = GetRandomChar(prevChar, level);
             pattern += currChar;
 
             var pos = new Vector2(xNext, Manager.DesignHeight - Height);
@@ -49,6 +48,7 @@ public static class Floor
 
             if (currChar == 'g')
             {
+                gaps.Add(new Line(pos.X, pos.Y, xNext, pos.Y));
                 if (prevChar != 'g' && list.Count > 0)
                     list[list.Count-1].RightEnd = true;
             }
@@ -62,10 +62,32 @@ public static class Floor
             }
         }
         width = xNext;
+        // if we have two gaps next to each other, we want one big gap
+        var gaps2 = new List<Line>();
+        Vector2 start, end;
+        var gapPairFound = true;
+        while (gapPairFound)
+        {
+            gapPairFound = false;
+            gaps2 = new List<Line>();
+            for (var i = 0; i < gaps.Count - 1; i++)
+            {
+                start = gaps[i].Start;
+                end = gaps[i].End;
+                if (gaps[i].End == gaps[i + 1].Start)
+                {
+                    gapPairFound = true;
+                    end = gaps[i + 1].End;
+                    i++;
+                }
+                gaps2.Add(new Line(start.X, start.Y, end.X, end.Y));
+            }
+            gaps = gaps2;
+        }
         return list.Select(s => (Sprite)s).ToList();
     }
 
-    private static char GetRandomChar(char prevChar, char prevprevChar, int level)
+    private static char GetRandomChar(char prevChar, int level)
     {
         char currChar;
         if (Rand.Bool(1, level))
@@ -74,10 +96,15 @@ public static class Floor
         }
         else
         {
-            var allowed = AllowedPatternPairs.Where(p => p[0] == prevChar).Select(p => p[1]).ToList();
-            if (prevChar == 'g' && prevprevChar == 'g')
-                allowed.Remove('g');
-            currChar = allowed[Rand.Int(0, allowed.Count - 1)];
+            if (Rand.Bool(1, 20 / level + 1))
+            {
+                currChar = 'g';
+            }
+            else
+            {
+                var allowed = AllowedPatternPairs.Where(p => p[0] == prevChar).Select(p => p[1]).ToList();
+                currChar = allowed[Rand.Int(0, allowed.Count - 1)];
+            }
         }
 
         return currChar;

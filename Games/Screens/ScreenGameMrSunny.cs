@@ -54,13 +54,13 @@ public class ScreenGameMrSunny : GameScreen
         // how many screens to boss?
         var distanceToBoss = Manager.DesignWidth * (level/4+3);
         // create player
-        SpriteManager.AddImmediate(Player.Create());
+        SpriteManager.AddImmediate(Player.Create(2));
         Player.Position = new Vector2(Manager.DesignWidth / 2 - Player.SpriteWidth / 2f, 200);
         // create floor
         var floorColor = new Color(Color.Brown.R, Color.Brown.G, Color.Brown.B, (byte)200);
-        SpriteManager.AddImmediate(Floor.Create(floorColor, distanceToBoss, level));
+        SpriteManager.AddImmediate(Floor.Create(floorColor, distanceToBoss, level, out var gaps));
         // create platforms
-        SpriteManager.AddImmediate(new Platform(new Vector2(Player.PositionX, Player.PositionY + 200f), Color.White, 0, 4));
+        SpriteManager.AddImmediate(Platforms.Create(gaps, distanceToBoss, level));
     }
 
     public override void Update(GameTime gameTime, bool otherScreenHasFocus, bool coveredByOtherScreen)
