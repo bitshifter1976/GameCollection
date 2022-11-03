@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
@@ -159,6 +160,21 @@ namespace Framework
             }
             Vector2 direction = delta / distance;
             return Start + direction * distance;
+        }
+
+        public List<Vector2> GetPoints(int quantity)
+        {
+            var points = new List<Vector2>();
+            var xdiff = End.X - Start.X;
+            var ydiff = End.Y - Start.Y;
+            var slope = ydiff / xdiff;
+            for (float i = 0; i < quantity; i++)
+            {
+                var y = slope == 0f ? 0 : ydiff * (i / quantity);
+                var x = slope == 0f ? xdiff * (i / quantity) : y / slope;
+                points.Add(new Vector2(x + Start.X, y + Start.Y));
+            }
+            return points;
         }
 
 

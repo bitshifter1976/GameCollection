@@ -57,10 +57,7 @@ public class ScreenGameMrSunny : GameScreen
         SpriteManager.AddImmediate(Player.Create(2));
         Player.Position = new Vector2(Manager.DesignWidth / 2 - Player.SpriteWidth / 2f, 200);
         // create floor
-        var floorColor = new Color(Color.Brown.R, Color.Brown.G, Color.Brown.B, (byte)200);
-        SpriteManager.AddImmediate(Floor.Create(floorColor, distanceToBoss, level, out var gaps));
-        // create platforms
-        SpriteManager.AddImmediate(Platforms.Create(gaps, distanceToBoss, level));
+        Floor2.Load(distanceToBoss, Color.Brown);
     }
 
     public override void Update(GameTime gameTime, bool otherScreenHasFocus, bool coveredByOtherScreen)
@@ -82,6 +79,7 @@ public class ScreenGameMrSunny : GameScreen
                     else
                     {
                         Player.Update(gameTime);
+                        Floor2.Update(gameTime);
                         SpriteManager.Update(gameTime, true);
                         SpriteManager.ScrollX(Player.VelocityX);
                     }
@@ -108,6 +106,7 @@ public class ScreenGameMrSunny : GameScreen
     public override void Draw(GameTime gameTime)
     {
         InitDraw(backColor);
+        Floor2.Draw(gameTime);
         SpriteManager.Draw();
         switch (state)
         {
