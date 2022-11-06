@@ -304,8 +304,8 @@ public static class ContinuousEllipsoidCollision
                 collLine.IntersectLine(new Line(ellipseIntersectionPoint.X, ellipseIntersectionPoint.Y, ellipseLineVelPoint.X, ellipseLineVelPoint.Y), out lineIntersectionPoint);
 #if DBG_COLL
                 //Log.Out(LogLevel.Dbg3, "    abs(lineNormalPosDistance) > radius");
-                Debug.Points.Add(new PointDebug(new Dot(ellipseIntersectionPoint), "ellipseIntersectionPoint", Color.Blue));
-                Debug.Points.Add(new PointDebug(new Dot(ellipseIntersectionPoint), "ellipseIntersectionPoint", Color.Blue));
+                Debug.Points.Add(new PointDebug(new Dot(ellipseIntersectionPoint), "ellipseIntersectionPoint", Color.OrangeRed));
+                Debug.Points.Add(new PointDebug(new Dot(lineIntersectionPoint), "lineIntersectionPoint", Color.LightBlue));
                 //Debug.Points.Add(new PointDebug(new Dot(lineIntersectionPoint), "lineIntersectionPoint", Color.Green));
 #endif
             }
@@ -330,19 +330,16 @@ public static class ContinuousEllipsoidCollision
             Line reverseIntersectLine = new Line(intersectionPoint.X, intersectionPoint.Y, pointOnNegativeVel.X, pointOnNegativeVel.Y);
             Vector2[] eIPs = new Vector2[2];
             var circle = new Circle(ellipse.Position, radius);
-            Debug.Ellipses.Add(new EllipseDebug(new Ellipse(circle.Center, circle.Radius*2, circle.Radius*2), "Ellipse", Color.Gold, 100));
-            Debug.Lines.Add(new LineDebug(reverseIntersectLine, "reverseIntersectLine", Color.Blue));
             int intersectionCount = circle.IntersectSegment(reverseIntersectLine.Start, reverseIntersectLine.End, out eIPs[0], out eIPs[1]);
-            float ellipseIntersectionPointDistance = -100;
-            //ellipseIntersectionPoint = new Vector2(-100, -100);
-            float dist2 = 100;
+            float ellipseIntersectionPointDistance = -1000;
+            float dist2 = 1000;
             if (intersectionCount == 2)
                 dist2 = Vector2.Distance(eIPs[1], intersectionPoint);
             if (intersectionCount > 0)
             {
                 float dist1 = Vector2.Distance(eIPs[0], intersectionPoint);
                 //ellipseIntersectionPoint = (dist1 <= dist2) ? eIPs[0] : eIPs[1];
-                ellipseIntersectionPointDistance = (dist1 <= dist2) ? dist1 : dist2;
+                ellipseIntersectionPointDistance = Math.Min(dist1, dist2);
             }
 #if DBG_COLL
             Log.Out(LogLevel.Dbg3, "    lineIntersectionPoint: {0}", lineIntersectionPoint);
@@ -350,7 +347,8 @@ public static class ContinuousEllipsoidCollision
             Log.Out(LogLevel.Dbg3, "    ellipseIntersectionPoint2: {0}", eIPs[1]);
             Log.Out(LogLevel.Dbg3, "    ellipseIntersectionPointDistance: {0}", ellipseIntersectionPointDistance);
             Log.Out(LogLevel.Dbg3, "    distanceToTravel: {0}", distanceToTravel);
-            //Debug.Lines.Add(new LineDebug(reverseIntersectLine, "reverseIntersectLine", Color.Black));
+            Debug.Ellipses.Add(new EllipseDebug(new Ellipse(circle.Center, circle.Radius*2, circle.Radius*2), "Ellipse", Color.Gold, 100));
+            Debug.Lines.Add(new LineDebug(reverseIntersectLine, "reverseIntersectLine", Color.Blue));
             //Debug.Points.Add(new PointDebug(new Dot(lineIntersectionPoint), "lineIntersectionPoint" + lineIdx, Color.Yellow));
             //Debug.Points.Add(new PointDebug(new Dot(intersectionPoint), "intersectionPoint" + lineIdx, Color.Yellow));
 #endif

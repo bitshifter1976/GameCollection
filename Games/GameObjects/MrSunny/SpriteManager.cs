@@ -41,6 +41,7 @@ public static class SpriteManager
 
     public static int Update(GameTime time, bool checkCollision)
     {
+        Debug.Clear();
         var numberOfEnemiesKilled = 0;
         // add new sprites
         sprites.AddRange(toAdd);
@@ -102,7 +103,6 @@ public static class SpriteManager
         if (Manager.Debug)
         {
             Debug.Draw();
-            //Debug.Clear();
         }
     }
 

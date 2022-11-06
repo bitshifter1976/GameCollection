@@ -85,7 +85,7 @@ public class ScreenGameSubmarineWars : GameScreen
                     hud.Energy = submarine.Energy;
                     hud.ElapsedTime += TimeSpan.FromSeconds(gameTime.ElapsedGameTime.TotalSeconds);
                     hud.EnemiesKilled += SpriteManager.Update(gameTime, true);
-                    if (tankShip != null && submarine.BoundingBoxRotated.CollisionRectangle.Intersects(tankShip.BoundingBoxForMissiles))
+                    if (tankShip != null && submarine.BoundingBoxRotated.Rect.Intersects(tankShip.BoundingBoxForMissiles))
                         hud.AddMunition(0.03f);
                     if (submarine.Energy <= 0 || hud.EnemiesKilled >= EnemyKillCount)
                         state = GameState.End; 

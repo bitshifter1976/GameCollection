@@ -22,5 +22,10 @@ namespace Framework.Geometry
             var rotationMatrix = Matrix.CreateRotationZ(radians);
             return Vector2.Transform(north, rotationMatrix);
         }
+
+        public static float CalculeAngleInRadians(Vector2 start, Vector2 end)
+        {
+            return (float)Math.Atan2(end.Y - start.Y, end.X - start.X);
+        }
     }
 }

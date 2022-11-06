@@ -73,6 +73,13 @@ namespace Framework
         {
             var src = new Rectangle(SpriteWidth * FrameIndex, SpriteHeight * RowIndex, SpriteWidth, SpriteHeight);
             Manager.SpriteBatch.Draw(texture, Position, src, Color.White, rotation, origin, scale, flip ? SpriteEffects.FlipHorizontally : SpriteEffects.None, 0);
+            if (Manager.Debug)
+            {
+                Debug.Rects.Add(new RectDebug(BoundingBoxRotated.ToLines(), "BoundingBox", Color.Red));
+                Debug.Points.Add(new PointDebug(new Dot(Center), "Center", Color.Gold));
+                Debug.Points.Add(new PointDebug(new Dot(position), "Position", Color.Green));
+                Manager.SpriteBatch.DrawString(Manager.Fonts.Get("Debug"), $"{position}({this.GetType().Name})", new Vector2(position.X, position.Y + Height + 2), Color.Black);
+            }
         }
     }
 }

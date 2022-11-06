@@ -88,7 +88,12 @@ public sealed class PlayerSprite : SpriteMultipleAnimated
         //Weapon.Draw();
 
         if (Manager.Debug)
-            Manager.SpriteBatch.DrawString(Manager.Fonts.Get("Debug"), Position.ToString(), new Vector2(Position.X, Position.Y + spriteHeight + 10), Color.Black);
+        {
+            Debug.Rects.Add(new RectDebug(BoundingBoxRotated.ToLines(), "BoundingBox", Color.Red));
+            Debug.Points.Add(new PointDebug(new Dot(Center), "Center", Color.Gold));
+            Debug.Points.Add(new PointDebug(new Dot(position), "Position", Color.Green));
+            Manager.SpriteBatch.DrawString(Manager.Fonts.Get("Debug"), $"{position}({this.GetType().Name})", new Vector2(position.X, position.Y + Height + 2), Color.Black);
+        }
     }
 
     public override Sprite Update(GameTime gameTime)

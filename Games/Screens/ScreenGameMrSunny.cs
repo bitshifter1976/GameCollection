@@ -36,7 +36,7 @@ public class ScreenGameMrSunny : GameScreen
     {
         state = GameState.Load;
         this.level = level;
-        Manager.Input.CreateHoldingKeys(0.10f, Keys.Up, Keys.Down, Keys.Left, Keys.Right, Keys.W, Keys.S, Keys.A, Keys.D);
+        Manager.Input.CreateHoldingKeys(0.10f, Keys.Up, Keys.Down, Keys.Left, Keys.Right, Keys.W, Keys.S, Keys.A, Keys.D, Keys.F4);
         Manager.Input.CreateHoldingButtons(0.10f, Buttons.DPadUp, Buttons.DPadDown, Buttons.DPadLeft, Buttons.DPadRight, Buttons.LeftThumbstickUp, Buttons.LeftThumbstickDown, Buttons.LeftThumbstickLeft, Buttons.LeftThumbstickRight);
     }
 
@@ -57,7 +57,7 @@ public class ScreenGameMrSunny : GameScreen
         SpriteManager.AddImmediate(Player.Create(2));
         Player.Position = new Vector2(Manager.DesignWidth / 2 - Player.SpriteWidth / 2f, 200);
         // create floor
-        Floor2.Load(distanceToBoss, Color.Brown);
+        SpriteManager.AddImmediate(Floor2.Create(distanceToBoss, Color.White));
     }
 
     public override void Update(GameTime gameTime, bool otherScreenHasFocus, bool coveredByOtherScreen)
@@ -79,7 +79,6 @@ public class ScreenGameMrSunny : GameScreen
                     else
                     {
                         Player.Update(gameTime);
-                        Floor2.Update(gameTime);
                         SpriteManager.Update(gameTime, true);
                         SpriteManager.ScrollX(Player.VelocityX);
                     }
@@ -100,13 +99,12 @@ public class ScreenGameMrSunny : GameScreen
         Manager.Update(gameTime);
         base.Update(gameTime, otherScreenHasFocus, coveredByOtherScreen);
         // activate to debug frame for frame with F4
-        //state = GameState.Paused;
+        state = GameState.Paused;
     }
 
     public override void Draw(GameTime gameTime)
     {
         InitDraw(backColor);
-        Floor2.Draw(gameTime);
         SpriteManager.Draw();
         switch (state)
         {
@@ -163,7 +161,7 @@ public class ScreenGameMrSunny : GameScreen
             Manager.Graphics.IsFullScreen = !Manager.Graphics.IsFullScreen;
             Manager.Graphics.ApplyChanges();
         }
-        if (Manager.Input.KeyPressed(Keys.F4))
+        if (Manager.Input.KeyPressed(Keys.F4) || Manager.Input.HoldingKey(Keys.F4))
         {
             if (state == GameState.Paused)
                 state = GameState.Play;

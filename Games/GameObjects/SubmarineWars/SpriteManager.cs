@@ -86,7 +86,7 @@ public static class SpriteManager
         {
             var rect = s.BoundingBoxF;
             if (s.CollisionType == CollisionType.BoundingBoxRotated)
-                rect = s.BoundingBoxRotated.CollisionRectangle;
+                rect = s.BoundingBoxRotated.Rect;
             var possibleCollisionPixel = Water.GroundPixel.Where(p => p.Key >= rect.Left && p.Key <= rect.Right).Select(p => new Vector2(p.Key, p.Value)).ToList();
             foreach (var p in possibleCollisionPixel)
             {

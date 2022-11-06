@@ -5,13 +5,6 @@ namespace AxeGameCollection.GameObjects.MrSunny;
 
 public static class Action
 {
-    private const float holdingKeyTime = 1.2f;
-
-    static Action()
-    {
-        Manager.Input.CreateHoldingKeys(holdingKeyTime, Keys.A, Keys.Left, Keys.D, Keys.Right);
-    }
-
     public static bool WalkLeft
     {
         get { return Manager.Input.KeyDown(Keys.A) || Manager.Input.KeyDown(Keys.Left); }

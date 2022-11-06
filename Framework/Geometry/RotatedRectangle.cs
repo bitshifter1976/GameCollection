@@ -7,35 +7,35 @@ namespace Framework
 {
     public class RotatedRectangle
     {
-        public RectangleF CollisionRectangle;
+        public RectangleF Rect;
         public float Rotation;
         public Vector2 Origin;
 
         public float X
         {
-            get { return CollisionRectangle.X; }
+            get { return Rect.X; }
         }
 
         public float Y
         {
-            get { return CollisionRectangle.Y; }
+            get { return Rect.Y; }
         }
 
         public float Width
         {
-            get { return CollisionRectangle.Width; }
+            get { return Rect.Width; }
         }
 
         public float Height
         {
-            get { return CollisionRectangle.Height; }
+            get { return Rect.Height; }
         }
 
         public Vector2 UpperLeftCorner
         {
             get
             {
-                var upperLeft = new Vector2(CollisionRectangle.Left, CollisionRectangle.Top);
+                var upperLeft = new Vector2(Rect.Left, Rect.Top);
                 upperLeft = RotatePoint(upperLeft, Origin, Rotation);
                 return upperLeft;
             }
@@ -45,7 +45,7 @@ namespace Framework
         {
             get
             {
-                var upperRight = new Vector2(CollisionRectangle.Right, CollisionRectangle.Top);
+                var upperRight = new Vector2(Rect.Right, Rect.Top);
                 upperRight = RotatePoint(upperRight, Origin, Rotation);
                 return upperRight;
             }
@@ -55,7 +55,7 @@ namespace Framework
         {
             get
             {
-                var lowerLeft = new Vector2(CollisionRectangle.Left, CollisionRectangle.Bottom);
+                var lowerLeft = new Vector2(Rect.Left, Rect.Bottom);
                 lowerLeft = RotatePoint(lowerLeft, Origin, Rotation);
                 return lowerLeft;
             }
@@ -65,7 +65,7 @@ namespace Framework
         {
             get
             {
-                var lowerRight = new Vector2(CollisionRectangle.Right, CollisionRectangle.Bottom);
+                var lowerRight = new Vector2(Rect.Right, Rect.Bottom);
                 lowerRight = RotatePoint(lowerRight, Origin, Rotation);
                 return lowerRight;
             }
@@ -84,7 +84,7 @@ namespace Framework
 
         public RotatedRectangle(RectangleF rect, float rotation)
         {
-            CollisionRectangle = rect;
+            Rect = rect;
             Rotation = rotation;
             Origin = rect.Center;
         }
@@ -96,8 +96,8 @@ namespace Framework
         /// <param name="posY"></param>
         public void ChangePosition(float posX, float posY)
         {
-            CollisionRectangle.X += posX;
-            CollisionRectangle.Y += posY;
+            Rect.X += posX;
+            Rect.Y += posY;
         }
 
         /// <summary>
