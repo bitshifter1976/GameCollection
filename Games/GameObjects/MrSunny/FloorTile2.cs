@@ -24,8 +24,8 @@ public class FloorTile2 : Sprite
 
     public override RotatedRectangle GetBoundingBox(Vector2 pos)
     {
-        var rect = new RotatedRectangle(new RectangleF(line.Start.X, line.Start.Y, Width, Height), rotation);
-        rect.Origin = line.Start;
+        var rect = new RotatedRectangle(new RectangleF(pos.X, pos.Y, Width, Height), rotation);
+        rect.Origin = pos;
         return rect;
     }
 
@@ -39,6 +39,7 @@ public class FloorTile2 : Sprite
             {
                 line.Start += diff;
                 line.End += diff;
+                fillLines.ForEach(l => { l.Start += diff; l.End += diff; });
             }
         }
     }

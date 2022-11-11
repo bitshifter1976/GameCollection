@@ -57,7 +57,7 @@ public class ScreenGameMrSunny : GameScreen
         SpriteManager.AddImmediate(Player.Create(2));
         Player.Position = new Vector2(Manager.DesignWidth / 2 - Player.SpriteWidth / 2f, 200);
         // create floor
-        SpriteManager.AddImmediate(Floor2.Create(distanceToBoss, Color.White));
+        SpriteManager.AddImmediate(Floor2.Create(distanceToBoss, Color.Black));
     }
 
     public override void Update(GameTime gameTime, bool otherScreenHasFocus, bool coveredByOtherScreen)
@@ -80,7 +80,6 @@ public class ScreenGameMrSunny : GameScreen
                     {
                         Player.Update(gameTime);
                         SpriteManager.Update(gameTime, true);
-                        SpriteManager.ScrollX(Player.VelocityX);
                     }
                     break;
                 }

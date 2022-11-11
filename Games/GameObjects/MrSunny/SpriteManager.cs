@@ -71,7 +71,7 @@ public static class SpriteManager
         // collision
         var removeSprites = ContinuousEllipsoidCollision.Do(Player.Sprite, ellipse, ref center, ref position, ref velocity, gravity, Player.Sprite.Friction, Player.WorldScale, time, sprites.ToList());
         // update player
-        var scrollX = center.X - Player.Sprite.CenterBEllipse.X + velocity.X;
+        var scrollX = center.X - Player.Sprite.CenterBEllipse.X;
         ScrollX(-scrollX);
         Player.Position = new Vector2(Player.PositionX, position.Y);
         //Player.Sprite.CenterBEllipse = new Vector2(Player.Sprite.CenterBEllipse.X, center.Y);

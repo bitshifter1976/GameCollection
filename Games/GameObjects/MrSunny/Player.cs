@@ -33,7 +33,6 @@ public static class Player
     private static float startFallVelocity;
     private static bool forceStandAfterCollision;
     private static Direction shotDirection;
-    private static int speed;
 
     public static PlayerSprite Sprite
     {
@@ -150,8 +149,6 @@ public static class Player
     public static bool EnergyLost { get; set; }
 
     public static bool WaterChanged { get; set; }
-
-    public static int Speed => speed;
 
     public static int SpriteWidth => dude.SpriteWidth;
 
@@ -480,7 +477,7 @@ public static class Player
     {
         Sprite removeSprite = null;
 
-        if (s is Platform || s is FloorTile)
+        if (s is Platform || s is FloorTile || s is FloorTile2)
         {
             if (Animation == "Fall" || Animation == "Jump")
                 forceStandAfterCollision = true;

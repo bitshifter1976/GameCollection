@@ -10,7 +10,6 @@ namespace AxeGameCollection.GameObjects.SubmarineWars;
 public sealed class TankShip : Sprite
 {
     private readonly int sign;
-    private int bombAmount;
     private Texture2D texture2;
 
     public override Rectangle BoundingBox => new((int)(position.X - Width / 2f), (int)position.Y, (int)Width, (int)(Height / 2f));
@@ -46,7 +45,6 @@ public sealed class TankShip : Sprite
         position.Y = Water.TopPixel.Max(p => p.Value) - Height / 3f;
 		speed = Rand.Float(40,80);
         color = Color.White;
-        bombAmount = 5;
     }
 
     public override Sprite Update(GameTime gameTime)
