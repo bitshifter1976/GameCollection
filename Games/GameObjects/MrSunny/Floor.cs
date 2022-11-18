@@ -20,7 +20,7 @@ public static class Floor
     };
     private static string[] AllowedPatternPairs = new[] { "AA", "AB", "AC", "AD", "AE", "AF", "Ag", "Bg", "Cg", "Dg", "Eg", "Fg", "gg", "gA", "gB", "gC", "gD", "gE", "gF" };
 
-    public static float Height => 100;
+    public static float Height => 400;
     public static float Width => width;
 
     public static List<Sprite> Create(Color color, int distanceToBoss, int level, out List<Line> gaps)

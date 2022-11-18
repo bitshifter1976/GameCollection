@@ -34,8 +34,6 @@ public static class Player
     private static float startFallVelocity;
     private static bool groundCollisionOccured;
     private static Direction shotDirection;
-    private static Vector2 oldPos;
-    private static float delta;
 
     public static PlayerSprite Sprite
     {
@@ -172,20 +170,19 @@ public static class Player
         walkSpeedMax = 4f;
         walkStartSpeed = 0.5f;
         walkSpeed = walkStartSpeed;
-        walkSpeedAcceleration = 0.1f;
+        walkSpeedAcceleration = 0.05f;
         runSpeed = walkSpeedMax;
         runSpeedMax = walkSpeedMax * 1.5f;
-        runSpeedAcceleration = 0.2f;
+        runSpeedAcceleration = 0.05f;
         shotStartTime = 0.2f;
         shotStartTimeElapsed = 0f;
         timeToShoot = false;
         unduckTime = 0.5f;
         unduckElapsedTime = 0f;
-        jumpAccelleration = 15;
+        jumpAccelleration = 10;
         startFallVelocity = 3f;
         worldScale = new Vector2((float)dude.BoundingBox.Height / dude.BoundingBox.Width, 1);
         groundCollisionOccured = false;
-        oldPos = Position;
         //Weapon.Select(WeaponType.WaterBall);
     }
 
@@ -255,6 +252,8 @@ public static class Player
     {
         if (Animation != "Jump")
         {
+            // to avoid collision before we jump, otherwise collision cuts off jump
+            dude.PositionY--;
             dude.VelocityY = -jumpAccelleration;
             dude.Flip("Jump", !directionRight);
             Manager.Sound.PlayEffect("jump");
@@ -448,7 +447,8 @@ public static class Player
 
         if (s is Platform || s is FloorTile || s is FloorTile2)
         {
-            groundCollisionOccured = true;
+            if (Animation == "Fall" || Animation == "Jump")
+                groundCollisionOccured = true;
         }
 
         return removeSprite;
