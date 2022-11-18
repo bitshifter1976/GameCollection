@@ -1,6 +1,8 @@
 ﻿using Framework;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using System;
+using System.Linq;
 
 namespace AxeGameCollection.GameObjects.MrSunny;
 
@@ -29,10 +31,11 @@ public static class Player
     //private static Direction shotDirection;
     private static Vector2 worldScale;
     private static int jumpAccelleration;
-    private static float gravity;
     private static float startFallVelocity;
-    private static bool forceStandAfterCollision;
+    private static bool groundCollisionOccured;
     private static Direction shotDirection;
+    private static Vector2 oldPos;
+    private static float delta;
 
     public static PlayerSprite Sprite
     {
@@ -98,9 +101,18 @@ public static class Player
         }
     }
 
-    public static float Mass
+    public static bool EnergyChanged { get; set; }
+
+    public static bool EnergyLost { get; set; }
+
+    public static bool WaterChanged { get; set; }
+
+    public static int SpriteWidth => dude.SpriteWidth;
+
+    public static Vector2 Position 
     {
-        get { return dude.Mass; }
+        get => dude.Position;
+        set => dude.Position = value;
     }
 
     public static Vector2 WorldScale
@@ -110,49 +122,10 @@ public static class Player
 
     public static Vector2 Gravity
     {
-        get { return new Vector2(0, gravity); }
+        get { return new Vector2(0, dude.Gravity); }
     }
 
-    public static float VelocityX
-    {
-        get { return dude.Velocity.X; }
-        set { dude.Velocity = new Vector2(value, dude.Velocity.Y); }
-    }
-
-    public static float VelocityY
-    {
-        get { return dude.Velocity.Y; }
-        set { dude.Velocity = new Vector2(dude.Velocity.X, value); }
-    }
-
-    public static Vector2 Position
-    {
-        get { return dude.Position; }
-        set { dude.Position = value; }
-    }
-
-    public static float PositionX
-    {
-        get { return dude.Position.X; }
-        set { dude.Position = new Vector2(value, dude.Position.Y); }
-    }
-
-    public static float PositionY
-    {
-        get { return dude.Position.Y; }
-        set { dude.Position = new Vector2(dude.Position.X, value); }
-    }
-
-
-    public static bool EnergyChanged { get; set; }
-
-    public static bool EnergyLost { get; set; }
-
-    public static bool WaterChanged { get; set; }
-
-    public static int SpriteWidth => dude.SpriteWidth;
-
-    public static Sprite Create(float scale)
+    public static void Create(float scale)
     {
         dude = new PlayerSprite(scale);
         var ani = new Animation {Fps = 20};
@@ -184,7 +157,6 @@ public static class Player
         Manager.Sound.LoadEffect("collect");
         Manager.Sound.LoadEffect("autsch");
         Manager.Sound.LoadEffect("fireDelete");
-        return dude;
     }
 
     private static void Init()
@@ -210,12 +182,10 @@ public static class Player
         unduckTime = 0.5f;
         unduckElapsedTime = 0f;
         jumpAccelleration = 15;
-        startFallVelocity = 1f;
-        dude.Mass = 12f;
-        dude.Friction = 0.8f;
+        startFallVelocity = 3f;
         worldScale = new Vector2((float)dude.BoundingBox.Height / dude.BoundingBox.Width, 1);
-        gravity = Physics.Gravity * Mass;
-        forceStandAfterCollision = false;
+        groundCollisionOccured = false;
+        oldPos = Position;
         //Weapon.Select(WeaponType.WaterBall);
     }
 
@@ -285,7 +255,7 @@ public static class Player
     {
         if (Animation != "Jump")
         {
-            VelocityY = -jumpAccelleration;
+            dude.VelocityY = -jumpAccelleration;
             dude.Flip("Jump", !directionRight);
             Manager.Sound.PlayEffect("jump");
             Animation = "Jump";
@@ -332,7 +302,7 @@ public static class Player
             walkSpeed += walkSpeedAcceleration;
             walkSpeed = MathHelper.Clamp(walkSpeed, walkStartSpeed, walkSpeedMax);
         }
-        VelocityX = -walkSpeed;
+        dude.VelocityX = -walkSpeed;
     }
 
     private static void WalkRight()
@@ -348,7 +318,7 @@ public static class Player
             walkSpeed += walkSpeedAcceleration;
             walkSpeed = MathHelper.Clamp(walkSpeed, walkStartSpeed, walkSpeedMax);
         }
-        VelocityX = walkSpeed;
+        dude.VelocityX = walkSpeed;
     }
 
     private static void RunLeft()
@@ -364,7 +334,7 @@ public static class Player
             runSpeed += runSpeedAcceleration;
             runSpeed = MathHelper.Clamp(runSpeed, walkSpeedMax, runSpeedMax);
         }
-        VelocityX = -runSpeed;
+        dude.VelocityX = -runSpeed;
     }
 
     private static void RunRight()
@@ -380,7 +350,7 @@ public static class Player
             runSpeed += runSpeedAcceleration;
             runSpeed = MathHelper.Clamp(runSpeed, walkSpeedMax, runSpeedMax);
         }
-        VelocityX = runSpeed;
+        dude.VelocityX = runSpeed;
     }
 
     private static void Fall()
@@ -400,7 +370,7 @@ public static class Player
             dude.Flip("Fall", true);
             runSpeed += runSpeedAcceleration;
             runSpeed = MathHelper.Clamp(runSpeed, walkSpeedMax, runSpeedMax);
-            VelocityX = -runSpeed;
+            dude.VelocityX = -runSpeed;
         }
         else if (Action.RunRight)
         {
@@ -408,7 +378,7 @@ public static class Player
             dude.Flip("Fall", false);
             runSpeed += runSpeedAcceleration;
             runSpeed = MathHelper.Clamp(runSpeed, walkSpeedMax, runSpeedMax);
-            VelocityX = runSpeed;
+            dude.VelocityX = runSpeed;
         }
         else if (Action.WalkLeft)
         {
@@ -416,7 +386,7 @@ public static class Player
             dude.Flip("Fall", true);
             walkSpeed += walkSpeedAcceleration;
             walkSpeed = MathHelper.Clamp(walkSpeed, walkStartSpeed, walkSpeedMax);
-            VelocityX = -walkSpeed;
+            dude.VelocityX = -walkSpeed;
         }
         else if (Action.WalkRight)
         {
@@ -424,23 +394,26 @@ public static class Player
             dude.Flip("Fall", false);
             walkSpeed += walkSpeedAcceleration;
             walkSpeed = MathHelper.Clamp(walkSpeed, walkStartSpeed, walkSpeedMax);
-            VelocityX = walkSpeed;
+            dude.VelocityX = walkSpeed;
         }
     }
 
     public static void Update(GameTime time)
     {
-        if (PositionY > Manager.DesignHeight)
-            Energy = 0;
-
-        if (VelocityY > startFallVelocity)
-            Fall();
-
-        if (forceStandAfterCollision)
+        dude.Update(time);
+        if (groundCollisionOccured)
         {
             Stand();
-            forceStandAfterCollision = false;
+            groundCollisionOccured = false;
         }
+        else
+        {
+            if (dude.VelocityY > startFallVelocity)
+                Fall();
+        }
+
+        if (dude.PositionY > Manager.DesignHeight)
+            Energy = 0;
 
         if (timeToShoot)
         {
@@ -466,11 +439,7 @@ public static class Player
                 Animation = "Stand";
             }
         }
-    }
 
-    public static void Draw()
-    {
-        dude.Draw();
     }
 
     public static Sprite ReactToCollision(Sprite s)
@@ -479,10 +448,14 @@ public static class Player
 
         if (s is Platform || s is FloorTile || s is FloorTile2)
         {
-            if (Animation == "Fall" || Animation == "Jump")
-                forceStandAfterCollision = true;
+            groundCollisionOccured = true;
         }
 
         return removeSprite;
+    }
+
+    public static void Draw()
+    {
+        dude.Draw();
     }
 }

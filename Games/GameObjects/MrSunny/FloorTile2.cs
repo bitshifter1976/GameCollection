@@ -18,14 +18,16 @@ public class FloorTile2 : Sprite
 
     public override float Height => height;
 
-    public override Rectangle BoundingBox => new Rectangle((int)line.Start.X, (int)line.Start.Y, (int)Width, (int)Height);
-    public override RectangleF BoundingBoxF => new RectangleF(line.Start.X, line.Start.Y, Width, height);
-    public override RotatedRectangle BoundingBoxRotated => boundingBox;
+    public override Rectangle BoundingBox => new((int)line.Start.X, (int)line.Start.Y, (int)Width, (int)Height);
+    public override RectangleF BoundingBoxF => new(line.Start.X, line.Start.Y, Width, height);
+    public override RotatedRectangle BoundingBoxRotated => GetBoundingBox(Position);
 
     public override RotatedRectangle GetBoundingBox(Vector2 pos)
     {
-        var rect = new RotatedRectangle(new RectangleF(pos.X, pos.Y, Width, Height), rotation);
-        rect.Origin = pos;
+        var rect = new RotatedRectangle(new RectangleF(pos.X, pos.Y, Width, Height), rotation)
+        {
+            Origin = pos
+        };
         return rect;
     }
 

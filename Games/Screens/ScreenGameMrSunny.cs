@@ -54,10 +54,10 @@ public class ScreenGameMrSunny : GameScreen
         // how many screens to boss?
         var distanceToBoss = Manager.DesignWidth * (level/4+3);
         // create player
-        SpriteManager.AddImmediate(Player.Create(2));
+        Player.Create(2);
         Player.Position = new Vector2(Manager.DesignWidth / 2 - Player.SpriteWidth / 2f, 200);
         // create floor
-        SpriteManager.AddImmediate(Floor2.Create(distanceToBoss, Color.Black));
+        SpriteManager.AddImmediate(Floor2.Create(distanceToBoss, Color.SandyBrown));
     }
 
     public override void Update(GameTime gameTime, bool otherScreenHasFocus, bool coveredByOtherScreen)
@@ -66,8 +66,6 @@ public class ScreenGameMrSunny : GameScreen
         {
             case GameState.Load:
                 {
-                    Player.Update(gameTime);
-                    SpriteManager.Update(gameTime, false);
                     break;
                 }
             case GameState.Play:
@@ -78,8 +76,8 @@ public class ScreenGameMrSunny : GameScreen
                     }
                     else
                     {
-                        Player.Update(gameTime);
                         SpriteManager.Update(gameTime, true);
+                        Player.Update(gameTime);
                     }
                     break;
                 }
@@ -104,6 +102,7 @@ public class ScreenGameMrSunny : GameScreen
     public override void Draw(GameTime gameTime)
     {
         InitDraw(backColor);
+        Player.Draw();
         SpriteManager.Draw();
         switch (state)
         {

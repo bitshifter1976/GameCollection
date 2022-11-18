@@ -163,28 +163,19 @@ namespace Framework
         public virtual void ScrollX(float speed)
         {
             if (scrolling)
-            {
                 position.X += speed;
-                velocity.X = speed;
-            }
         }
 
         public virtual void ScrollY(float speed)
         {
             if (scrolling)
-            { 
                 position.Y += speed;
-                velocity.Y = speed;
-            }
         }
 
         public virtual void Scroll(Vector2 speed)
         {
             if (scrolling)
-            {
                 position += speed;
-                velocity = speed;
-            }
         }
 
         public virtual void BounceBack(float distance)

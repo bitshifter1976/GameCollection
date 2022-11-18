@@ -15,6 +15,7 @@ public sealed class PlayerSprite : SpriteMultipleAnimated
     private const int boundingBottomOffset = 11;
     private const int boundingHeightOffset = boundingTopOffset + boundingBottomOffset;
     private static bool energyLost;
+    public float Gravity;
 
     public bool EnergyLost
     {
@@ -25,23 +26,45 @@ public sealed class PlayerSprite : SpriteMultipleAnimated
         }
     }
 
-    public Vector2 CenterBEllipse
-    {
-        get { return new Vector2(BoundingBox.Center.X, BoundingBox.Center.Y); }
-    }
-
-    public Ellipse BoundingEllipse
-    {
-        get { return new Ellipse(CenterBEllipse, BoundingBox.Width, BoundingBox.Height); }
-    }
-
-    public override Rectangle BoundingBox => GetBBox(Position);
+    public override Rectangle BoundingBox => new((int)(position.X + boundingXOffset * scale), (int)(position.Y + boundingTopOffset * scale), (int)(Width - boundingXOffset * scale * 2), (int)(Height - boundingHeightOffset * scale));
 
     public int SpriteWidth => spriteWidth;
 
-    public PlayerSprite(float scale) : base("graphic/mrSunny/sunny", Vector2.Zero, 162, 9, 0f, scale, (int)Layer.Player)
+    public float VelocityX
+    {
+        get => velocity.X;
+        set => velocity = new(value, velocity.Y);
+    }
+
+    public float VelocityY
+    {
+        get => velocity.Y;
+        set => velocity = new(velocity.X, value);
+    }
+
+    public float PositionX
+    {
+        get => position.X;
+        set => position = new(value, position.Y);
+    }
+
+    public float PositionY
+    {
+        get => position.Y;
+        set => position = new(position.X, value);
+    }
+    public override Vector2 Center
+    {
+        get => BoundingBoxRotated.Center;
+        set => throw new NotImplementedException();
+    }
+
+    public PlayerSprite(float scale) : base("graphic/mrSunny/sunny", Vector2.Zero, 162, 9, 0f, scale, (int)Layer.Player, CollisionType.BoundingBox)
     {
         collisionType = CollisionType.BoundingBox;
+        mass = 12;
+        friction = 0.8f;
+        Gravity = Mass * Physics.Gravity;
     }
 
     public override void Draw()
@@ -98,6 +121,7 @@ public sealed class PlayerSprite : SpriteMultipleAnimated
 
     public override Sprite Update(GameTime gameTime)
     {
+        // next frame of animation
         base.Update(gameTime);
         //Weapon.Update(gameTime);
         return null;
@@ -113,23 +137,13 @@ public sealed class PlayerSprite : SpriteMultipleAnimated
         //Weapon.Shoot(Center, power, ducking, direction);
     }
 
-    private Rectangle GetBBox(Vector2 pos)
-    {
-        return new Rectangle((int)(pos.X + boundingXOffset * scale), (int)(pos.Y + boundingTopOffset * scale), (int)(Width - boundingXOffset * scale * 2), (int)(Height - boundingHeightOffset * scale));
-    }
-
-    public override RotatedRectangle GetBoundingBox(Vector2 pos)
-    {
-        return new RotatedRectangle(new RectangleF(GetBBox(pos)),rotation);
-    }
-
-    public override Sprite ReactToCollision(Sprite s)
-    {
-        return Player.ReactToCollision(s);
-    }
-
     public Ellipse GetScaledBEllipse(Vector2 worldScale)
     {
-        return new Ellipse(new Vector2(CenterBEllipse.X*worldScale.X,CenterBEllipse.Y*worldScale.Y), BoundingBox.Width * worldScale.X, BoundingBox.Height * worldScale.Y);
+        return new Ellipse(new Vector2(BoundingBox.Center.X * worldScale.X, BoundingBox.Center.Y * worldScale.Y), BoundingBox.Width * worldScale.X, BoundingBox.Height * worldScale.Y);
+    }
+
+    public override Sprite ReactToCollision(Sprite sprite)
+    {
+        return Player.ReactToCollision(sprite);
     }
 }

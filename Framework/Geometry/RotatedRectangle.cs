@@ -75,7 +75,7 @@ namespace Framework
         {
             get
             {
-                var l1 = new Line(UpperLeftCorner.X,UpperLeftCorner.Y,LowerRightCorner.X,LowerRightCorner.Y);
+                var l1 = new Line(UpperLeftCorner.X, UpperLeftCorner.Y, LowerRightCorner.X, LowerRightCorner.Y);
                 var l2 = new Line(LowerLeftCorner.X, LowerLeftCorner.Y, UpperRightCorner.X, UpperRightCorner.Y);
                 l1.IntersectLine(l2, out var intersectionPoint);
                 return intersectionPoint;

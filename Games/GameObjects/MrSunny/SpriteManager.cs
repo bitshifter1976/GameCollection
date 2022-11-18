@@ -61,29 +61,31 @@ public static class SpriteManager
 
     private static List<Sprite> CheckCollision(GameTime time)
     {
-        // test if there is any collision
+        var removeSprites = new List<Sprite>();
+        var collisionSprites = sprites.Where(s => s.CollisionType != CollisionType.None).ToList();
         // player collision
         var ellipse = Player.Sprite.GetScaledBEllipse(Player.WorldScale);
-        var center = Player.Sprite.CenterBEllipse;
+        var center = Player.Sprite.BoundingBoxRotated.Center;
         var position = Player.Sprite.Position;
         var velocity = Player.Sprite.Velocity;
-        var gravity = new Vector2(0, Player.Mass);
+        var gravity = Player.Gravity;
         // collision
-        var removeSprites = ContinuousEllipsoidCollision.Do(Player.Sprite, ellipse, ref center, ref position, ref velocity, gravity, Player.Sprite.Friction, Player.WorldScale, time, sprites.ToList());
+        var remSprites = ContinuousEllipsoidCollision.Do(Player.Sprite, ellipse, ref center, ref position, ref velocity, gravity, Player.Sprite.Friction, Player.WorldScale, time, collisionSprites);
+        removeSprites.AddRange(remSprites);
         // update player
-        var scrollX = center.X - Player.Sprite.CenterBEllipse.X;
+        var scrollX = center.X - Player.Sprite.BoundingBoxRotated.Center.X;
         ScrollX(-scrollX);
-        Player.Position = new Vector2(Player.PositionX, position.Y);
-        //Player.Sprite.CenterBEllipse = new Vector2(Player.Sprite.CenterBEllipse.X, center.Y);
+        Player.Sprite.PositionY = position.Y;
         Player.Sprite.Velocity = velocity;
         // do all other collisions
-        var collisionSprites = sprites.Where(s => s.CollisionType != CollisionType.None).ToList();
         for (var i = 0; i < collisionSprites.Count - 1; i++)
         {
             for (var j = i + 1; j < collisionSprites.Count; j++)
             {
                 if (collisionSprites[i].Collide(collisionSprites[j]))
+                {
                     removeSprites.AddRange(DoCollisionReaction(collisionSprites[i], collisionSprites[j]));
+                }
             }
         }
 
@@ -94,6 +96,10 @@ public static class SpriteManager
     {
         var toRemove = new List<Sprite>();
 
+        if (s1 is PlayerSprite)
+        {
+            toRemove.Add(Player.ReactToCollision(s2));
+        }
         return toRemove;
     }
 
