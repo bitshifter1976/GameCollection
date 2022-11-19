@@ -1,6 +1,7 @@
 ﻿using AxeGameCollection.GameObjects.MrSunny;
 using Framework;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 
 namespace AxeGameCollection.Screens;
@@ -25,7 +26,8 @@ public class ScreenGameMrSunny : GameScreen
         Hud = 100,
     }
 
-    private Color backColor;
+    private Color backgroundColor; 
+    private Texture2D textureBackground;
     private GameState state;
     private readonly int level;
     private float gameEndTime = 0;
@@ -50,7 +52,11 @@ public class ScreenGameMrSunny : GameScreen
 
     private void CreateScene()
     {
-        backColor = Color.CornflowerBlue;
+        // background
+        var alpha = Rand.Int(50, 255);
+        var color = Rand.Color(Color.Orange, Color.Red, Color.CornflowerBlue, Color.AliceBlue, Color.DarkBlue, Color.CadetBlue);
+        backgroundColor = new Color(color.R, color.G, color.B, alpha);
+        textureBackground = Manager.Content.Load<Texture2D>("graphic/mrSunny/background");
         // how many screens to boss?
         var distanceToBoss = Manager.DesignWidth * (level/4+3);
         // create player
@@ -102,7 +108,8 @@ public class ScreenGameMrSunny : GameScreen
 
     public override void Draw(GameTime gameTime)
     {
-        InitDraw(backColor);
+        InitDraw(backgroundColor);
+        Manager.SpriteBatch.Draw(textureBackground, new Rectangle(0, 0, Manager.DesignWidth, Manager.DesignHeight), backgroundColor);
         SpriteManager.Draw();
         Player.Draw();
         switch (state)

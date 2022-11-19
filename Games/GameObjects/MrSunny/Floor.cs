@@ -94,24 +94,16 @@ public static class Floor
         {
             currChar = 'A';
         }
+        else if (Rand.Bool(1, 20 / level + 1))
+        {
+            currChar = 'g';
+        }
         else
         {
-            if (Rand.Bool(1, 20 / level + 1))
-            {
-                currChar = 'g';
-            }
-            else
-            {
-                var allowed = AllowedPatternPairs.Where(p => p[0] == prevChar).Select(p => p[1]).ToList();
-                currChar = allowed[Rand.Int(0, allowed.Count - 1)];
-            }
+            var allowed = AllowedPatternPairs.Where(p => p[0] == prevChar).Select(p => p[1]).ToList();
+            currChar = allowed[Rand.Int(0, allowed.Count - 1)];
         }
 
         return currChar;
-    }
-
-    private static char GetCharFromPattern(string possiblePatterns)
-    {
-        return possiblePatterns[Rand.Int(0, possiblePatterns.Length - 1)];
     }
 }
