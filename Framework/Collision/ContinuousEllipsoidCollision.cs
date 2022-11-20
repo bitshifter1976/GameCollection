@@ -63,10 +63,8 @@ public static class ContinuousEllipsoidCollision
             var distanceToTravel = velocity.Length();
             // What's our destination?
             var destinationPoint = center + velocity;
-
             // ++++++++++++++++++++++++++++++++++ Potential colliders +++++++++++++++++++++++++++++++++++++++++++++++++
-            List<Sprite> potentialColliders;
-            if (!IsCollisionPossible(itself, position, velocity, worldScale, distanceToTravel, ref iteration, sprites, out potentialColliders))
+            if (!IsCollisionPossible(itself, position, velocity, worldScale, distanceToTravel, ref iteration, sprites, out var potentialColliders))
             {
                 center += velocity;
                 position += velocity;
@@ -82,10 +80,14 @@ public static class ContinuousEllipsoidCollision
                 return;
             }
             // ++++++++++++++++++++++++++++++++++ New velocity and position (slide) +++++++++++++++++++++++++++++++++++++
-            var nearestCollVect = CalculateNearestCollVect(velocity, nearestDistance);
-            center += nearestCollVect;
-            position += nearestCollVect;
-            velocity = CalculateVelocity(center, friction, destinationPoint, nearestIntersectionPoint); 
+            //var nearestCollVect = CalculateNearestCollVect(velocity, nearestDistance);
+            //center += nearestCollVect;
+            //position += nearestCollVect;
+            //velocity = CalculateVelocity(center, friction, destinationPoint, nearestIntersectionPoint); 
+            velocity.Y = 0;
+            velocity.X *= friction;
+            center += velocity;
+            position += velocity;
             // ++++++++++++++++++++++++++++++++++ React to collision ++++++++++++++++++++++++++++++++++++++++++++++++++++
             removeSprites.AddRange(collidedSprites.Select(s => itself.ReactToCollision(s)));
         }
@@ -96,7 +98,7 @@ public static class ContinuousEllipsoidCollision
 
         // +++++++++++++++++++++++++++++++++++++++ Slide or bounce +++++++++++++++++++++++++++++++++++++++++++++++++++++++
         // Recursively slide (without adding gravity)
-        CollideWithWorld(itself, removeSprites, ellipse, ref center, ref position, ref velocity, friction, worldScale, ref iteration, sprites);
+        //CollideWithWorld(itself, removeSprites, ellipse, ref center, ref position, ref velocity, friction, worldScale, ref iteration, sprites);
     }
 
     private static bool IsCollisionPossible(

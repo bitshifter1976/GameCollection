@@ -172,17 +172,20 @@ public static class Player
         walkSpeed = walkStartSpeed;
         walkSpeedAcceleration = 0.05f;
         runSpeed = walkSpeedMax;
-        runSpeedMax = walkSpeedMax * 1.5f;
-        runSpeedAcceleration = 0.05f;
+        runSpeedMax = walkSpeedMax * 2f;
+        runSpeedAcceleration = 0.01f;
         shotStartTime = 0.2f;
         shotStartTimeElapsed = 0f;
         timeToShoot = false;
         unduckTime = 0.5f;
         unduckElapsedTime = 0f;
-        jumpAccelleration = 10;
-        startFallVelocity = 3f;
+        jumpAccelleration = 12;
+        startFallVelocity = 2f;
         worldScale = new Vector2((float)dude.BoundingBox.Height / dude.BoundingBox.Width, 1);
         groundCollisionOccured = false;
+        dude.Mass = 12;
+        dude.Friction = 0.8f;
+        dude.Gravity = dude.Mass * Physics.Gravity;
         //Weapon.Select(WeaponType.WaterBall);
     }
 
@@ -306,6 +309,7 @@ public static class Player
 
     private static void WalkRight()
     {
+        Log.Out(LogLevel.Dbg1, "walk right");
         if (Animation != "WalkRight")
         {
             directionRight = true;
@@ -445,7 +449,7 @@ public static class Player
     {
         Sprite removeSprite = null;
 
-        if (s is Platform || s is FloorTile || s is FloorTile2)
+        if (s is Platform || s is FloorTile || s is FloorTile2 || s is FloorTile3)
         {
             if (Animation == "Fall" || Animation == "Jump")
                 groundCollisionOccured = true;

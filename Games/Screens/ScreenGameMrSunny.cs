@@ -38,8 +38,8 @@ public class ScreenGameMrSunny : GameScreen
     {
         state = GameState.Load;
         this.level = level;
-        Manager.Input.CreateHoldingKeys(0.10f, Keys.Up, Keys.Down, Keys.Left, Keys.Right, Keys.W, Keys.S, Keys.A, Keys.D, Keys.F4);
-        Manager.Input.CreateHoldingButtons(0.10f, Buttons.DPadUp, Buttons.DPadDown, Buttons.DPadLeft, Buttons.DPadRight, Buttons.LeftThumbstickUp, Buttons.LeftThumbstickDown, Buttons.LeftThumbstickLeft, Buttons.LeftThumbstickRight);
+        Manager.Input.CreateHoldingKeys(1.5f, Keys.Left, Keys.Right, Keys.A, Keys.D, Keys.F4);
+        //Manager.Input.CreateHoldingButtons(0.10f, Buttons.DPadUp, Buttons.DPadDown, Buttons.DPadLeft, Buttons.DPadRight, Buttons.LeftThumbstickUp, Buttons.LeftThumbstickDown, Buttons.LeftThumbstickLeft, Buttons.LeftThumbstickRight);
     }
 
     public override void LoadContent()
@@ -63,8 +63,8 @@ public class ScreenGameMrSunny : GameScreen
         Player.Create(2);
         Player.Position = new Vector2(Manager.DesignWidth / 2 - Player.SpriteWidth / 2f, 200);
         // create floor
-        SpriteManager.AddImmediate(Floor.Create(Color.SandyBrown, distanceToBoss, level, out var gaps));
-        SpriteManager.Add(new Water());
+        SpriteManager.AddImmediate(Floor3.Create(distanceToBoss, level, out var gaps));
+        //SpriteManager.Add(new Water());
     }
 
     public override void Update(GameTime gameTime, bool otherScreenHasFocus, bool coveredByOtherScreen)

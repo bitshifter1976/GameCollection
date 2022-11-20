@@ -62,9 +62,6 @@ public sealed class PlayerSprite : SpriteMultipleAnimated
     public PlayerSprite(float scale) : base("graphic/mrSunny/sunny", Vector2.Zero, 162, 9, 0f, scale, (int)Layer.Player, CollisionType.BoundingBox)
     {
         collisionType = CollisionType.BoundingBox;
-        mass = 12;
-        friction = 0.8f;
-        Gravity = Mass * Physics.Gravity;
     }
 
     public override void Draw()
