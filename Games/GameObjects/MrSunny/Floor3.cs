@@ -94,8 +94,15 @@ public static class Floor3
     {
         pattern += currChar;
         if (HeightChangers.Contains(currChar) && !Rand.Bool(1, level))
-            heightLevel += Rand.Int(-1, 1);
-        heightLevel = Math.Clamp((int)heightLevel, 1, 3);
+        {
+            if (heightLevel > 2)
+                heightLevel--;
+            else if (heightLevel == 2)
+                heightLevel += Rand.Bool(1, 2) ? 1 : -1;
+            else if (heightLevel < 2)
+                heightLevel++;
+            //heightLevel = Math.Clamp(heightLevel, 1, 3);
+        }
         var floorTileProps = tiles[currChar].Clone();
         floorTileProps.heightLevel = heightLevel;
         var floorTile = new FloorTile3(x, floorTileProps);

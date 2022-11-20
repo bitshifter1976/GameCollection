@@ -172,7 +172,7 @@ public static class Player
         walkSpeed = walkStartSpeed;
         walkSpeedAcceleration = 0.05f;
         runSpeed = walkSpeedMax;
-        runSpeedMax = walkSpeedMax * 2f;
+        runSpeedMax = walkSpeedMax * 3f;
         runSpeedAcceleration = 0.01f;
         shotStartTime = 0.2f;
         shotStartTimeElapsed = 0f;

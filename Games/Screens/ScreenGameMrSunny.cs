@@ -54,7 +54,7 @@ public class ScreenGameMrSunny : GameScreen
     {
         // background
         var alpha = Rand.Int(50, 255);
-        var color = Rand.Color(Color.Orange, Color.Red, Color.CornflowerBlue, Color.AliceBlue, Color.DarkBlue, Color.CadetBlue);
+        var color = Rand.Color(Color.Orange, Color.OrangeRed, Color.CornflowerBlue, Color.CadetBlue, Color.White, Color.RosyBrown, Color.Pink);
         backgroundColor = new Color(color.R, color.G, color.B, alpha);
         textureBackground = Manager.Content.Load<Texture2D>("graphic/mrSunny/background");
         // how many screens to boss?
