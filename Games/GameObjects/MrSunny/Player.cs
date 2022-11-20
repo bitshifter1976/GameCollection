@@ -179,7 +179,7 @@ public static class Player
         timeToShoot = false;
         unduckTime = 0.5f;
         unduckElapsedTime = 0f;
-        jumpAccelleration = 12;
+        jumpAccelleration = 13;
         startFallVelocity = 2f;
         worldScale = new Vector2((float)dude.BoundingBox.Height / dude.BoundingBox.Width, 1);
         groundCollisionOccured = false;

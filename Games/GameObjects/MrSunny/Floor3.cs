@@ -19,6 +19,7 @@ public static class Floor3
     private static string[] AllowedPatternPairs = new[] { "gg", "gA", "gD", "AB", "BB", "BC", "CA", "CD", "Cg", "DA", "DD", "Dg" };
     private static char[] HeightChangers = new[] { 'A', 'D' };
     private static char[] EndTiles = new[] { 'C', 'D', 'g' };
+    private static int MaxGapCount = 3;
 
     public static float MinHeight => 256;
     public static float MaxHeight => 256*3;
@@ -32,23 +33,34 @@ public static class Floor3
         var pattern = "g";
         var currIdx = 0;
         char currChar = char.MinValue, prevChar = char.MinValue;
-        var prevHeightLevel = 2;
+        var heightLevel = 1;
+        var gapCount = 0;
         while (x < distanceToBoss)
         {
             currIdx++;
             prevChar = pattern[currIdx - 1];
-            currChar = GetRandomChar(prevChar, level);
-            var floorTile = CreateFloorTile(level, x, ref pattern, currChar, ref prevHeightLevel);
-            var y = Manager.DesignHeight - floorTile.Height * prevHeightLevel;
+            if (gapCount == MaxGapCount)
+                currChar = 'A';
+            else
+                currChar = GetRandomChar(prevChar, level);
+
+            var floorTile = CreateFloorTile(level, x, ref pattern, currChar, ref heightLevel);
 
             if (currChar == 'g')
+            {
+                gapCount++;
+                var y = Manager.DesignHeight - floorTile.Height * heightLevel;
                 gaps.Add(new Line(x, y, x + floorTile.Width, y));
+            }
             else
+            {
+                gapCount = 0;
                 list.Add(floorTile);
+            }
             x += (int)floorTile.Width;
         }
         if (!EndTiles.Contains(currChar))
-            CreateEnd(level, list, ref x, ref pattern, currChar, ref prevHeightLevel);
+            CreateEnd(level, list, ref x, ref pattern, currChar, ref heightLevel);
 
         width = x;
 
@@ -56,36 +68,37 @@ public static class Floor3
         return list.Select(s => (Sprite)s).ToList();
     }
 
-    private static void CreateEnd(int level, List<FloorTile3> list, ref int x, ref string pattern, char currChar, ref int prevHeightLevel)
+    private static void CreateEnd(int level, List<FloorTile3> list, ref int x, ref string pattern, char currChar, ref int heightLevel)
     {
         if (currChar == 'A')
         {
-            var t1 = CreateFloorTile(level, x, ref pattern, 'B', ref prevHeightLevel);
-            var t2 = CreateFloorTile(level, x, ref pattern, 'C', ref prevHeightLevel);
+            var t1 = CreateFloorTile(level, x, ref pattern, 'B', ref heightLevel);
+            var t2 = CreateFloorTile(level, x, ref pattern, 'C', ref heightLevel);
             list.Add(t1);
             list.Add(t2);
             x += (int)t1.Width;
             x += (int)t2.Width;
+            pattern += 'B';
+            pattern += 'C';
         }
         else if (currChar == 'B')
         {
-            var t = CreateFloorTile(level, x, ref pattern, 'C', ref prevHeightLevel);
+            var t = CreateFloorTile(level, x, ref pattern, 'C', ref heightLevel);
             list.Add(t);
             x += (int)t.Width;
+            pattern += 'C';
         }
     }
 
-    private static FloorTile3 CreateFloorTile(int level, int x, ref string pattern, char currChar, ref int prevHeightLevel)
+    private static FloorTile3 CreateFloorTile(int level, int x, ref string pattern, char currChar, ref int heightLevel)
     {
         pattern += currChar;
-        var heightLevel = prevHeightLevel;
         if (HeightChangers.Contains(currChar) && !Rand.Bool(1, level))
             heightLevel += Rand.Int(-1, 1);
-        heightLevel = Math.Clamp(heightLevel, 1, 3);
+        heightLevel = Math.Clamp((int)heightLevel, 1, 3);
         var floorTileProps = tiles[currChar].Clone();
         floorTileProps.heightLevel = heightLevel;
         var floorTile = new FloorTile3(x, floorTileProps);
-        prevHeightLevel = heightLevel;
         return floorTile;
     }
 
@@ -123,14 +136,11 @@ public static class Floor3
         // create ground
         if (Rand.Bool(1, level))
         {
-            if (allowed.Count > 1 && allowed.Contains('g'))
+            if (allowed.Count > 1)
                 allowed.Remove('g');
+            if (allowed.Count > 1)
+                allowed.Remove('C');
             currChar = allowed[Rand.Int(0, allowed.Count - 1)];
-        }
-        // create gap
-        else if (Rand.Bool(1, 20 / level + 1) && allowed.Contains('g'))
-        {
-            currChar = 'g';
         }
         // anything else
         else
