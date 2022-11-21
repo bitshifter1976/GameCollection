@@ -7,29 +7,26 @@ using System.Linq;
 namespace AxeGameCollection.GameObjects.MrSunny;
 public static class Floor3
 {
-    private static float width;
-    private static readonly Dictionary<char, FloorTileProps3> tiles = new() 
+    public static float width;
+    private static readonly Dictionary<char, FloorTileProps3> tileProps = new() 
     {
-        { 'A', new FloorTileProps3("GroundTopLeft",   FloorTileType.GroundTopLeft,   "GroundBottomLeft",   FloorTileType.GroundBottomLeft,   0) },
-        { 'B', new FloorTileProps3("GroundTopMiddle", FloorTileType.GroundTopMiddle, "GroundBottomMiddle", FloorTileType.GroundBottomMiddle, 0) },
-        { 'C', new FloorTileProps3("GroundTopRight",  FloorTileType.GroundTopRight,  "GroundBottomRight",  FloorTileType.GroundBottomRight,  0) },
-        { 'D', new FloorTileProps3("GroundTopSingle", FloorTileType.GroundTopSingle, "GroundBottomSingle", FloorTileType.GroundBottomSingle, 0) },
-        { 'g', new FloorTileProps3("gap",             FloorTileType.GroundGap,       "gap",                FloorTileType.GroundGap,          0) }
+        { 'A', new FloorTileProps3(FloorTileType.GroundTopLeft,   FloorTileType.GroundBottomLeft,   FloorTileType.PlatformLeft  ) },
+        { 'B', new FloorTileProps3(FloorTileType.GroundTopMiddle, FloorTileType.GroundBottomMiddle, FloorTileType.PlatformMiddle) },
+        { 'C', new FloorTileProps3(FloorTileType.GroundTopRight,  FloorTileType.GroundBottomRight,  FloorTileType.PlatformRight ) },
+        { 'D', new FloorTileProps3(FloorTileType.GroundTopSingle, FloorTileType.GroundBottomSingle, FloorTileType.PlatformSingle) },
+        { 'g', new FloorTileProps3(FloorTileType.gap,             FloorTileType.gap,                FloorTileType.gap           ) }
     };
     private static string[] AllowedPatternPairs = new[] { "gg", "gA", "gD", "AB", "BB", "BC", "CA", "CD", "Cg", "DA", "DD", "Dg" };
     private static char[] HeightChangers = new[] { 'A', 'D' };
     private static char[] EndTiles = new[] { 'C', 'D', 'g' };
-    private static int MaxGapCount = 3;
+    private static int MaxGapCount = 2;
 
-    public static float MinHeight => 256;
-    public static float MaxHeight => 256*3;
     public static float Width => width;
 
-    public static List<Sprite> Create(int distanceToBoss, int level, out List<Line> gaps)
+    public static List<Sprite> Create(int distanceToBoss, int level)
     {
         var list = new List<FloorTile3>();
-        gaps = new List<Line>();
-        var x = 0;
+        var x = 0f;
         var pattern = "g";
         var currIdx = 0;
         char currChar = char.MinValue, prevChar = char.MinValue;
@@ -39,36 +36,30 @@ public static class Floor3
         {
             currIdx++;
             prevChar = pattern[currIdx - 1];
-            if (gapCount == MaxGapCount)
-                currChar = 'A';
-            else
-                currChar = GetRandomChar(prevChar, level);
+            currChar = (gapCount == MaxGapCount ? 'A' : GetRandomChar(prevChar, level));
 
             var floorTile = CreateFloorTile(level, x, ref pattern, currChar, ref heightLevel);
 
             if (currChar == 'g')
             {
                 gapCount++;
-                var y = Manager.DesignHeight - floorTile.Height * heightLevel;
-                gaps.Add(new Line(x, y, x + floorTile.Width, y));
             }
             else
             {
                 gapCount = 0;
                 list.Add(floorTile);
             }
-            x += (int)floorTile.Width;
+            x += floorTile.Width;
         }
+
         if (!EndTiles.Contains(currChar))
             CreateEnd(level, list, ref x, ref pattern, currChar, ref heightLevel);
-
         width = x;
 
-        gaps = CalculateGaps(gaps);
         return list.Select(s => (Sprite)s).ToList();
     }
 
-    private static void CreateEnd(int level, List<FloorTile3> list, ref int x, ref string pattern, char currChar, ref int heightLevel)
+    private static void CreateEnd(int level, List<FloorTile3> list, ref float x, ref string pattern, char currChar, ref int heightLevel)
     {
         if (currChar == 'A')
         {
@@ -90,50 +81,22 @@ public static class Floor3
         }
     }
 
-    private static FloorTile3 CreateFloorTile(int level, int x, ref string pattern, char currChar, ref int heightLevel)
+    private static FloorTile3 CreateFloorTile(int level, float x, ref string pattern, char currChar, ref int heightLevel)
     {
         pattern += currChar;
         if (HeightChangers.Contains(currChar) && !Rand.Bool(1, level))
         {
-            if (heightLevel > 2)
-                heightLevel--;
-            else if (heightLevel == 2)
-                heightLevel += Rand.Bool(1, 2) ? 1 : -1;
-            else if (heightLevel < 2)
+            if (heightLevel == 1)
                 heightLevel++;
-            //heightLevel = Math.Clamp(heightLevel, 1, 3);
+            else if (heightLevel == 2)
+                heightLevel += Rand.Bool(1, 3) ? -1 : 1;
+            else if (heightLevel == 3)
+                heightLevel += Rand.Bool(1, 3) ? 1 : -1;
+            else if (heightLevel == 4)
+                heightLevel--;
+            heightLevel = Math.Clamp(heightLevel, 1, 4);
         }
-        var floorTileProps = tiles[currChar].Clone();
-        floorTileProps.heightLevel = heightLevel;
-        var floorTile = new FloorTile3(x, floorTileProps);
-        return floorTile;
-    }
-
-    private static List<Line> CalculateGaps(List<Line> gaps)
-    {
-        // if we have two gaps next to each other, we want one big gap
-        Vector2 start, end;
-        var gapPairFound = true;
-        while (gapPairFound)
-        {
-            gapPairFound = false;
-            var gaps2 = new List<Line>();
-            for (var i = 0; i < gaps.Count - 1; i++)
-            {
-                start = gaps[i].Start;
-                end = gaps[i].End;
-                if (gaps[i].End == gaps[i + 1].Start)
-                {
-                    gapPairFound = true;
-                    end = gaps[i + 1].End;
-                    i++;
-                }
-                gaps2.Add(new Line(start.X, start.Y, end.X, end.Y));
-            }
-            gaps = gaps2;
-        }
-
-        return gaps;
+        return new FloorTile3(x, heightLevel, tileProps[currChar].Clone());
     }
 
     private static char GetRandomChar(char prevChar, int level)

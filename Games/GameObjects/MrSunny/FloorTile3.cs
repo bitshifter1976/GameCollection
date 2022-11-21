@@ -8,6 +8,7 @@ namespace AxeGameCollection.GameObjects.MrSunny
 {
     public class FloorTile3 : Sprite
     {
+        private int heightLevel;
         private FloorTileProps3 props;
         private Texture2D bottomTexture;
 
@@ -28,7 +29,7 @@ namespace AxeGameCollection.GameObjects.MrSunny
                     case FloorTileType.GroundBottomMiddle:
                     case FloorTileType.GroundBottomRight:
                     case FloorTileType.GroundBottomSingle:
-                    case FloorTileType.GroundGap:
+                    case FloorTileType.gap:
                     default:
                         return 0;
                 }
@@ -50,7 +51,7 @@ namespace AxeGameCollection.GameObjects.MrSunny
                     case FloorTileType.GroundBottomRight:
                     case FloorTileType.GroundTopSingle:
                     case FloorTileType.GroundBottomSingle:
-                    case FloorTileType.GroundGap:
+                    case FloorTileType.gap:
                     default:
                         return 0;
                 }
@@ -72,33 +73,32 @@ namespace AxeGameCollection.GameObjects.MrSunny
                     case FloorTileType.GroundBottomMiddle:
                     case FloorTileType.GroundTopSingle:
                     case FloorTileType.GroundBottomSingle:
-                    case FloorTileType.GroundGap:
+                    case FloorTileType.gap:
                     default:
                         return 0;
                 }
             }
         }
 
-        public override Rectangle BoundingBox => new((int)position.X + LeftOffset, (int)position.Y + TopOffset, (int)Width - RightOffset - LeftOffset, (int)Height*props.heightLevel - TopOffset);
+        public override Rectangle BoundingBox => new((int)position.X + LeftOffset, (int)position.Y + TopOffset, (int)Width - RightOffset - LeftOffset, (int)Height*heightLevel - TopOffset);
 
-        public FloorTile3(float x, FloorTileProps3 props) : base("graphic/mrSunny/" + props.name, Vector2.Zero, 0, 1, (int)Layer.Beach, CollisionType.BoundingBox)
+        public FloorTile3(float x, int heightLevel, FloorTileProps3 props) : base("graphic/mrSunny/" + (heightLevel < 3 ? props.type.ToString() : props.platformType.ToString()), Vector2.Zero, 0, 1, (int)Layer.Beach, CollisionType.BoundingBox)
         {
+            this.heightLevel = heightLevel;
             this.props = props;
-            if (props.heightLevel > 1)
-                bottomTexture = Manager.Content.Load<Texture2D>("graphic/mrSunny/" + props.bottomName);
+            if (heightLevel == 2)
+                bottomTexture = Manager.Content.Load<Texture2D>("graphic/mrSunny/" + props.bottomType.ToString());
             scrolling = true;
-            position = new Vector2(x, Manager.DesignHeight - Height * props.heightLevel);
+            position = new Vector2(x, Manager.DesignHeight - Height * heightLevel);
         }
 
         public override void Draw()
         {
-            if (props.type != FloorTileType.GroundGap)
+            if (props.type != FloorTileType.gap)
             {
                 Manager.SpriteBatch.Draw(texture, position, null, Color.White, 0, Vector2.Zero, scale, SpriteEffects.None, 0);
-                if (props.heightLevel > 1)
+                if (heightLevel == 2)
                     Manager.SpriteBatch.Draw(bottomTexture, new Vector2(position.X, position.Y + Height), null, Color.White, 0, Vector2.Zero, scale, SpriteEffects.None, 0);
-                if (props.heightLevel > 2)
-                    Manager.SpriteBatch.Draw(bottomTexture, new Vector2(position.X, position.Y + Height*2), null, Color.White, 0, Vector2.Zero, scale, SpriteEffects.None, 0);
 
                 if (Manager.Debug)
                 {
@@ -119,29 +119,29 @@ namespace AxeGameCollection.GameObjects.MrSunny
         GroundBottomRight,
         GroundTopSingle,
         GroundBottomSingle,
-        GroundGap
+        PlatformLeft,
+        PlatformMiddle,
+        PlatformRight,
+        PlatformSingle,
+        gap
     }
 
     public class FloorTileProps3
     {
-        public string name;
         public FloorTileType type;
-        public string bottomName;
         public FloorTileType bottomType;
-        public int heightLevel;
+        public FloorTileType platformType;
 
-        public FloorTileProps3(string name, FloorTileType type, string bottomName, FloorTileType bottomType, int heightLevel)
+        public FloorTileProps3(FloorTileType type, FloorTileType bottomType, FloorTileType platformType)
         {
-            this.name = name;
             this.type = type;
-            this.bottomName = bottomName;
             this.bottomType = bottomType;
-            this.heightLevel = heightLevel;
+            this.platformType = platformType;
         }
 
         public FloorTileProps3 Clone()
         {
-            return new FloorTileProps3(name, type, bottomName, bottomType, heightLevel);
+            return new FloorTileProps3(type, bottomType, platformType);
         }
     }
 }
