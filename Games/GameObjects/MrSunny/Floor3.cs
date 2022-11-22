@@ -91,9 +91,9 @@ public static class Floor3
             else if (heightLevel == 2)
                 heightLevel += Rand.Bool(1, 3) ? -1 : 1;
             else if (heightLevel == 3)
-                heightLevel += Rand.Bool(1, 3) ? 1 : -1;
+                heightLevel += Rand.Bool(1, 3) ? 1 : Rand.Int(-2,-1);
             else if (heightLevel == 4)
-                heightLevel--;
+                heightLevel += Rand.Int(-3, -1);
             heightLevel = Math.Clamp(heightLevel, 1, 4);
         }
         return new FloorTile3(x, heightLevel, tileProps[currChar].Clone());
