@@ -159,7 +159,7 @@ public static class Player
 
     private static void Init()
     {
-        maxEnergy = 190;
+        maxEnergy = 100;
         energy = maxEnergy;
         EnergyChanged = false; 
         shotPower = 15;
@@ -453,7 +453,7 @@ public static class Player
     {
         Sprite removeSprite = null;
 
-        if (s is FloorTile || s is Stone)
+        if (s is GroundTile || s is Stone)
         {
             if (Animation == "Fall" || Animation == "Jump")
                 groundCollisionOccured = true;

@@ -6,7 +6,7 @@ using System.Linq;
 
 namespace AxeGameCollection.GameObjects.MrSunny
 {
-    public class FloorTile : Sprite
+    public class GroundTile : Sprite
     {
         private int heightLevel;
         private FloorTileProps3 props;
@@ -83,7 +83,7 @@ namespace AxeGameCollection.GameObjects.MrSunny
 
         public override Rectangle BoundingBox => new((int)position.X + LeftOffset, (int)position.Y + TopOffset, (int)Width - RightOffset - LeftOffset, (int)Height*heightLevel - TopOffset);
 
-        public FloorTile(float x, int heightLevel, FloorTileProps3 props) : base("graphic/mrSunny/" + (heightLevel < 3 ? props.type.ToString() : props.platformType.ToString()), Vector2.Zero, 0, 1, (int)Layer.Beach, CollisionType.BoundingBox)
+        public GroundTile(float x, int heightLevel, FloorTileProps3 props) : base("graphic/mrSunny/" + (heightLevel < 3 ? props.type.ToString() : props.platformType.ToString()), Vector2.Zero, 0, 1, (int)Layer.Beach, CollisionType.BoundingBox)
         {
             this.heightLevel = heightLevel;
             this.props = props;

@@ -58,13 +58,12 @@ public class ScreenGameMrSunny : GameScreen
         backgroundColor = new Color(color.R, color.G, color.B, alpha);
         textureBackground = Manager.Content.Load<Texture2D>("graphic/mrSunny/background");
         // how many screens to boss?
-        var distanceToBoss = Manager.DesignWidth * (level/4+3);
+        var distanceToBoss = Manager.DesignWidth * 2;// (level/4+3);
         // create player
         Player.Create(2);
         Player.Position = new Vector2(Manager.DesignWidth / 2 - Player.SpriteWidth / 2f, 200);
         // create floor
-        SpriteManager.AddImmediate(Floor.Create(distanceToBoss, level));
-        //SpriteManager.Add(new Water());
+        SpriteManager.AddImmediate(Level.Create(distanceToBoss, level));
     }
 
     public override void Update(GameTime gameTime, bool otherScreenHasFocus, bool coveredByOtherScreen)

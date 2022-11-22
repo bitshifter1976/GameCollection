@@ -271,6 +271,30 @@
 /processorParam:TextureFormat=Color
 /build:graphic/mrSunny/background.png
 
+#begin graphic/mrSunny/enemy.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:graphic/mrSunny/enemy.png
+
+#begin graphic/mrSunny/enemySign.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:graphic/mrSunny/enemySign.png
+
 #begin graphic/mrSunny/gap.png
 /importer:TextureImporter
 /processor:TextureProcessor

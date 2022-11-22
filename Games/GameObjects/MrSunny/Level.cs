@@ -5,9 +5,11 @@ using System;
 using System.Linq;
 
 namespace AxeGameCollection.GameObjects.MrSunny;
-public static class Floor
+public static class Level
 {
-    public static float width;
+    private static float width;
+    private static string pattern;
+
     private static readonly Dictionary<char, FloorTileProps3> tileProps = new() 
     {
         { 'A', new FloorTileProps3(FloorTileType.groundTopLeft,   FloorTileType.groundBottomLeft,   FloorTileType.platformLeft  ) },
@@ -16,30 +18,35 @@ public static class Floor
         { 'D', new FloorTileProps3(FloorTileType.groundTopSingle, FloorTileType.groundBottomSingle, FloorTileType.platformSingle) },
         { 'g', new FloorTileProps3(FloorTileType.gap,             FloorTileType.gap,                FloorTileType.gap           ) }
     };
+
     private static string[] AllowedPatternPairs = new[] { "gg", "gA", "gD", "AB", "BB", "BC", "CA", "CD", "Cg", "DA", "DD", "Dg" };
     private static char[] HeightChangers = new[] { 'A', 'D' };
     private static char[] EndTiles = new[] { 'C', 'D', 'g' };
     private static int MaxGapCount = 2;
-
     public static float Width => width;
 
     public static List<Sprite> Create(int distanceToBoss, int level)
     {
-        var list = new List<Sprite>();
+        var sprites = new List<Sprite>();
         var x = 0f;
-        var pattern = "g";
-        var currIdx = 0;
-        char currChar = char.MinValue, prevChar = char.MinValue;
+        char currChar = ' '; 
+        char prevChar;
         var heightLevel = 1;
         var gapCount = 0;
+        // create start floor where player can land
+        var startPattern = "gABBBBB";
+        foreach (var c in startPattern)
+        {
+            var floorTile = CreateFloorTile(level, x, ref pattern, c, ref heightLevel);
+            sprites.Add(floorTile);
+            x += floorTile.Width;
+        }
+        // create random floor and platforms
         while (x < distanceToBoss)
         {
-            currIdx++;
-            prevChar = pattern[currIdx-1];
+            prevChar = pattern.Last();
             currChar = (gapCount == MaxGapCount ? 'A' : GetRandomChar(prevChar, level));
-
             var floorTile = CreateFloorTile(level, x, ref pattern, currChar, ref heightLevel);
-
             if (currChar == 'g')
             {
                 gapCount++;
@@ -47,22 +54,46 @@ public static class Floor
             else
             {
                 gapCount = 0;
-                list.Add(floorTile);
-                CreateItemOnFloor(floorTile, list);
+                sprites.Add(floorTile);
+                RandomlyCreateItemOnFloor(floorTile, sprites);
             }
             x += floorTile.Width;
         }
-
-        if (!EndTiles.Contains(currChar))
-            CreateEnd(level, list, ref x, ref pattern, currChar, ref heightLevel);
+        // create end floor, where enemy boss awaits you
+        var endPattern = string.Empty;
+        if (currChar == 'C' || currChar == 'D' || currChar == 'g')
+            endPattern = "A";
+        endPattern += "BBBBBBC";
+        var idx = 0;
+        foreach (var c in endPattern)
+        {
+            idx++;
+            var floorTile = CreateFloorTile(level, x, ref pattern, c, ref heightLevel);
+            sprites.Add(floorTile);
+            x += (int)floorTile.Width;
+            pattern += c;
+            if (idx == 2)
+            {
+                var sign = new EnemySign(1);
+                sign.Position = new Vector2(floorTile.BoundingBox.X, floorTile.BoundingBox.Y - sign.Height);
+                sprites.Add(sign);
+            }
+            if (idx == 5)
+            {
+                var enemy = new Enemy(1);
+                enemy.Position = new Vector2(floorTile.BoundingBox.X, floorTile.BoundingBox.Y - enemy.Height/2f);
+                sprites.Add(enemy);
+            }
+        }
+        // remember final width
         width = x;
-
-        return list;
+        // return the created sprite list
+        return sprites;
     }
 
-    private static void CreateItemOnFloor(FloorTile floorTile, List<Sprite> list)
+    private static void RandomlyCreateItemOnFloor(GroundTile floorTile, List<Sprite> list)
     {
-        if (Rand.Bool(1,20))
+        if (Rand.Bool(1, 20))
         {
             var stone = new Stone(Rand.Float(0.5f, 1.5f));
             stone.Position = new Vector2(Rand.Float(floorTile.BoundingBox.X, floorTile.BoundingBox.X + floorTile.Width - stone.Width), floorTile.BoundingBox.Y - stone.Height);
@@ -70,29 +101,7 @@ public static class Floor
         }
     }
 
-    private static void CreateEnd(int level, List<Sprite> list, ref float x, ref string pattern, char currChar, ref int heightLevel)
-    {
-        if (currChar == 'A')
-        {
-            var t1 = CreateFloorTile(level, x, ref pattern, 'B', ref heightLevel);
-            var t2 = CreateFloorTile(level, x, ref pattern, 'C', ref heightLevel);
-            list.Add(t1);
-            list.Add(t2);
-            x += (int)t1.Width;
-            x += (int)t2.Width;
-            pattern += 'B';
-            pattern += 'C';
-        }
-        else if (currChar == 'B')
-        {
-            var t = CreateFloorTile(level, x, ref pattern, 'C', ref heightLevel);
-            list.Add(t);
-            x += (int)t.Width;
-            pattern += 'C';
-        }
-    }
-
-    private static FloorTile CreateFloorTile(int level, float x, ref string pattern, char currChar, ref int heightLevel)
+    private static GroundTile CreateFloorTile(int level, float x, ref string pattern, char currChar, ref int heightLevel)
     {
         pattern += currChar;
         if (HeightChangers.Contains(currChar) && !Rand.Bool(1, level))
@@ -107,7 +116,7 @@ public static class Floor
                 heightLevel += Rand.Int(-3, -1);
             heightLevel = Math.Clamp(heightLevel, 1, 4);
         }
-        return new FloorTile(x, heightLevel, tileProps[currChar].Clone());
+        return new GroundTile(x, heightLevel, tileProps[currChar].Clone());
     }
 
     private static char GetRandomChar(char prevChar, int level)
