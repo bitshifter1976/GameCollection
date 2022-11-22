@@ -449,7 +449,7 @@ public static class Player
     {
         Sprite removeSprite = null;
 
-        if (s is Platform || s is FloorTile || s is FloorTile2 || s is FloorTile3)
+        if (s is Platform || s is FloorTile || s is FloorTile2 || s is FloorTile)
         {
             if (Animation == "Fall" || Animation == "Jump")
                 groundCollisionOccured = true;

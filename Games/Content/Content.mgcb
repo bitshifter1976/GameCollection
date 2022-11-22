@@ -271,162 +271,6 @@
 /processorParam:TextureFormat=Color
 /build:graphic/mrSunny/background.png
 
-#begin graphic/mrSunny/beachA.png
-/importer:TextureImporter
-/processor:TextureProcessor
-/processorParam:ColorKeyColor=255,0,255,255
-/processorParam:ColorKeyEnabled=True
-/processorParam:GenerateMipmaps=False
-/processorParam:PremultiplyAlpha=True
-/processorParam:ResizeToPowerOfTwo=False
-/processorParam:MakeSquare=False
-/processorParam:TextureFormat=Color
-/build:graphic/mrSunny/beachA.png
-
-#begin graphic/mrSunny/beachB.png
-/importer:TextureImporter
-/processor:TextureProcessor
-/processorParam:ColorKeyColor=255,0,255,255
-/processorParam:ColorKeyEnabled=True
-/processorParam:GenerateMipmaps=False
-/processorParam:PremultiplyAlpha=True
-/processorParam:ResizeToPowerOfTwo=False
-/processorParam:MakeSquare=False
-/processorParam:TextureFormat=Color
-/build:graphic/mrSunny/beachB.png
-
-#begin graphic/mrSunny/beachC.png
-/importer:TextureImporter
-/processor:TextureProcessor
-/processorParam:ColorKeyColor=255,0,255,255
-/processorParam:ColorKeyEnabled=True
-/processorParam:GenerateMipmaps=False
-/processorParam:PremultiplyAlpha=True
-/processorParam:ResizeToPowerOfTwo=False
-/processorParam:MakeSquare=False
-/processorParam:TextureFormat=Color
-/build:graphic/mrSunny/beachC.png
-
-#begin graphic/mrSunny/beachD.png
-/importer:TextureImporter
-/processor:TextureProcessor
-/processorParam:ColorKeyColor=255,0,255,255
-/processorParam:ColorKeyEnabled=True
-/processorParam:GenerateMipmaps=False
-/processorParam:PremultiplyAlpha=True
-/processorParam:ResizeToPowerOfTwo=False
-/processorParam:MakeSquare=False
-/processorParam:TextureFormat=Color
-/build:graphic/mrSunny/beachD.png
-
-#begin graphic/mrSunny/beachE.png
-/importer:TextureImporter
-/processor:TextureProcessor
-/processorParam:ColorKeyColor=255,0,255,255
-/processorParam:ColorKeyEnabled=True
-/processorParam:GenerateMipmaps=False
-/processorParam:PremultiplyAlpha=True
-/processorParam:ResizeToPowerOfTwo=False
-/processorParam:MakeSquare=False
-/processorParam:TextureFormat=Color
-/build:graphic/mrSunny/beachE.png
-
-#begin graphic/mrSunny/beachF.png
-/importer:TextureImporter
-/processor:TextureProcessor
-/processorParam:ColorKeyColor=255,0,255,255
-/processorParam:ColorKeyEnabled=True
-/processorParam:GenerateMipmaps=False
-/processorParam:PremultiplyAlpha=True
-/processorParam:ResizeToPowerOfTwo=False
-/processorParam:MakeSquare=False
-/processorParam:TextureFormat=Color
-/build:graphic/mrSunny/beachF.png
-
-#begin graphic/mrSunny/beachLeft.png
-/importer:TextureImporter
-/processor:TextureProcessor
-/processorParam:ColorKeyColor=255,0,255,255
-/processorParam:ColorKeyEnabled=True
-/processorParam:GenerateMipmaps=False
-/processorParam:PremultiplyAlpha=True
-/processorParam:ResizeToPowerOfTwo=False
-/processorParam:MakeSquare=False
-/processorParam:TextureFormat=Color
-/build:graphic/mrSunny/beachLeft.png
-
-#begin graphic/mrSunny/beachRightA.png
-/importer:TextureImporter
-/processor:TextureProcessor
-/processorParam:ColorKeyColor=255,0,255,255
-/processorParam:ColorKeyEnabled=True
-/processorParam:GenerateMipmaps=False
-/processorParam:PremultiplyAlpha=True
-/processorParam:ResizeToPowerOfTwo=False
-/processorParam:MakeSquare=False
-/processorParam:TextureFormat=Color
-/build:graphic/mrSunny/beachRightA.png
-
-#begin graphic/mrSunny/beachRightB.png
-/importer:TextureImporter
-/processor:TextureProcessor
-/processorParam:ColorKeyColor=255,0,255,255
-/processorParam:ColorKeyEnabled=True
-/processorParam:GenerateMipmaps=False
-/processorParam:PremultiplyAlpha=True
-/processorParam:ResizeToPowerOfTwo=False
-/processorParam:MakeSquare=False
-/processorParam:TextureFormat=Color
-/build:graphic/mrSunny/beachRightB.png
-
-#begin graphic/mrSunny/beachRightC.png
-/importer:TextureImporter
-/processor:TextureProcessor
-/processorParam:ColorKeyColor=255,0,255,255
-/processorParam:ColorKeyEnabled=True
-/processorParam:GenerateMipmaps=False
-/processorParam:PremultiplyAlpha=True
-/processorParam:ResizeToPowerOfTwo=False
-/processorParam:MakeSquare=False
-/processorParam:TextureFormat=Color
-/build:graphic/mrSunny/beachRightC.png
-
-#begin graphic/mrSunny/beachRightD.png
-/importer:TextureImporter
-/processor:TextureProcessor
-/processorParam:ColorKeyColor=255,0,255,255
-/processorParam:ColorKeyEnabled=True
-/processorParam:GenerateMipmaps=False
-/processorParam:PremultiplyAlpha=True
-/processorParam:ResizeToPowerOfTwo=False
-/processorParam:MakeSquare=False
-/processorParam:TextureFormat=Color
-/build:graphic/mrSunny/beachRightD.png
-
-#begin graphic/mrSunny/beachRightE.png
-/importer:TextureImporter
-/processor:TextureProcessor
-/processorParam:ColorKeyColor=255,0,255,255
-/processorParam:ColorKeyEnabled=True
-/processorParam:GenerateMipmaps=False
-/processorParam:PremultiplyAlpha=True
-/processorParam:ResizeToPowerOfTwo=False
-/processorParam:MakeSquare=False
-/processorParam:TextureFormat=Color
-/build:graphic/mrSunny/beachRightE.png
-
-#begin graphic/mrSunny/beachRightF.png
-/importer:TextureImporter
-/processor:TextureProcessor
-/processorParam:ColorKeyColor=255,0,255,255
-/processorParam:ColorKeyEnabled=True
-/processorParam:GenerateMipmaps=False
-/processorParam:PremultiplyAlpha=True
-/processorParam:ResizeToPowerOfTwo=False
-/processorParam:MakeSquare=False
-/processorParam:TextureFormat=Color
-/build:graphic/mrSunny/beachRightF.png
-
 #begin graphic/mrSunny/gap.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -439,7 +283,7 @@
 /processorParam:TextureFormat=Color
 /build:graphic/mrSunny/gap.png
 
-#begin graphic/mrSunny/GroundBottomLeft.png
+#begin graphic/mrSunny/groundBottomLeft.png
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -449,9 +293,9 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:graphic/mrSunny/GroundBottomLeft.png
+/build:graphic/mrSunny/groundBottomLeft.png
 
-#begin graphic/mrSunny/GroundBottomMiddle.png
+#begin graphic/mrSunny/groundBottomMiddle.png
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -461,9 +305,9 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:graphic/mrSunny/GroundBottomMiddle.png
+/build:graphic/mrSunny/groundBottomMiddle.png
 
-#begin graphic/mrSunny/GroundBottomRight.png
+#begin graphic/mrSunny/groundBottomRight.png
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -473,9 +317,9 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:graphic/mrSunny/GroundBottomRight.png
+/build:graphic/mrSunny/groundBottomRight.png
 
-#begin graphic/mrSunny/GroundBottomSingle.png
+#begin graphic/mrSunny/groundBottomSingle.png
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -485,9 +329,9 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:graphic/mrSunny/GroundBottomSingle.png
+/build:graphic/mrSunny/groundBottomSingle.png
 
-#begin graphic/mrSunny/GroundTopLeft.png
+#begin graphic/mrSunny/groundTopLeft.png
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -497,9 +341,9 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:graphic/mrSunny/GroundTopLeft.png
+/build:graphic/mrSunny/groundTopLeft.png
 
-#begin graphic/mrSunny/GroundTopMiddle.png
+#begin graphic/mrSunny/groundTopMiddle.png
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -509,9 +353,9 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:graphic/mrSunny/GroundTopMiddle.png
+/build:graphic/mrSunny/groundTopMiddle.png
 
-#begin graphic/mrSunny/GroundTopRight.png
+#begin graphic/mrSunny/groundTopRight.png
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -521,9 +365,9 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:graphic/mrSunny/GroundTopRight.png
+/build:graphic/mrSunny/groundTopRight.png
 
-#begin graphic/mrSunny/GroundTopSingle.png
+#begin graphic/mrSunny/groundTopSingle.png
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -533,9 +377,9 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:graphic/mrSunny/GroundTopSingle.png
+/build:graphic/mrSunny/groundTopSingle.png
 
-#begin graphic/mrSunny/platform.png
+#begin graphic/mrSunny/platformLeft.png
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -545,9 +389,9 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:graphic/mrSunny/platform.png
+/build:graphic/mrSunny/platformLeft.png
 
-#begin graphic/mrSunny/PlatformLeft.png
+#begin graphic/mrSunny/platformMiddle.png
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -557,9 +401,9 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:graphic/mrSunny/PlatformLeft.png
+/build:graphic/mrSunny/platformMiddle.png
 
-#begin graphic/mrSunny/PlatformMiddle.png
+#begin graphic/mrSunny/platformRight.png
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -569,9 +413,9 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:graphic/mrSunny/PlatformMiddle.png
+/build:graphic/mrSunny/platformRight.png
 
-#begin graphic/mrSunny/PlatformRight.png
+#begin graphic/mrSunny/platformSingle.png
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -581,19 +425,7 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:graphic/mrSunny/PlatformRight.png
-
-#begin graphic/mrSunny/PlatformSingle.png
-/importer:TextureImporter
-/processor:TextureProcessor
-/processorParam:ColorKeyColor=255,0,255,255
-/processorParam:ColorKeyEnabled=True
-/processorParam:GenerateMipmaps=False
-/processorParam:PremultiplyAlpha=True
-/processorParam:ResizeToPowerOfTwo=False
-/processorParam:MakeSquare=False
-/processorParam:TextureFormat=Color
-/build:graphic/mrSunny/PlatformSingle.png
+/build:graphic/mrSunny/platformSingle.png
 
 #begin graphic/mrSunny/sunny.png
 /importer:TextureImporter

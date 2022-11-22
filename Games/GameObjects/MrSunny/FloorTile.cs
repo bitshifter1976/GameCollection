@@ -8,70 +8,97 @@ namespace AxeGameCollection.GameObjects.MrSunny
 {
     public class FloorTile : Sprite
     {
-        public FloorTileProps Tile;
-        private Texture2D left;
-        private Texture2D right;
-        public new float Width;
-        public new float Height;
+        private int heightLevel;
+        private FloorTileProps3 props;
+        private Texture2D bottomTexture;
 
-        public int TopOffset => 50;
+        public override float Width => 256;
 
-        public override Rectangle BoundingBox 
+        public int TopOffset
         {
             get
             {
-                if (LeftEnd && RightEnd)
-                    return new((int)position.X - 10, (int)position.Y + TopOffset, (int)Width + 20, (int)Height - TopOffset);
-                if (LeftEnd)
-                    return new((int)position.X - 10, (int)position.Y + TopOffset, (int)Width + 10, (int)Height - TopOffset);
-                if (RightEnd)
-                    return new((int)position.X, (int)position.Y + TopOffset, (int)Width + 10, (int)Height - TopOffset);
-
-                return new((int)position.X, (int)position.Y + TopOffset, (int)Width, (int)Height - TopOffset);
+                switch (props.type)
+                {
+                    case FloorTileType.groundTopLeft:
+                    case FloorTileType.groundTopMiddle:
+                    case FloorTileType.groundTopRight:
+                    case FloorTileType.groundTopSingle:
+                        return 120;
+                    case FloorTileType.groundBottomLeft:
+                    case FloorTileType.groundBottomMiddle:
+                    case FloorTileType.groundBottomRight:
+                    case FloorTileType.groundBottomSingle:
+                    case FloorTileType.gap:
+                    default:
+                        return 0;
+                }
             }
         }
 
-        public bool LeftEnd
+        public int LeftOffset
         {
-            get => Tile.leftEnd;
-            set
+            get
             {
-                Tile.leftEnd = value;
-                if (value)
-                    left = Manager.Content.Load<Texture2D>("graphic/mrSunny/" + Tile.left);
+                switch (props.type)
+                {
+                    case FloorTileType.groundTopLeft:
+                    case FloorTileType.groundBottomLeft:
+                        return 110;
+                    case FloorTileType.groundTopRight:
+                    case FloorTileType.groundTopMiddle:
+                    case FloorTileType.groundBottomMiddle:
+                    case FloorTileType.groundBottomRight:
+                    case FloorTileType.groundTopSingle:
+                    case FloorTileType.groundBottomSingle:
+                    case FloorTileType.gap:
+                    default:
+                        return 0;
+                }
             }
         }
 
-        public bool RightEnd 
+        public int RightOffset
         {
-            get => Tile.rightEnd;
-            set
+            get
             {
-                Tile.rightEnd = value;
-                if (value)                   
-                    right = Manager.Content.Load<Texture2D>("graphic/mrSunny/" + Tile.right);
-            } 
+                switch (props.type)
+                {
+                    case FloorTileType.groundTopRight:
+                    case FloorTileType.groundBottomRight:
+                        return 110;
+                    case FloorTileType.groundTopLeft:
+                    case FloorTileType.groundBottomLeft:
+                    case FloorTileType.groundTopMiddle:
+                    case FloorTileType.groundBottomMiddle:
+                    case FloorTileType.groundTopSingle:
+                    case FloorTileType.groundBottomSingle:
+                    case FloorTileType.gap:
+                    default:
+                        return 0;
+                }
+            }
         }
 
-        public FloorTile(Vector2 position, FloorTileProps tile) : base("graphic/mrSunny/" + tile.name, position, 0, 1, (int)Layer.Beach, CollisionType.BoundingBox)
+        public override Rectangle BoundingBox => new((int)position.X + LeftOffset, (int)position.Y + TopOffset, (int)Width - RightOffset - LeftOffset, (int)Height*heightLevel - TopOffset);
+
+        public FloorTile(float x, int heightLevel, FloorTileProps3 props) : base("graphic/mrSunny/" + (heightLevel < 3 ? props.type.ToString() : props.platformType.ToString()), Vector2.Zero, 0, 1, (int)Layer.Beach, CollisionType.BoundingBox)
         {
-            Tile = tile;
+            this.heightLevel = heightLevel;
+            this.props = props;
+            if (heightLevel == 2)
+                bottomTexture = Manager.Content.Load<Texture2D>("graphic/mrSunny/" + props.bottomType.ToString());
             scrolling = true;
-            Width = tile.width;
-            Height = Floor.Height;
-            LeftEnd = tile.leftEnd;
-            RightEnd = tile.rightEnd;
+            position = new Vector2(x, Manager.DesignHeight - Height * heightLevel);
         }
 
         public override void Draw()
         {
-            if (Tile.name != "gap")
+            if (props.type != FloorTileType.gap)
             {
-                Manager.SpriteBatch.Draw(texture, new Rectangle((int)position.X, (int)position.Y, (int)Width, (int)Height), null, Tile.color);
-                if (LeftEnd)
-                    Manager.SpriteBatch.Draw(left, new Rectangle((int)(position.X - 10), (int)Position.Y, 10, (int)Height), null, Tile.color);
-                if (RightEnd)
-                    Manager.SpriteBatch.Draw(right, new Rectangle((int)(position.X + Width), (int)position.Y, 10, (int)Height), null, Tile.color);
+                Manager.SpriteBatch.Draw(texture, position, null, Color.White, 0, Vector2.Zero, scale, SpriteEffects.None, 0);
+                if (heightLevel == 2)
+                    Manager.SpriteBatch.Draw(bottomTexture, new Vector2(position.X, position.Y + Height), null, Color.White, 0, Vector2.Zero, scale, SpriteEffects.None, 0);
 
                 if (Manager.Debug)
                 {
@@ -82,32 +109,39 @@ namespace AxeGameCollection.GameObjects.MrSunny
         }
     }
 
-    public class FloorTileProps
+    public enum FloorTileType
     {
-        public string name;
-        public string left;
-        public string right;
-        public int width;
-        public Color color;
-        public bool leftEnd = false;
-        public bool rightEnd = false;
+        groundTopLeft,
+        groundTopMiddle,
+        groundTopRight,
+        groundBottomLeft,
+        groundBottomMiddle,
+        groundBottomRight,
+        groundTopSingle,
+        groundBottomSingle,
+        platformLeft,
+        platformMiddle,
+        platformRight,
+        platformSingle,
+        gap
+    }
 
-        public FloorTileProps(string name, string left, string right, int width)
+    public class FloorTileProps3
+    {
+        public FloorTileType type;
+        public FloorTileType bottomType;
+        public FloorTileType platformType;
+
+        public FloorTileProps3(FloorTileType type, FloorTileType bottomType, FloorTileType platformType)
         {
-            this.name = name;
-            this.left = left;
-            this.right = right;
-            this.width = width;
-            this.color = Color.White;
+            this.type = type;
+            this.bottomType = bottomType;
+            this.platformType = platformType;
         }
 
-        public FloorTileProps Clone()
+        public FloorTileProps3 Clone()
         {
-            var t = new FloorTileProps(this.name, this.left, this.right, this.width);
-            t.leftEnd = this.leftEnd;
-            t.rightEnd = this.rightEnd;
-            t.color = this.color;
-            return t;
+            return new FloorTileProps3(type, bottomType, platformType);
         }
     }
 }

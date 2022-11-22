@@ -7,100 +7,114 @@ using System.Linq;
 namespace AxeGameCollection.GameObjects.MrSunny;
 public static class Floor
 {
-    private static float width;
-    private static readonly Dictionary<char, FloorTileProps> tiles = new() 
+    public static float width;
+    private static readonly Dictionary<char, FloorTileProps3> tileProps = new() 
     {
-        { 'A', new FloorTileProps("beachA", "beachLeft", "beachRightA", 400) },
-        { 'B', new FloorTileProps("beachB", "beachLeft", "beachRightB", 300) },
-        { 'C', new FloorTileProps("beachC", "beachLeft", "beachRightC", 200) },
-        { 'D', new FloorTileProps("beachD", "beachLeft", "beachRightD", 100) },
-        { 'E', new FloorTileProps("beachE", "beachLeft", "beachRightE", 50)  },
-        { 'F', new FloorTileProps("beachF", "beachLeft", "beachRightF", 25)  },
-        { 'g', new FloorTileProps("gap",    "gap",       "gap",         50)  }
+        { 'A', new FloorTileProps3(FloorTileType.groundTopLeft,   FloorTileType.groundBottomLeft,   FloorTileType.platformLeft  ) },
+        { 'B', new FloorTileProps3(FloorTileType.groundTopMiddle, FloorTileType.groundBottomMiddle, FloorTileType.platformMiddle) },
+        { 'C', new FloorTileProps3(FloorTileType.groundTopRight,  FloorTileType.groundBottomRight,  FloorTileType.platformRight ) },
+        { 'D', new FloorTileProps3(FloorTileType.groundTopSingle, FloorTileType.groundBottomSingle, FloorTileType.platformSingle) },
+        { 'g', new FloorTileProps3(FloorTileType.gap,             FloorTileType.gap,                FloorTileType.gap           ) }
     };
-    private static string[] AllowedPatternPairs = new[] { "AA", "AB", "AC", "AD", "AE", "AF", "Ag", "Bg", "Cg", "Dg", "Eg", "Fg", "gg", "gA", "gB", "gC", "gD", "gE", "gF" };
+    private static string[] AllowedPatternPairs = new[] { "gg", "gA", "gD", "AB", "BB", "BC", "CA", "CD", "Cg", "DA", "DD", "Dg" };
+    private static char[] HeightChangers = new[] { 'A', 'D' };
+    private static char[] EndTiles = new[] { 'C', 'D', 'g' };
+    private static int MaxGapCount = 2;
 
-    public static float Height => 400;
     public static float Width => width;
 
-    public static List<Sprite> Create(Color color, int distanceToBoss, int level, out List<Line> gaps)
+    public static List<Sprite> Create(int distanceToBoss, int level)
     {
         var list = new List<FloorTile>();
-        gaps = new List<Line>();
-        var xNext = 0;
-        var pattern = string.Empty;
-        var currIdx = -1;
-        char currChar, prevChar = 'g';
-        FloorTile floorTile;
-        while (xNext < distanceToBoss)
+        var x = 0f;
+        var pattern = "g";
+        var currIdx = 0;
+        char currChar = char.MinValue, prevChar = char.MinValue;
+        var heightLevel = 1;
+        var gapCount = 0;
+        while (x < distanceToBoss)
         {
             currIdx++;
-            if (currIdx > 0)
-                prevChar = pattern[currIdx - 1];
-            currChar = GetRandomChar(prevChar, level);
-            pattern += currChar;
+            prevChar = pattern[currIdx-1];
+            currChar = (gapCount == MaxGapCount ? 'A' : GetRandomChar(prevChar, level));
 
-            var pos = new Vector2(xNext, Manager.DesignHeight - Height);
-            var floorTileProps = tiles[currChar].Clone();
-            floorTileProps.color = color;
-            floorTile = new FloorTile(pos, floorTileProps);
-            xNext += (int)floorTile.Width;
+            var floorTile = CreateFloorTile(level, x, ref pattern, currChar, ref heightLevel);
 
             if (currChar == 'g')
             {
-                gaps.Add(new Line(pos.X, pos.Y, xNext, pos.Y));
-                if (prevChar != 'g' && list.Count > 0)
-                    list[list.Count-1].RightEnd = true;
+                gapCount++;
             }
             else
             {
-                if (prevChar == 'g')
-                    floorTile.LeftEnd = true;
-                if (xNext >= distanceToBoss)
-                    floorTile.RightEnd = true;
+                gapCount = 0;
                 list.Add(floorTile);
             }
+            x += floorTile.Width;
         }
-        width = xNext;
-        // if we have two gaps next to each other, we want one big gap
-        var gaps2 = new List<Line>();
-        Vector2 start, end;
-        var gapPairFound = true;
-        while (gapPairFound)
-        {
-            gapPairFound = false;
-            gaps2 = new List<Line>();
-            for (var i = 0; i < gaps.Count - 1; i++)
-            {
-                start = gaps[i].Start;
-                end = gaps[i].End;
-                if (gaps[i].End == gaps[i + 1].Start)
-                {
-                    gapPairFound = true;
-                    end = gaps[i + 1].End;
-                    i++;
-                }
-                gaps2.Add(new Line(start.X, start.Y, end.X, end.Y));
-            }
-            gaps = gaps2;
-        }
+
+        if (!EndTiles.Contains(currChar))
+            CreateEnd(level, list, ref x, ref pattern, currChar, ref heightLevel);
+        width = x;
+
         return list.Select(s => (Sprite)s).ToList();
+    }
+
+    private static void CreateEnd(int level, List<FloorTile> list, ref float x, ref string pattern, char currChar, ref int heightLevel)
+    {
+        if (currChar == 'A')
+        {
+            var t1 = CreateFloorTile(level, x, ref pattern, 'B', ref heightLevel);
+            var t2 = CreateFloorTile(level, x, ref pattern, 'C', ref heightLevel);
+            list.Add(t1);
+            list.Add(t2);
+            x += (int)t1.Width;
+            x += (int)t2.Width;
+            pattern += 'B';
+            pattern += 'C';
+        }
+        else if (currChar == 'B')
+        {
+            var t = CreateFloorTile(level, x, ref pattern, 'C', ref heightLevel);
+            list.Add(t);
+            x += (int)t.Width;
+            pattern += 'C';
+        }
+    }
+
+    private static FloorTile CreateFloorTile(int level, float x, ref string pattern, char currChar, ref int heightLevel)
+    {
+        pattern += currChar;
+        if (HeightChangers.Contains(currChar) && !Rand.Bool(1, level))
+        {
+            if (heightLevel == 1)
+                heightLevel++;
+            else if (heightLevel == 2)
+                heightLevel += Rand.Bool(1, 3) ? -1 : 1;
+            else if (heightLevel == 3)
+                heightLevel += Rand.Bool(1, 3) ? 1 : Rand.Int(-2,-1);
+            else if (heightLevel == 4)
+                heightLevel += Rand.Int(-3, -1);
+            heightLevel = Math.Clamp(heightLevel, 1, 4);
+        }
+        return new FloorTile(x, heightLevel, tileProps[currChar].Clone());
     }
 
     private static char GetRandomChar(char prevChar, int level)
     {
         char currChar;
+        var allowed = AllowedPatternPairs.Where(p => p[0] == prevChar).Select(p => p[1]).ToList();
+        // create ground
         if (Rand.Bool(1, level))
         {
-            currChar = 'A';
+            if (allowed.Count > 1)
+                allowed.Remove('g');
+            if (allowed.Count > 1)
+                allowed.Remove('C');
+            currChar = allowed[Rand.Int(0, allowed.Count - 1)];
         }
-        else if (Rand.Bool(1, 20 / level + 1))
-        {
-            currChar = 'g';
-        }
+        // anything else
         else
         {
-            var allowed = AllowedPatternPairs.Where(p => p[0] == prevChar).Select(p => p[1]).ToList();
             currChar = allowed[Rand.Int(0, allowed.Count - 1)];
         }
 

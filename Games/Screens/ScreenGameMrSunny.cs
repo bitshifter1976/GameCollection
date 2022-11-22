@@ -63,7 +63,7 @@ public class ScreenGameMrSunny : GameScreen
         Player.Create(2);
         Player.Position = new Vector2(Manager.DesignWidth / 2 - Player.SpriteWidth / 2f, 200);
         // create floor
-        SpriteManager.AddImmediate(Floor3.Create(distanceToBoss, level));
+        SpriteManager.AddImmediate(Floor.Create(distanceToBoss, level));
         //SpriteManager.Add(new Water());
     }
 
