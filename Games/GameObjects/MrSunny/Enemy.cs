@@ -13,4 +13,9 @@ public class Enemy : Sprite
     {
         scrolling = true;
     }
+
+    public override RotatedRectangle GetBoundingBox(Vector2 pos)
+    {
+        return new RotatedRectangle(new RectangleF(pos.X - Width / 2f, pos.Y - Height / 2f, Width, Height), rotation);
+    }
 }

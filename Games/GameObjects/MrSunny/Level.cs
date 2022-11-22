@@ -93,7 +93,7 @@ public static class Level
 
     private static void RandomlyCreateItemOnFloor(GroundTile floorTile, List<Sprite> list)
     {
-        if (Rand.Bool(1, 20))
+        if (Rand.Bool(1, 10))
         {
             var stone = new Stone(Rand.Float(0.5f, 1.5f));
             stone.Position = new Vector2(Rand.Float(floorTile.BoundingBox.X, floorTile.BoundingBox.X + floorTile.Width - stone.Width), floorTile.BoundingBox.Y - stone.Height);

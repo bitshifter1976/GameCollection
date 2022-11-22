@@ -453,10 +453,12 @@ public static class Player
     {
         Sprite removeSprite = null;
 
-        if (s is GroundTile || s is Stone)
+        if (s is GroundTile || s is Stone || s is Enemy)
         {
             if (Animation == "Fall" || Animation == "Jump")
                 groundCollisionOccured = true;
+            if (s is Stone || s is Enemy)
+                SpriteManager.ScrollX(dude.VelocityX);
         }
 
         return removeSprite;

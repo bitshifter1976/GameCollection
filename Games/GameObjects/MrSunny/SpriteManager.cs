@@ -83,9 +83,7 @@ public static class SpriteManager
             for (var j = i + 1; j < collisionSprites.Count; j++)
             {
                 if (collisionSprites[i].Collide(collisionSprites[j]))
-                {
                     removeSprites.AddRange(DoCollisionReaction(collisionSprites[i], collisionSprites[j]));
-                }
             }
         }
 
@@ -95,11 +93,6 @@ public static class SpriteManager
     private static List<Sprite> DoCollisionReaction(Sprite s1, Sprite s2)
     {
         var toRemove = new List<Sprite>();
-
-        if (s1 is PlayerSprite)
-        {
-            toRemove.Add(Player.ReactToCollision(s2));
-        }
         return toRemove;
     }
 
