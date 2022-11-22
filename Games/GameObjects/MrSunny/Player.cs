@@ -457,6 +457,7 @@ public static class Player
         {
             if (Animation == "Fall" || Animation == "Jump")
                 groundCollisionOccured = true;
+
             if (s is Stone || s is Enemy)
                 SpriteManager.ScrollX(dude.VelocityX);
         }
