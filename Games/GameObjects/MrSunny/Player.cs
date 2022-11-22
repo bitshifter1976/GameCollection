@@ -298,6 +298,8 @@ public static class Player
             directionRight = false;
             Animation = "WalkLeft";
             walkSpeed = walkStartSpeed;
+            // to avoid collision before we jump, otherwise collision cuts off jump
+            dude.PositionX--;
         }
         else
         {
@@ -315,6 +317,8 @@ public static class Player
             directionRight = true;
             Animation = "WalkRight";
             walkSpeed = walkStartSpeed;
+            // to avoid collision before we jump, otherwise collision cuts off jump
+            dude.PositionX++;
         }
         else
         {
@@ -449,7 +453,7 @@ public static class Player
     {
         Sprite removeSprite = null;
 
-        if (s is Platform || s is FloorTile || s is FloorTile2 || s is FloorTile)
+        if (s is FloorTile || s is Stone)
         {
             if (Animation == "Fall" || Animation == "Jump")
                 groundCollisionOccured = true;

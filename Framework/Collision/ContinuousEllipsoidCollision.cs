@@ -80,14 +80,14 @@ public static class ContinuousEllipsoidCollision
                 return;
             }
             // ++++++++++++++++++++++++++++++++++ New velocity and position (slide) +++++++++++++++++++++++++++++++++++++
-            //var nearestCollVect = CalculateNearestCollVect(velocity, nearestDistance);
-            //center += nearestCollVect;
-            //position += nearestCollVect;
-            //velocity = CalculateVelocity(center, friction, destinationPoint, nearestIntersectionPoint); 
-            velocity.Y = 0;
-            velocity.X *= friction;
-            center += velocity;
-            position += velocity;
+            var nearestCollVect = CalculateNearestCollVect(velocity, nearestDistance);
+            center += nearestCollVect;
+            position += nearestCollVect;
+            velocity = CalculateVelocity(center, friction, destinationPoint, nearestIntersectionPoint); 
+            //velocity.Y = 0;
+            //velocity.X *= friction;
+            //center += velocity;
+            //position += velocity;
             // ++++++++++++++++++++++++++++++++++ React to collision ++++++++++++++++++++++++++++++++++++++++++++++++++++
             removeSprites.AddRange(collidedSprites.Select(s => itself.ReactToCollision(s)));
         }
@@ -98,7 +98,7 @@ public static class ContinuousEllipsoidCollision
 
         // +++++++++++++++++++++++++++++++++++++++ Slide or bounce +++++++++++++++++++++++++++++++++++++++++++++++++++++++
         // Recursively slide (without adding gravity)
-        //CollideWithWorld(itself, removeSprites, ellipse, ref center, ref position, ref velocity, friction, worldScale, ref iteration, sprites);
+        CollideWithWorld(itself, removeSprites, ellipse, ref center, ref position, ref velocity, friction, worldScale, ref iteration, sprites);
     }
 
     private static bool IsCollisionPossible(
@@ -371,9 +371,9 @@ public static class ContinuousEllipsoidCollision
     {
         // calculate the nearest collision
         // Vector V = velocity with length set to (nearestDistance - EPSILON);
-        Vector2 moveToNearestCollVect = velocity;
+        var moveToNearestCollVect = velocity;
         moveToNearestCollVect.Normalize();
-        moveToNearestCollVect *= nearestDistance - 0.5f;
+        moveToNearestCollVect *= nearestDistance - float.Epsilon;
         return moveToNearestCollVect;
     }
 

@@ -25,7 +25,7 @@ public static class Floor
 
     public static List<Sprite> Create(int distanceToBoss, int level)
     {
-        var list = new List<FloorTile>();
+        var list = new List<Sprite>();
         var x = 0f;
         var pattern = "g";
         var currIdx = 0;
@@ -48,6 +48,7 @@ public static class Floor
             {
                 gapCount = 0;
                 list.Add(floorTile);
+                CreateItemOnFloor(floorTile, list);
             }
             x += floorTile.Width;
         }
@@ -56,10 +57,20 @@ public static class Floor
             CreateEnd(level, list, ref x, ref pattern, currChar, ref heightLevel);
         width = x;
 
-        return list.Select(s => (Sprite)s).ToList();
+        return list;
     }
 
-    private static void CreateEnd(int level, List<FloorTile> list, ref float x, ref string pattern, char currChar, ref int heightLevel)
+    private static void CreateItemOnFloor(FloorTile floorTile, List<Sprite> list)
+    {
+        if (Rand.Bool(1,20))
+        {
+            var stone = new Stone(Rand.Float(0.5f, 1.5f));
+            stone.Position = new Vector2(Rand.Float(floorTile.BoundingBox.X, floorTile.BoundingBox.X + floorTile.Width - stone.Width), floorTile.BoundingBox.Y - stone.Height);
+            list.Add(stone);
+        }
+    }
+
+    private static void CreateEnd(int level, List<Sprite> list, ref float x, ref string pattern, char currChar, ref int heightLevel)
     {
         if (currChar == 'A')
         {

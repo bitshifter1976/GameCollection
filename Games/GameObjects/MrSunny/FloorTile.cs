@@ -13,6 +13,7 @@ namespace AxeGameCollection.GameObjects.MrSunny
         private Texture2D bottomTexture;
 
         public override float Width => 256;
+        public override float Height => 256;
 
         public int TopOffset
         {
