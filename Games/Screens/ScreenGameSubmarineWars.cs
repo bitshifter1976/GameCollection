@@ -29,8 +29,8 @@ public class ScreenGameSubmarineWars : GameScreen
     private Color backColor;
     private GameState state;
     private readonly int level;
-    private Submarine submarine;
-    private Hud hud;
+        private Submarine submarine;
+        private Hud hud;
     private float gameEndTime = 0;
     private const float GameEndTimeout = 2;
     private bool acceptEndInput;

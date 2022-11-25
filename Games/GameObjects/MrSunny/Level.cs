@@ -74,13 +74,13 @@ public static class Level
             pattern += c;
             if (idx == 2)
             {
-                var sign = new EnemySign(1);
+                var sign = new EnemyBossSign(1);
                 sign.Position = new Vector2(floorTile.BoundingBox.X, floorTile.BoundingBox.Y - sign.Height);
                 sprites.Add(sign);
             }
             if (idx == 5)
             {
-                var enemy = new Enemy(1);
+                var enemy = new EnemyBoss(1);
                 enemy.Position = new Vector2(floorTile.BoundingBox.X, floorTile.BoundingBox.Y - enemy.Height/2f);
                 sprites.Add(enemy);
             }

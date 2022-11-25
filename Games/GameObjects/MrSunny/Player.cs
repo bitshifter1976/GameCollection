@@ -40,6 +40,8 @@ public static class Player
         get { return dude; }
     }
 
+    public static int MaxEnergy => maxEnergy;
+
     public static int Energy
     {
         get { return energy; }
@@ -101,7 +103,11 @@ public static class Player
 
     public static bool EnergyChanged { get; set; }
 
-    public static bool EnergyLost { get; set; }
+    public static bool EnergyLost
+    {
+        get => dude.EnergyLost;
+        set => dude.EnergyLost = value;
+    }
 
     public static bool WaterChanged { get; set; }
 
@@ -453,13 +459,25 @@ public static class Player
     {
         Sprite removeSprite = null;
 
-        if (s is GroundTile || s is Stone || s is Enemy)
-        {
-            if (Animation == "Fall" || Animation == "Jump")
-                groundCollisionOccured = true;
+        if (s is EnemyBoss && !EnergyLost)
+            Energy -= s.Damage;
 
-            if (s is Stone || s is Enemy)
-                SpriteManager.ScrollX(dude.VelocityX);
+        var collDir = Collision.GetCollisionDirection(dude.BoundingBoxF, s.BoundingBoxF);
+        switch (collDir)
+        {
+            case CollisionDirection.Bottom:
+            case CollisionDirection.BottomLeft:
+            case CollisionDirection.BottomRight:
+                if ((s is GroundTile || s is Stone || s is EnemyBoss) && (Animation == "Fall" || Animation == "Jump"))
+                    groundCollisionOccured = true;
+                break;
+            case CollisionDirection.Left: 
+            case CollisionDirection.Right:
+            case CollisionDirection.TopLeft:
+            case CollisionDirection.TopRight:
+                if (s is Stone || s is EnemyBoss)
+                    SpriteManager.ScrollX(dude.VelocityX);
+                break;
         }
 
         return removeSprite;

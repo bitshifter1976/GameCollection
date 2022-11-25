@@ -11,13 +11,13 @@ namespace Framework
             var directions = new List<CollisionDirection>();
             var result = CollisionDirection.Undefined;
             // where did collision occur? on player top, left, right or bottom?
-            if (r2.Top < r1.Bottom && r2.Bottom > r1.Bottom && r1.Top < r2.Top)
+            if (r2.Top <= r1.Bottom && r2.Bottom >= r1.Bottom && r1.Top <= r2.Top)
                 directions.Add(CollisionDirection.Bottom);
-            if (r2.Top < r1.Top && r2.Bottom > r1.Top && r1.Bottom > r2.Bottom)
+            if (r2.Top <= r1.Top && r2.Bottom >= r1.Top && r1.Bottom >= r2.Bottom)
                 directions.Add(CollisionDirection.Top);
-            if (r2.Left < r1.Left && r2.Right > r1.Left && r1.Right > r2.Right)
+            if (r2.Left <= r1.Left && r2.Right >= r1.Left && r1.Right >= r2.Right)
                 directions.Add(CollisionDirection.Left);
-            if (r2.Left < r1.Right && r2.Right > r1.Right && r1.Left < r2.Left)
+            if (r2.Left <= r1.Right && r2.Right >= r1.Right && r1.Left <= r2.Left)
                 directions.Add(CollisionDirection.Right);
 
             // now combine directions

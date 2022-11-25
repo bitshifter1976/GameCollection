@@ -14,7 +14,9 @@ public sealed class PlayerSprite : SpriteMultipleAnimated
     private const int boundingTopOffset = 25;
     private const int boundingBottomOffset = 11;
     private const int boundingHeightOffset = boundingTopOffset + boundingBottomOffset;
-    private static bool energyLost;
+    private bool energyLost;
+    private float energyLostTime;
+    private readonly float energyLostTimeout = 5;
     public float Gravity;
 
     public bool EnergyLost
@@ -118,6 +120,15 @@ public sealed class PlayerSprite : SpriteMultipleAnimated
 
     public override Sprite Update(GameTime gameTime)
     {
+        if (energyLost)
+        {
+            energyLostTime += (float)gameTime.ElapsedGameTime.TotalSeconds;
+            if (energyLostTime >= energyLostTimeout)
+            {
+                energyLost = false;
+                energyLostTime = 0;
+            }
+        }
         // next frame of animation
         base.Update(gameTime);
         //Weapon.Update(gameTime);

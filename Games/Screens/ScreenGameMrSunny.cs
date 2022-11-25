@@ -3,6 +3,7 @@ using Framework;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using System;
 
 namespace AxeGameCollection.Screens;
 
@@ -33,6 +34,7 @@ public class ScreenGameMrSunny : GameScreen
     private float gameEndTime = 0;
     private const float GameEndTimeout = 2;
     private bool acceptEndInput;
+    private Hud hud;
 
     public ScreenGameMrSunny(Game game, int level) : base(game)
     {
@@ -62,8 +64,10 @@ public class ScreenGameMrSunny : GameScreen
         // create player
         Player.Create(2);
         Player.Position = new Vector2(Manager.DesignWidth / 2 - Player.SpriteWidth / 2f, 200);
-        // create floor
+        // create floor, platforms, platform items
         SpriteManager.AddImmediate(Level.Create(distanceToBoss, level));
+        // create hud
+        SpriteManager.AddImmediate(hud = new Hud());
     }
 
     public override void Update(GameTime gameTime, bool otherScreenHasFocus, bool coveredByOtherScreen)
@@ -84,6 +88,8 @@ public class ScreenGameMrSunny : GameScreen
                     {
                         Player.Update(gameTime);
                         SpriteManager.Update(gameTime, true);
+                        hud.Energy = Player.Energy;
+                        hud.ElapsedTime += TimeSpan.FromSeconds(gameTime.ElapsedGameTime.TotalSeconds);
                     }
                     break;
                 }
