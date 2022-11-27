@@ -28,12 +28,11 @@ public static class Player
     private static float shotStartTime;
     private static float shotStartTimeElapsed;
     private static bool timeToShoot;
-    //private static Direction shotDirection;
+    private static Direction shotDirection;
     private static Vector2 worldScale;
     private static int jumpAccelleration;
     private static float startFallVelocity;
     private static bool groundCollisionOccured;
-    private static Direction shotDirection;
 
     public static PlayerSprite Sprite
     {
@@ -84,8 +83,8 @@ public static class Player
                 shotPower += shotPowerBonus;
             }
             water = value;
-            water = (int)MathHelper.Clamp(water, 0, maxEnergy);
-            //Weapon.ChangeCount(WeaponType.WaterBall, water / shotConsumption);
+            water = MathHelper.Clamp(water, 0, maxEnergy);
+            Weapon.Count = water;
         }
     }
 
@@ -192,7 +191,6 @@ public static class Player
         dude.Mass = 12;
         dude.Friction = 0.8f;
         dude.Gravity = dude.Mass * Physics.Gravity;
-        //Weapon.Select(WeaponType.WaterBall);
     }
 
     public static void HandleInput()
@@ -241,10 +239,6 @@ public static class Player
                 shotDirection = Direction.Left;
             Shoot();
         }
-        //if (Action.Weapon1)
-        //    Weapon.Select(WeaponType.WaterBall);
-        //if (Action.Weapon2)
-        //    Weapon.Select(WeaponType.RainDance);
     }
 
     private static void Stand()
@@ -272,7 +266,6 @@ public static class Player
 
     private static void Shoot()
     {
-        timeToShoot = true;
         if (Animation != "Duck")
         {
             Animation = "Shoot";
@@ -283,6 +276,7 @@ public static class Player
             Animation = "ShootDuck";
             dude.Flip("ShootDuck", !directionRight);
         }
+        timeToShoot = true;
     }
 
     private static void Duck()
@@ -435,8 +429,8 @@ public static class Player
             {
                 timeToShoot = false;
                 shotStartTimeElapsed = 0;
-                Manager.Sound.PlayEffect("shot");
-                dude.Shoot((Animation == "ShootDuck"), shotPower, shotDirection);
+                Manager.Sound.PlayEffect("shot3");
+                dude.Shoot(Animation == "ShootDuck", shotPower, shotDirection);
                 shotPower -= shotPowerBonus;
                 Water -= shotConsumption;
                 if (Animation != "Jump" && Animation != "Fall")

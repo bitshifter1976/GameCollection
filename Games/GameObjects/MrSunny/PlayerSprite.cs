@@ -142,7 +142,7 @@ public sealed class PlayerSprite : SpriteMultipleAnimated
 
     public void Shoot(bool ducking, int power, Direction direction)
     {
-        //Weapon.Shoot(Center, power, ducking, direction);
+        Weapon.Shoot(Center, power, ducking, direction);
     }
 
     public Ellipse GetScaledBEllipse(Vector2 worldScale)

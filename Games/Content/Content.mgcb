@@ -451,6 +451,30 @@
 /processorParam:TextureFormat=Color
 /build:graphic/mrSunny/platformSingle.png
 
+#begin graphic/mrSunny/rain.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:graphic/mrSunny/rain.png
+
+#begin graphic/mrSunny/shot.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:graphic/mrSunny/shot.png
+
 #begin graphic/mrSunny/stone.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -864,6 +888,12 @@
 /processor:SoundEffectProcessor
 /processorParam:Quality=Best
 /build:sound/fx/shot2.wav
+
+#begin sound/fx/shot3.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:sound/fx/shot3.wav
 
 #begin sound/fx/waterdrop.WAV
 /importer:WavImporter

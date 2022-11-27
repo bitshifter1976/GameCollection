@@ -64,8 +64,11 @@ public class ScreenGameMrSunny : GameScreen
         // create player
         Player.Create(2);
         Player.Position = new Vector2(Manager.DesignWidth / 2 - Player.SpriteWidth / 2f, 200);
-        // create floor, platforms, platform items
+        // create floor, platforms, platform items, enemies, enemy boss
         SpriteManager.AddImmediate(Level.Create(distanceToBoss, level));
+        // raining?
+        if (Rand.Bool(1, 5))
+            SpriteManager.AddImmediate(new Rain(Rand.Int(30, 90)));
         // create hud
         SpriteManager.AddImmediate(hud = new Hud());
     }

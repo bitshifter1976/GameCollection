@@ -13,11 +13,11 @@ namespace Framework
         public Rectangle SourceRect { get; set; }
         public Vector2 Origin { get; set; }
 
-        public Particle(Texture2D texture, Vector2 position, Vector2 velocity, float rotation, float angularVelocity, Color color, int layer, float scale, float timeToLiveSec, float gravity, float shrinkFactor, bool useGravity = true, bool scrolling = false)
+        public Particle(Texture2D texture, Vector2 position, Vector2 velocity, float rotation, float rotationSpeed, Color color, int layer, float scale, float timeToLiveSec, float gravity, float shrinkFactor, bool useGravity = true, bool scrolling = false)
             : base(texture, position, rotation, scale, color, layer, CollisionType.None)
         {
             Velocity = velocity;
-            RotationSpeed = angularVelocity;
+            RotationSpeed = rotationSpeed;
             TimeToLive = timeToLiveSec;
             if (useGravity)
                 Gravity = gravity;
