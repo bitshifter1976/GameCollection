@@ -20,6 +20,9 @@ namespace AxeGameCollection.GameObjects.MrSunny
 
         public override Sprite Update(GameTime gameTime)
         {
+            var toRemove = new List<Sprite>();
+            particles.ForEach(s => toRemove.Add(s.Update(gameTime)));
+            toRemove.ForEach(s => particles.Remove(s));
             return (particles.Count == 0) ? this : null;
         }
 
@@ -36,7 +39,11 @@ namespace AxeGameCollection.GameObjects.MrSunny
             var mass = scale;
             var shrinkFactor = Rand.Float(0.001f, 0.003f);
             particles.Add(new Particle(texture, position, velocity, rotation, rotationSpeed, color, (int)Layer.Water, scale, ttl, Physics.Gravity*mass, shrinkFactor));
-            SpriteManager.Add(particles);
+        }
+
+        public override void Draw()
+        {
+            particles.ForEach(s => s.Draw());
         }
     }
 }

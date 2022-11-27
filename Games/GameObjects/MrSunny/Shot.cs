@@ -24,7 +24,7 @@ public sealed class Shot : Sprite
         Velocity = gravity.Update(time);
         Position += Velocity;
 
-        waterTrack.EmitterLocation = Position;
+        waterTrack.Position = Position;
         waterTrack.Update(time);
 
         if (Position.Y > Manager.DesignHeight)
