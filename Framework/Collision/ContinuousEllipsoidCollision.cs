@@ -83,13 +83,17 @@ public static class ContinuousEllipsoidCollision
             var nearestCollVect = CalculateNearestCollVect(velocity, nearestDistance);
             center += nearestCollVect;
             position += nearestCollVect;
-            velocity = CalculateVelocity(center, friction, destinationPoint, nearestIntersectionPoint); 
+            velocity = CalculateVelocity(center, friction, destinationPoint, nearestIntersectionPoint);
             //velocity.Y = 0;
             //velocity.X *= friction;
             //center += velocity;
             //position += velocity;
             // ++++++++++++++++++++++++++++++++++ React to collision ++++++++++++++++++++++++++++++++++++++++++++++++++++
-            removeSprites.AddRange(collidedSprites.Select(s => itself.ReactToCollision(s)));
+            collidedSprites.ForEach(s =>
+            {
+                removeSprites.Add(itself.ReactToCollision(s));
+                removeSprites.Add(s.ReactToCollision(itself));
+            });
         }
         catch (Exception ex)
         {

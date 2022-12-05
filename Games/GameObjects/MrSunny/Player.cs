@@ -470,7 +470,7 @@ public static class Player
             case CollisionDirection.TopLeft:
             case CollisionDirection.TopRight:
                 if (s is Stone || s is EnemyBoss)
-                    SpriteManager.ScrollX(dude.VelocityX);
+                    SpriteManager.ScrollX(dude.VelocityX - s.Velocity.X);
                 break;
         }
 

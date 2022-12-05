@@ -93,8 +93,12 @@ public static class SpriteManager
 
     private static List<Sprite> DoCollisionReaction(Sprite s1, Sprite s2)
     {
-        var toRemove = new List<Sprite>();
-        return toRemove;
+        var toRemove = new List<Sprite>
+        {
+            s1.ReactToCollision(s2),
+            s2.ReactToCollision(s1)
+        };
+        return toRemove.Where(r => r != null).ToList();
     }
 
     public static void Draw()
