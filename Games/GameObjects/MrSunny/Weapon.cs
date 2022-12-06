@@ -60,7 +60,6 @@ namespace AxeGameCollection.GameObjects.MrSunny
                 var p = pos + velocity * 50;
                 var pwr = ducking ? power / (duckShotPower / duckShotPower) : power / (duckShotPower / shotPower);
                 SpriteManager.Add(new Shot(new Vector2(p.X, p.Y), velocity * pwr, shotScale));
-                SpriteManager.Add(new WaterSplash(new Vector2(p.X, p.Y)));
                 shotCount--;
             }
         }

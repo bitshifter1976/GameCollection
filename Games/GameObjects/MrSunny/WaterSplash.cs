@@ -33,7 +33,7 @@ namespace AxeGameCollection.GameObjects.MrSunny
             velocity *= speed;
             var rotation = 0f;
             var rotationSpeed = 0f;
-            var color = new Color(0, 0, Rand.Float(0, 255));
+            var color = new Color(0, 0, Rand.Float(0, 255), 100);
             var scale = Rand.Float(0.01f, 0.2f);
             var ttl = Rand.Int(20, 100);
             var mass = scale;

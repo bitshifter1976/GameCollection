@@ -37,4 +37,11 @@ public sealed class Shot : Sprite
         waterTrack.Draw();
         base.Draw();
     }
+
+    public override Sprite ReactToCollision(Sprite sprite)
+    {
+        sprite.Energy -= damage;
+        SpriteManager.Add(new WaterSplash(new Vector2(Center.X, Center.Y)));
+        return this;
+    }
 }

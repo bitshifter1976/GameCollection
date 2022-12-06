@@ -38,6 +38,7 @@ public class EnemyBoss : Sprite
         if (OnScreen)
         {
             var direction = Player.Position.X > position.X ? 1 : -1;
+            flip = direction == -1;
             var elapsedSec = (float)gameTime.ElapsedGameTime.TotalSeconds;
             speed += accelleration * elapsedSec;
             speed = Math.Clamp(speed, 0, maxSpeed);
@@ -53,9 +54,6 @@ public class EnemyBoss : Sprite
     public override Sprite ReactToCollision(Sprite s)
     {
         Sprite removeSprite = null;
-
-        if (s is Shot)
-            energy -= s.Damage;
 
         var collDir = Collision.GetCollisionDirection(BoundingBoxF, s.BoundingBoxF);
         switch (collDir)
