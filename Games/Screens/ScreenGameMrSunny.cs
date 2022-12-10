@@ -91,6 +91,7 @@ public class ScreenGameMrSunny : GameScreen
                     {
                         Player.Update(gameTime);
                         SpriteManager.Update(gameTime, true);
+                        hud.Munition = Player.Water;
                         hud.Energy = Player.Energy;
                         hud.ElapsedTime += TimeSpan.FromSeconds(gameTime.ElapsedGameTime.TotalSeconds);
                     }

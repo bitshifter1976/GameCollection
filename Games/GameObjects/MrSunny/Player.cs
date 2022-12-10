@@ -12,8 +12,6 @@ public static class Player
     private static int energy;
     private static int water;
     private static int shotPower;
-    private static int shotPowerBonus;
-    private static int shotConsumption;
     private static float walkStartSpeed;
     private static float walkSpeed;
     private static float walkSpeedMax;
@@ -73,17 +71,7 @@ public static class Player
         get { return water; }
         set
         {
-            if (value < water)
-            {
-                WaterChanged = true;
-            }
-            else if (value > water)
-            {
-                WaterChanged = true;
-                shotPower += shotPowerBonus;
-            }
-            water = value;
-            water = MathHelper.Clamp(water, 0, maxEnergy);
+            water = MathHelper.Clamp(value, 0, 10);
             Weapon.Count = water;
         }
     }
@@ -168,8 +156,6 @@ public static class Player
         energy = maxEnergy;
         EnergyChanged = false; 
         shotPower = 15;
-        shotConsumption = 38;
-        shotPowerBonus = 3;
         Water = maxEnergy;
         WaterChanged = false;
         walkSpeedMax = 4f;
@@ -431,8 +417,7 @@ public static class Player
                 shotStartTimeElapsed = 0;
                 Manager.Sound.PlayEffect("shot3");
                 dude.Shoot(Animation == "ShootDuck", shotPower, shotDirection);
-                shotPower -= shotPowerBonus;
-                Water -= shotConsumption;
+                Water--;
                 if (Animation != "Jump" && Animation != "Fall")
                     Animation = Animation == "Shoot" ? "Stand" : "Duck";
             }
