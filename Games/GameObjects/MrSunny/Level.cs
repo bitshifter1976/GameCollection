@@ -56,7 +56,7 @@ public static class Level
             {
                 gapCount = 0;
                 sprites.Add(floorTile);
-                RandomlyCreateItemOnFloor(floorTile, sprites);
+                RandomlyCreateItemOnFloor(floorTile, level, sprites);
             }
             x += floorTile.Width;
         }
@@ -92,13 +92,20 @@ public static class Level
         return sprites;
     }
 
-    private static void RandomlyCreateItemOnFloor(GroundTile floorTile, List<Sprite> list)
+    private static void RandomlyCreateItemOnFloor(GroundTile floorTile, int level, List<Sprite> list)
     {
         if (Rand.Bool(1, 10))
         {
             var stone = new Stone(Rand.Float(0.5f, 1.5f));
             stone.Position = new Vector2(Rand.Float(floorTile.BoundingBox.X, floorTile.BoundingBox.X + floorTile.Width - stone.Width), floorTile.BoundingBox.Y - stone.Height);
             list.Add(stone);
+        }
+        //if (Rand.Bool(1, (level+30)/level))
+        if (Rand.Bool(1, 1))
+        {
+            var enemy = new EnemyFlower(Rand.Float(0.5f, 1f), level);
+            enemy.Position = new Vector2(Rand.Float(floorTile.BoundingBox.X, floorTile.BoundingBox.X + floorTile.Width - enemy.Width), floorTile.BoundingBox.Y - enemy.Height + 20);
+            list.Add(enemy);
         }
     }
 

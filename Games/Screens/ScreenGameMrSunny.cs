@@ -62,7 +62,7 @@ public class ScreenGameMrSunny : GameScreen
         textureBackground = Manager.Content.Load<Texture2D>("graphic/mrSunny/background");
         // how many screens to boss?
         //var distanceToBoss = Manager.DesignWidth * 2;
-        var distanceToBoss = (int)(level/4f + 3);
+        var distanceToBoss = Manager.DesignWidth * (int)(level/4f + 3);
         // create player
         Player.Create(2);
         Player.Position = new Vector2(Manager.DesignWidth / 2 - Player.SpriteWidth / 2f, 200);
