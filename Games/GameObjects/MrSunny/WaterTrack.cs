@@ -1,6 +1,5 @@
 ﻿using Microsoft.Xna.Framework;
 using Framework;
-using System.Collections.Generic;
 using static AxeGameCollection.Screens.ScreenGameMrSunny;
 
 namespace AxeGameCollection.GameObjects.MrSunny;
@@ -30,10 +29,10 @@ public class WaterTrack : Sprite
         var velocity = new Vector2(Rand.Float(0f,1f), Rand.Float(0f,1f));
         var rotation = 0f;
         var rotationSpeed = 0f;
-        var color = new Color(Color.Aquamarine.R, Color.Aquamarine.G, Color.Aquamarine.B, (byte)Rand.Int(10,200));
+        var color = new Color(Color.Aquamarine.R, Color.Aquamarine.G, Color.Aquamarine.B, (byte)Rand.Int(100,200));
         var scale = Rand.Float(0.01f,0.05f);
-        var shrinkFactor = Rand.Float(0.001f, 0.003f); 
-        var ttl = Rand.Int(20,100);
+        var shrinkFactor = 0; 
+        var ttl = Rand.Int(100,200);
         var mass = scale;
         return new Particle(texture, position, velocity, rotation, rotationSpeed, color, (int)Layer.Water, scale, ttl, Physics.Gravity * mass, shrinkFactor);
     }

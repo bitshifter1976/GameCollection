@@ -16,6 +16,7 @@ public sealed class Shot : Sprite
         mass = 0.5f;
         waterTrack = new WaterTrack(Position);
         gravity = new Gravity(GravityType.UpDown, Velocity, mass);
+        color = new Color(Color.Aquamarine.R, Color.Aquamarine.G, Color.Aquamarine.B, (byte)Rand.Int(100, 200));
         scrolling = true;
     }
     

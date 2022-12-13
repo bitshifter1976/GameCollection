@@ -35,6 +35,7 @@ public class ScreenGameMrSunny : GameScreen
     private const float GameEndTimeout = 2;
     private bool acceptEndInput;
     private Hud hud;
+    private EnemyBoss enemyBoss;
 
     public ScreenGameMrSunny(Game game, int level) : base(game)
     {
@@ -60,12 +61,13 @@ public class ScreenGameMrSunny : GameScreen
         backgroundColor = new Color(color.R, color.G, color.B, alpha);
         textureBackground = Manager.Content.Load<Texture2D>("graphic/mrSunny/background");
         // how many screens to boss?
-        var distanceToBoss = Manager.DesignWidth * 2;// (level/4+3);
+        //var distanceToBoss = Manager.DesignWidth * 2;
+        var distanceToBoss = (int)(level/4f + 3);
         // create player
         Player.Create(2);
         Player.Position = new Vector2(Manager.DesignWidth / 2 - Player.SpriteWidth / 2f, 200);
         // create floor, platforms, platform items, enemies, enemy boss
-        SpriteManager.AddImmediate(Level.Create(distanceToBoss, level));
+        SpriteManager.AddImmediate(Level.Create(distanceToBoss, level, out enemyBoss));
         // raining?
         if (Rand.Bool(1, 5))
             SpriteManager.AddImmediate(new Rain(Rand.Int(30, 90)));
@@ -94,6 +96,8 @@ public class ScreenGameMrSunny : GameScreen
                         hud.Munition = Player.Water;
                         hud.Energy = Player.Energy;
                         hud.ElapsedTime += TimeSpan.FromSeconds(gameTime.ElapsedGameTime.TotalSeconds);
+                        if (enemyBoss.Energy <= 0 || Player.Energy <= 0)
+                            state= GameState.End;
                     }
                     break;
                 }

@@ -19,15 +19,16 @@ public static class Level
         { 'g', new FloorTileProps3(FloorTileType.gap,             FloorTileType.gap,                FloorTileType.gap           ) }
     };
 
-    private static string[] AllowedPatternPairs = new[] { "gg", "gA", "gD", "AB", "BB", "BC", "CA", "CD", "Cg", "DA", "DD", "Dg" };
-    private static char[] HeightChangers = new[] { 'A', 'D' };
-    private static char[] EndTiles = new[] { 'C', 'D', 'g' };
-    private static int MaxGapCount = 2;
+    private static readonly string[] AllowedPatternPairs = new[] { "gg", "gA", "gD", "AB", "BB", "BC", "CA", "CD", "Cg", "DA", "DD", "Dg" };
+    private static readonly char[] HeightChangers = new[] { 'A', 'D' };
+    private static readonly char[] EndTiles = new[] { 'C', 'D', 'g' };
+    private static readonly int MaxGapCount = 2;
     public static float Width => width;
 
-    public static List<Sprite> Create(int distanceToBoss, int level)
+    public static List<Sprite> Create(int distanceToBoss, int level, out EnemyBoss enemyBoss)
     {
         var sprites = new List<Sprite>();
+        enemyBoss = null;
         var x = 0f;
         char currChar = ' '; 
         char prevChar;
@@ -61,7 +62,7 @@ public static class Level
         }
         // create end floor, where enemy boss awaits you
         var endPattern = string.Empty;
-        if (currChar == 'C' || currChar == 'D' || currChar == 'g')
+        if (EndTiles.Contains(currChar))
             endPattern = "A";
         endPattern += "BBBBBBC";
         var idx = 0;
@@ -80,9 +81,9 @@ public static class Level
             }
             if (idx == 5)
             {
-                var enemy = new EnemyBoss(1);
-                enemy.Position = new Vector2(floorTile.BoundingBox.X, floorTile.BoundingBox.Y - enemy.Height/2f);
-                sprites.Add(enemy);
+                enemyBoss = new EnemyBoss(1, level);
+                enemyBoss.Position = new Vector2(floorTile.BoundingBox.X, floorTile.BoundingBox.Y - enemyBoss.Height/2f);
+                sprites.Add(enemyBoss);
             }
         }
         // remember final width

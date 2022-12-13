@@ -45,8 +45,8 @@ public class Hud : Sprite
         var hudItemCount = 3;
         var itemWidth = (int)(Width / hudItemCount);
         var posX = 0f;
-        var posY = 0;
-        shotBar = new MunitionBar(new Vector2(posX, posY), 0.2f, 10, itemWidth, (int)Height);
+        var posY = Manager.DesignHeight - Height;
+        shotBar = new MunitionBar(new Vector2(posX, posY), 0.15f, 10, itemWidth, (int)Height);
         posX += itemWidth;
         energyBar = new LifeBar(new Vector2(posX, posY), 0.25f, itemWidth, (int)Height);
         posX += itemWidth;

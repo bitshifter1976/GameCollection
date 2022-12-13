@@ -19,15 +19,15 @@ public class EnemyBoss : Sprite
     }
 
 
-    public EnemyBoss(float scale) : base("graphic/mrSunny/enemy", Vector2.Zero, 0, scale, Color.White, (int)Layer.Player, CollisionType.BoundingBoxRotated)
+    public EnemyBoss(float scale, int level) : base("graphic/mrSunny/enemy", Vector2.Zero, 0, scale, Color.White, (int)Layer.Player, CollisionType.BoundingBoxRotated)
     {
         scrolling = true;
         mass = 10;
         energy = Player.MaxEnergy;
         damage = Player.MaxEnergy / 5;
         speed = 0;
-        maxSpeed = 500;
-        accelleration = 10f;
+        maxSpeed = 100 * level;
+        accelleration = level;
     }
 
     public override Sprite Update(GameTime gameTime)
